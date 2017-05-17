@@ -2,7 +2,7 @@ package com.speedyblur.kretaremastered;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -32,8 +32,6 @@ import org.json.JSONObject;
  * A login screen that offers login via email/password.
  */
 public class MainLogin extends AppCompatActivity {
-    // Keep track of the login task to ensure we can cancel it if requested.
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private EditText mIdView;
@@ -79,14 +77,12 @@ public class MainLogin extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) { return; }
-
         // Reset errors.
         mIdView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mIdView.getText().toString();
+        String studentId = mIdView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -100,7 +96,7 @@ public class MainLogin extends AppCompatActivity {
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(studentId)) {
             mIdView.setError(getString(R.string.error_field_required));
             focusView = mIdView;
             cancel = true;
@@ -112,8 +108,46 @@ public class MainLogin extends AppCompatActivity {
         } else {
             // Login
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+
+            RequestQueue mReqQueue;
+            Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024);
+            mReqQueue = new RequestQueue(cache, new BasicNetwork(new HurlStack()));
+            mReqQueue.start();
+
+            JSONObject payload = new JSONObject();
+            try {
+                payload.put("UserName", studentId);
+                payload.put("Password", password);
+            } catch (JSONException e) {
+                // TODO: Add error handling
+                e.printStackTrace();
+            }
+
+            JsonObjectRequest jsoReq = new JsonObjectRequest(Request.Method.POST, Vars.KRETABASE + "/Adminisztracio/Login/LoginCheck", payload, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getBoolean("Success")) {
+                            Toast.makeText(getApplicationContext(), "Login OK.", Toast.LENGTH_LONG).show();
+                            Intent it = new Intent();
+                            startActivity(it);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Login error. Username or passwd incorrect.", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        // TODO: Add error handling
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "Login ERR: "+error.getMessage(), Toast.LENGTH_LONG).show();
+                    showProgress(false);
+                }
+            });
+
+            mReqQueue.add(jsoReq);
         }
     }
 
@@ -141,80 +175,6 @@ public class MainLogin extends AppCompatActivity {
                 mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
-    }
-
-    /**
-     * AsyncTask for login process
-     */
-    private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mStudentId;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mStudentId = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            RequestQueue mReqQueue;
-            Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024);
-            mReqQueue = new RequestQueue(cache, new BasicNetwork(new HurlStack()));
-            mReqQueue.start();
-
-            JSONObject payload = new JSONObject();
-            try {
-                payload.put("UserName", mStudentId);
-                payload.put("Password", mPassword);
-            } catch (JSONException e) {
-                // TODO: Add error handling
-                e.printStackTrace();
-            }
-
-            JsonObjectRequest jsoReq = new JsonObjectRequest(Request.Method.POST, Vars.KRETABASE + "/Adminisztracio/Login/LoginCheck", payload, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    try {
-                        if (response.getBoolean("Success")) {
-                            Toast.makeText(getApplicationContext(), "Login OK.", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Login error: Bad username or passwd.", Toast.LENGTH_LONG).show();
-                        }
-                    } catch (JSONException e) {
-                        // TODO: Add error handling
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "Login ERR: "+error.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-
-            mReqQueue.add(jsoReq);
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
 }
 
