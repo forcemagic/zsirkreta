@@ -13,6 +13,20 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Cache;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * A login screen that offers login via email/password.
@@ -144,10 +158,42 @@ public class MainLogin extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: Write auth logic here
+            RequestQueue mReqQueue;
+            Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024);
+            mReqQueue = new RequestQueue(cache, new BasicNetwork(new HurlStack()));
+            mReqQueue.start();
 
+            JSONObject payload = new JSONObject();
+            try {
+                payload.put("UserName", mStudentId);
+                payload.put("Password", mPassword);
+            } catch (JSONException e) {
+                // TODO: Add error handling
+                e.printStackTrace();
+            }
 
+            JsonObjectRequest jsoReq = new JsonObjectRequest(Request.Method.POST, Vars.KRETABASE + "/Adminisztracio/Login/LoginCheck", payload, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        if (response.getBoolean("Success")) {
+                            Toast.makeText(getApplicationContext(), "Login OK.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Login error: Bad username or passwd.", Toast.LENGTH_LONG).show();
+                        }
+                    } catch (JSONException e) {
+                        // TODO: Add error handling
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    Toast.makeText(getApplicationContext(), "Login ERR: "+error.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
 
+            mReqQueue.add(jsoReq);
             return true;
         }
 
