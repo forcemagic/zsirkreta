@@ -13,4 +13,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="login_btn">Login</string>
+    <string name="login_studentcard_hint">Student card ID</string>
+    <string name="login_passwd_hint">Password</string>
 </resources>

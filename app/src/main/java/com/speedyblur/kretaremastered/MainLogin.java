@@ -2,37 +2,18 @@ package com.speedyblur.kretaremastered;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
-
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static android.Manifest.permission.READ_CONTACTS;
+import android.widget.Toast;
 
 /**
  * A login screen that offers login via email/password.
@@ -42,7 +23,7 @@ public class MainLogin extends AppCompatActivity {
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mIdView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
@@ -53,7 +34,7 @@ public class MainLogin extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mIdView = (EditText) findViewById(R.id.studentid);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -88,11 +69,11 @@ public class MainLogin extends AppCompatActivity {
         if (mAuthTask != null) { return; }
 
         // Reset errors.
-        mEmailView.setError(null);
+        mIdView.setError(null);
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        String email = mIdView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -107,8 +88,8 @@ public class MainLogin extends AppCompatActivity {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
+            mIdView.setError(getString(R.string.error_field_required));
+            focusView = mIdView;
             cancel = true;
         }
 
@@ -154,11 +135,11 @@ public class MainLogin extends AppCompatActivity {
      */
     private class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
+        private final String mStudentId;
         private final String mPassword;
 
         UserLoginTask(String email, String password) {
-            mEmail = email;
+            mStudentId = email;
             mPassword = password;
         }
 
@@ -166,6 +147,7 @@ public class MainLogin extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: Write auth logic here
 
+            Toast.makeText(getApplicationContext(), mStudentId, Toast.LENGTH_LONG).show();
 
             return true;
         }
