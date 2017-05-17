@@ -28,6 +28,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -43,6 +46,9 @@ public class MainLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        CookieManager mgr = new CookieManager();
+        CookieHandler.setDefault(mgr);
 
         // Set up the login form.
         mIdView = (EditText) findViewById(R.id.studentid);
