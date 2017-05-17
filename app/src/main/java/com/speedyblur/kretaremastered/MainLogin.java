@@ -13,7 +13,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * A login screen that offers login via email/password.
@@ -147,7 +146,7 @@ public class MainLogin extends AppCompatActivity {
         protected Boolean doInBackground(Void... params) {
             // TODO: Write auth logic here
 
-            Toast.makeText(getApplicationContext(), mStudentId, Toast.LENGTH_LONG).show();
+
 
             return true;
         }
