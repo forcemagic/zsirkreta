@@ -8,4 +8,11 @@
     tools:context="com.speedyblur.kretaremastered.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <TextView
+        android:id="@+id/testOutput"
+        android:layout_width="368dp"
+        android:layout_height="495dp"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp" />
 </android.support.constraint.ConstraintLayout>

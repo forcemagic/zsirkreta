@@ -134,10 +134,12 @@ public class MainLogin extends AppCompatActivity {
                 public void onResponse(JSONObject response) {
                     try {
                         if (response.getBoolean("Success")) {
-                            Toast.makeText(getApplicationContext(), "Login OK.", Toast.LENGTH_LONG).show();
-                            Intent it = new Intent();
+                            Toast.makeText(getApplicationContext(), "Login OK.", Toast.LENGTH_SHORT).show();
+                            Intent it = new Intent(MainLogin.this, MainActivity.class);
                             startActivity(it);
+                            showProgress(false);
                         } else {
+                            showProgress(false);
                             Toast.makeText(getApplicationContext(), "Login error. Username or passwd incorrect.", Toast.LENGTH_LONG).show();
                         }
                     } catch (JSONException e) {
