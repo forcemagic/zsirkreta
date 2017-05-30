@@ -122,29 +122,26 @@ public class MainLogin extends AppCompatActivity {
 
             JSONObject payload = new JSONObject();
             try {
-                payload.put("UserName", studentId);
-                payload.put("Password", password);
+                payload.put("username", studentId);
+                payload.put("password", password);
             } catch (JSONException e) {
                 // TODO: Add error handling
                 e.printStackTrace();
             }
 
-            JsonObjectRequest jsoReq = new JsonObjectRequest(Request.Method.POST, Vars.KRETABASE + "/Adminisztracio/Login/LoginCheck", payload, new Response.Listener<JSONObject>() {
+            JsonObjectRequest jsoReq = new JsonObjectRequest(Request.Method.POST, Vars.APIBASE + "/auth", payload, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        if (response.getBoolean("Success")) {
-                            Toast.makeText(getApplicationContext(), "Login OK.", Toast.LENGTH_SHORT).show();
-                            Intent it = new Intent(MainLogin.this, MainActivity.class);
-                            startActivity(it);
-                            showProgress(false);
-                        } else {
-                            showProgress(false);
-                            Toast.makeText(getApplicationContext(), "Login error. Username or passwd incorrect.", Toast.LENGTH_LONG).show();
-                        }
+                        String token = response.getString("token");
+                        Vars.AUTHTOKEN = token;
+                        Toast.makeText(getApplicationContext(), "Login OK.", Toast.LENGTH_SHORT).show();
+                        Intent it = new Intent(MainLogin.this, MainActivity.class);
+                        startActivity(it);
+                        showProgress(false);
                     } catch (JSONException e) {
-                        // TODO: Add error handling
-                        e.printStackTrace();
+                        showProgress(false);
+                        Toast.makeText(getApplicationContext(), "Login error. Username or passwd incorrect.", Toast.LENGTH_LONG).show();
                     }
                 }
             }, new Response.ErrorListener() {

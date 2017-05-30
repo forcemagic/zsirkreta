@@ -1,5 +1,6 @@
 package com.speedyblur.kretaremastered;
 
 public class Vars {
-    public static String KRETABASE = "https://klik031937001.e-kreta.hu";
+    public static final String APIBASE = "https://www.speedyblur.com/kretaapi";
+    public static String AUTHTOKEN = "";
 }
