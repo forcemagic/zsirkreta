@@ -1,5 +1,6 @@
 package com.speedyblur.kretaremastered;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -9,9 +10,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,8 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,8 +76,27 @@ public class MainActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TextView tv = (TextView) findViewById(R.id.testOutput);
-                        tv.setText(resp.toString());
+                        TableLayout tl = (TableLayout) findViewById(R.id.mainGradeView);
+                        LayoutInflater li = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                        for (int i=0; i<resp.length(); i++) {
+                            try {
+                                JSONObject actual = resp.getJSONObject(i);
+                                for (int j=0; j<actual.getJSONArray("grades").length(); j++) {
+                                    View view = li.inflate(R.layout.grades_table, tl, false);
+                                    TextView gradeView = (TextView) view.findViewById(R.id.grade);
+                                    TextView subjView = (TextView) view.findViewById(R.id.subject);
+
+                                    JSONObject gradeObj = actual.getJSONArray("grades").getJSONObject(j);
+                                    gradeView.setText(gradeObj.getString("grade"));
+                                    subjView.setText(actual.getString("subject"));
+                                    tl.addView(view);
+                                }
+                            } catch (JSONException e) {
+                                // TODO: Error handling
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 });
             }
