@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class GradeAdapter extends ArrayAdapter<Grade> {
-    public GradeAdapter(Context context, ArrayList<Grade> grades) {
+class GradeAdapter extends ArrayAdapter<Grade> {
+    GradeAdapter(Context context, ArrayList<Grade> grades) {
         super(context, 0, grades);
     }
 

@@ -6,12 +6,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Grade {
+class Grade {
     String grade;
     String subject;
     String gotDate;
 
-    public Grade(JSONObject obj) {
+    Grade(JSONObject obj) {
         try {
             this.grade = obj.getString("grade");
             this.subject = obj.getString("subject");
@@ -21,8 +21,8 @@ public class Grade {
         }
     }
 
-    public static ArrayList<Grade> fromJson(JSONArray jsonObjects) {
-        ArrayList<Grade> grades = new ArrayList<Grade>();
+    static ArrayList<Grade> fromJson(JSONArray jsonObjects) {
+        ArrayList<Grade> grades = new ArrayList<>();
         for (int i = 0; i < jsonObjects.length(); i++) {
             try {
                 grades.add(new Grade(jsonObjects.getJSONObject(i)));
