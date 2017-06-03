@@ -2,7 +2,6 @@ package com.speedyblur.kretaremastered;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -11,12 +10,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TableLayout;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -70,6 +67,8 @@ public class MainActivity extends AppCompatActivity
         mReqQueue = new RequestQueue(cache, new BasicNetwork(new HurlStack()));
         mReqQueue.start();
 
+        final Context localCtxt = this;
+
         JsonArrayRequest jsoReq = new JsonArrayRequest(Request.Method.GET, Vars.APIBASE + "/grades", null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
@@ -77,43 +76,27 @@ public class MainActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        TableLayout tl = (TableLayout) findViewById(R.id.mainGradeView);
-                        LayoutInflater li = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        ListView lv = (ListView) findViewById(R.id.mainGradeView);
+                        JSONArray finalArr = new JSONArray();
 
                         for (int i=0; i<resp.length(); i++) {
                             try {
                                 JSONObject actual = resp.getJSONObject(i);
                                 for (int j=0; j<actual.getJSONArray("grades").length(); j++) {
-                                    View view = li.inflate(R.layout.grades_table, tl, false);
-                                    TextView gradeView = (TextView) view.findViewById(R.id.grade);
-                                    TextView subjView = (TextView) view.findViewById(R.id.subject);
-                                    TextView dateGotView = (TextView) view.findViewById(R.id.dateOfGrade);
-
                                     JSONObject gradeObj = actual.getJSONArray("grades").getJSONObject(j);
-                                    gradeView.setText(gradeObj.getString("grade"));
-
-                                    StringBuilder res = new StringBuilder();
-
-                                    String[] strArr = actual.getString("subject").split(" ");
-                                    for (String str : strArr) {
-                                        str = str.trim();
-                                        if (!str.equalsIgnoreCase("és")) {
-                                            char[] stringArray = str.toCharArray();
-                                            stringArray[0] = Character.toUpperCase(stringArray[0]);
-                                            str = new String(stringArray);
-                                        }
-                                        res.append(str).append(" ");
-                                    }
-
-                                    subjView.setText(res.toString().trim());
-                                    dateGotView.setText(actual.getString("date"));
-                                    tl.addView(view);
+                                    JSONObject finalized = new JSONObject();
+                                    finalized.put("grade", gradeObj.getString("grade"));
+                                    finalized.put("subject", actual.getString("subject"));
+                                    finalized.put("date", gradeObj.getString("date"));
+                                    finalArr.put(finalized);
                                 }
                             } catch (JSONException e) {
                                 // TODO: Error handling
                                 e.printStackTrace();
                             }
                         }
+
+                        lv.setAdapter(new GradeAdapter(localCtxt, Grade.fromJson(finalArr)));
                     }
                 });
             }

@@ -73,7 +73,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Kopirájt Kréta Teknolodzsíz 2017, minden jog lenntartva. Ha a szerver úgy gondolkodik, hogy éppen nem akar válaszolni, akkor az nem azért van, mert éppen fejlesztjük, hanem azért, mert éppen semmi kedve nincs kiszolgálni egy olyan büdös parasztot, mint Te." />
+                android:text="Kréta Teknolodzsíz 2017, minden jog lenntartva. Ha a szerver úgy gondolkodik, hogy éppen nem akar válaszolni, akkor az nem azért van, mert éppen fejlesztjük, hanem azért, mert éppen semmi kedve nincs kiszolgálni egy olyan... embert, mint Te." />
 
         </LinearLayout>
     </ScrollView>
