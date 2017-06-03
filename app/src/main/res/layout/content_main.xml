@@ -7,10 +7,13 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.speedyblur.kretaremastered.MainActivity"
     tools:showIn="@layout/app_bar_main">
-    <TableLayout
+
+    <LinearLayout
+        android:id="@+id/mainGradeView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/mainGradeView">
+        android:layout_margin="3dp"
+        android:orientation="horizontal">
 
-    </TableLayout>
+    </LinearLayout>
 </ScrollView>

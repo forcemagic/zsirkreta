@@ -1,22 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="32dp"
-    android:layout_margin="8dp">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp">
 
     <TextView
-        android:id="@+id/grade"
+        android:id="@+id/dateOfGrade"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1"
-        android:layout_gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        android:layout_alignStart="@+id/subject"
+        android:layout_below="@+id/subject"
+        android:layout_marginTop="2dp"
+        android:text="Sometime"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/subject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="top"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="2dp"
+        android:layout_toEndOf="@+id/grade"
+        android:text="Something"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:typeface="normal" />
+
+    <TextView
+        android:id="@+id/grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_margin="6dp"
-        android:text="Something" />
-</TableRow>
+        android:background="@drawable/roundrect"
+        android:fontFamily="sans-serif"
+        android:padding="5dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:text="1"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        android:typeface="normal" />
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.speedyblur.kretaremastered;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -86,10 +87,26 @@ public class MainActivity extends AppCompatActivity
                                     View view = li.inflate(R.layout.grades_table, tl, false);
                                     TextView gradeView = (TextView) view.findViewById(R.id.grade);
                                     TextView subjView = (TextView) view.findViewById(R.id.subject);
+                                    TextView dateGotView = (TextView) view.findViewById(R.id.dateOfGrade);
 
                                     JSONObject gradeObj = actual.getJSONArray("grades").getJSONObject(j);
                                     gradeView.setText(gradeObj.getString("grade"));
-                                    subjView.setText(actual.getString("subject"));
+
+                                    StringBuilder res = new StringBuilder();
+
+                                    String[] strArr = actual.getString("subject").split(" ");
+                                    for (String str : strArr) {
+                                        str = str.trim();
+                                        if (!str.equalsIgnoreCase("és")) {
+                                            char[] stringArray = str.toCharArray();
+                                            stringArray[0] = Character.toUpperCase(stringArray[0]);
+                                            str = new String(stringArray);
+                                        }
+                                        res.append(str).append(" ");
+                                    }
+
+                                    subjView.setText(res.toString().trim());
+                                    dateGotView.setText(actual.getString("date"));
                                     tl.addView(view);
                                 }
                             } catch (JSONException e) {
@@ -108,7 +125,7 @@ public class MainActivity extends AppCompatActivity
         }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put("X-Auth-Token", Vars.AUTHTOKEN);
                 return params;
             }
