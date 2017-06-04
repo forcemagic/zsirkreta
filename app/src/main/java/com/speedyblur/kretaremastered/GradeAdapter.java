@@ -25,6 +25,7 @@ class GradeAdapter extends ArrayAdapter<Grade> {
         TextView gradeView = (TextView) convertView.findViewById(R.id.grade);
         TextView subjView = (TextView) convertView.findViewById(R.id.subject);
         TextView dateGotView = (TextView) convertView.findViewById(R.id.dateOfGrade);
+        TextView teacherView = (TextView) convertView.findViewById(R.id.teacher);
 
         StringBuilder res = new StringBuilder();
         String[] strArr = grade.subject.split(" ");
@@ -41,6 +42,7 @@ class GradeAdapter extends ArrayAdapter<Grade> {
         gradeView.setText(grade.grade);
         subjView.setText(res.toString().trim());
         dateGotView.setText(grade.gotDate);
+        teacherView.setText(grade.teacher);
 
         return convertView;
     }

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="42dp"
+    android:layout_height="wrap_content"
     android:layout_margin="2dp">
 
     <TextView
@@ -11,10 +11,10 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/subject"
         android:layout_below="@+id/subject"
-        android:paddingLeft="4dp"
-        android:paddingTop="2dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginTop="2dp"
         android:text="Sometime"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/subject"
@@ -22,11 +22,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_gravity="top"
+        android:layout_marginTop="4dp"
         android:layout_toEndOf="@+id/grade"
-        android:paddingLeft="4dp"
         android:text="Something"
         android:textColor="@android:color/black"
-        android:textSize="14sp"
+        android:textSize="18sp"
         android:typeface="normal" />
 
     <TextView
@@ -34,13 +34,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/roundrect"
         android:fontFamily="sans-serif"
-        android:padding="5dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
         android:text="1"
         android:textColor="@android:color/background_light"
-        android:textSize="24sp"
+        android:textSize="30sp"
         android:typeface="normal" />
+
+    <TextView
+        android:id="@+id/teacher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:text="Someone"
+        android:layout_alignBaseline="@+id/subject"
+        android:layout_alignBottom="@+id/subject"
+        android:layout_toEndOf="@+id/subject" />
 </RelativeLayout>

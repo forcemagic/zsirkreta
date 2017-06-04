@@ -85,9 +85,10 @@ public class MainActivity extends AppCompatActivity
                                 for (int j=0; j<actual.getJSONArray("grades").length(); j++) {
                                     JSONObject gradeObj = actual.getJSONArray("grades").getJSONObject(j);
                                     JSONObject finalized = new JSONObject();
-                                    finalized.put("grade", gradeObj.getString("grade"));
                                     finalized.put("subject", actual.getString("subject"));
+                                    finalized.put("grade", gradeObj.getString("grade"));
                                     finalized.put("date", gradeObj.getString("date"));
+                                    finalized.put("teacher", gradeObj.getString("teacher"));
                                     finalArr.put(finalized);
                                 }
                             } catch (JSONException e) {

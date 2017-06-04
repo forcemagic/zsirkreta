@@ -10,12 +10,14 @@ class Grade {
     String grade;
     String subject;
     String gotDate;
+    String teacher;
 
     Grade(JSONObject obj) {
         try {
             this.grade = obj.getString("grade");
             this.subject = obj.getString("subject");
             this.gotDate = obj.getString("date");
+            this.teacher = obj.getString("teacher");
         } catch (JSONException e) {
             e.printStackTrace();
         }
