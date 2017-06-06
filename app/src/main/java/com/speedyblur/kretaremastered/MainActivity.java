@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -44,15 +45,6 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -76,28 +68,8 @@ public class MainActivity extends AppCompatActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ListView lv = (ListView) findViewById(R.id.mainGradeView);
-                        JSONArray finalArr = new JSONArray();
-
-                        for (int i=0; i<resp.length(); i++) {
-                            try {
-                                JSONObject actual = resp.getJSONObject(i);
-                                for (int j=0; j<actual.getJSONArray("grades").length(); j++) {
-                                    JSONObject gradeObj = actual.getJSONArray("grades").getJSONObject(j);
-                                    JSONObject finalized = new JSONObject();
-                                    finalized.put("subject", actual.getString("subject"));
-                                    finalized.put("grade", gradeObj.getString("grade"));
-                                    finalized.put("date", gradeObj.getString("date"));
-                                    finalized.put("teacher", gradeObj.getString("teacher"));
-                                    finalArr.put(finalized);
-                                }
-                            } catch (JSONException e) {
-                                // TODO: Error handling
-                                e.printStackTrace();
-                            }
-                        }
-
-                        lv.setAdapter(new GradeAdapter(localCtxt, Grade.fromJson(finalArr)));
+                        ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
+                        lv.setAdapter(new SubjectAdapter(localCtxt, Subject.fromJson(resp)));
                     }
                 });
             }

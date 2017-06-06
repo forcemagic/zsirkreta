@@ -8,11 +8,10 @@
     tools:context="com.speedyblur.kretaremastered.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/mainGradeView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-    </ListView>
+    </ExpandableListView>
 </RelativeLayout>

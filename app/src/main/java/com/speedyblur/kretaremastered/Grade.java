@@ -8,16 +8,18 @@ import java.util.ArrayList;
 
 class Grade {
     String grade;
-    String subject;
     String gotDate;
     String teacher;
+    String type;
+    String theme;
 
     Grade(JSONObject obj) {
         try {
             this.grade = obj.getString("grade");
-            this.subject = obj.getString("subject");
             this.gotDate = obj.getString("date");
             this.teacher = obj.getString("teacher");
+            this.theme = obj.getString("theme");
+            this.type = obj.getString("type");
         } catch (JSONException e) {
             e.printStackTrace();
         }
