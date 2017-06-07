@@ -15,7 +15,7 @@
         android:layout_marginTop="12dp"
         android:text="@string/blablabla"
         android:textColor="@android:color/black"
-        android:textSize="24sp"
+        android:textSize="16sp"
         android:typeface="normal" />
 
     <TextView
@@ -28,6 +28,6 @@
         android:layout_marginStart="12dp"
         android:fontFamily="monospace"
         android:text="@string/blablabla"
-        android:textSize="18sp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>
