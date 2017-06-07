@@ -31,11 +31,15 @@ build:
   artifacts:
     paths:
     - app/build/outputs/
+  tags:
+    - java
 
 unitTests:
   stage: test
   script:
     - ./gradlew test
+  tags:
+    - java
 
 functionalTests:
   stage: test
@@ -48,3 +52,5 @@ functionalTests:
     - ./android-wait-for-emulator
     - adb shell input keyevent 82
     - ./gradlew cAT
+  tags:
+    - java
