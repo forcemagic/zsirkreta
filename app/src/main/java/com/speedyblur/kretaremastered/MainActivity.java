@@ -2,7 +2,7 @@ package com.speedyblur.kretaremastered;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -12,11 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.android.volley.AuthFailureError;
@@ -31,21 +28,21 @@ import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private Toolbar toolbar;
+
+    @SuppressWarnings("deprecation")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Grades");
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.title_activity_grades);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -57,7 +54,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //
+        // Init viewFlipper
         ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
 
         // Start request
@@ -82,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Login ERR: "+error.getMessage(), Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.volley_req_error, error.getLocalizedMessage()), Snackbar.LENGTH_LONG);
             }
         }) {
             @Override
@@ -107,7 +104,7 @@ public class MainActivity extends AppCompatActivity
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Login ERR: "+error.getMessage(), Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.volley_req_error, error.getLocalizedMessage()), Snackbar.LENGTH_LONG);
             }
         }) {
             @Override
@@ -134,16 +131,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -154,16 +147,16 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         ViewFlipper vf = (ViewFlipper) findViewById(R.id.main_viewflipper);
 
         if (id == R.id.nav_avgs) {
+            toolbar.setTitle(R.string.title_activity_avgs);
             vf.setDisplayedChild(1);
         } else if (id == R.id.nav_grades) {
+            toolbar.setTitle(R.string.title_activity_grades);
             vf.setDisplayedChild(0);
         }
 

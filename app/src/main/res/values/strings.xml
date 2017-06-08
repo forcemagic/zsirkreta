@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Kreta Remastered</string>
-    <string name="title_activity_main">Kreta Remastered</string>
+    <string name="app_name" translatable="false">Kreta Remastered</string>
+    <string name="title_activity_main" translatable="false">Kreta Remastered</string>
+    <string name="title_activity_grades">Grades</string>
+    <string name="title_activity_avgs">Averages</string>
 
     <string name="error_field_required">This field is required</string>
     <string name="login_btn">Login</string>
@@ -8,11 +10,13 @@
     <string name="login_passwd_hint">Password</string>
     <string name="login_kreta_unresponsive">Whoops. The KRETA servers are having a great time having maintenanced. Check back later.</string>
     <string name="login_incorrect_account_details">You have not provided the magnificent KRETA with correct account details.</string>
-    <string name="login_other_error">The tiny gizmos that make up the Internet did not want you to connect properly to KRETA. Sorry. :(</string>
+    <string name="login_other_error">There\'s something wrong with your Internet connection. Did you turn on Wifi or Mobile Data?</string>
     <string name="login_copyright">API is Copyleft 2017 Matthew Coal.\nKRETA is Copyright © 2017 eKreta Informatikai Zrt.</string>
 
     <string name="action_settings">Settings</string>
     <string name="blablabla">Something</string>
+
+    <string name="volley_req_error">Some kind of error occurred. :( (%1$s)</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

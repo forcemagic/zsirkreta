@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="blablabla">Valami</string>
+    <string name="error_field_required">Ez a mező kötelező</string>
+    <string name="login_btn">Bejelentkezés</string>
+    <string name="login_copyright">Az API Copyleft 2017 Matthew Coal.\nA KRÉTA Copyright © 2017 eKréta Informatikai Zrt.</string>
+    <string name="login_incorrect_account_details">Rossz felhasználói adatokat adtál meg a fantasztikus Kréta részére.</string>
+    <string name="login_kreta_unresponsive">Hopsz. A Kréta szervereket véletlenül épp most tartják karban. Nézz vissza később.\n</string>
+    <string name="login_other_error">Valami probléma van a neteddel. Esetleg nem felejtetted el bekapcsolni a Wifit/Mobilnetet?</string>
+    <string name="login_passwd_hint">Jelszó</string>
+    <string name="login_studentcard_hint">Diákigazolvány Kódja</string>
+    <string name="navigation_drawer_close">Navigációs menü bezárása</string>
+    <string name="navigation_drawer_open">Navigációs menü megnyitása</string>
+    <string name="action_settings">Beállítások</string>
+    <string name="volley_req_error">Itten valami hiba van. :( Bocsi. (%1$s)</string>
+    <string name="title_activity_grades">Jegyek</string>
+    <string name="title_activity_avgs">Átlagok</string>
+</resources>

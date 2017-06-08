@@ -5,11 +5,11 @@
         <item
             android:id="@+id/nav_grades"
             android:icon="@drawable/grade_icon_black"
-            android:title="Grades" />
+            android:title="@string/title_activity_grades" />
         <item
             android:id="@+id/nav_avgs"
             android:icon="@drawable/avg_chart_icon_black"
-            android:title="Averages" />
+            android:title="@string/title_activity_avgs" />
     </group>
 
 </menu>
