@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -13,7 +14,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.Request;
@@ -30,6 +30,8 @@ import org.json.JSONObject;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * A login screen that offers login via email/password.
@@ -109,10 +111,8 @@ public class MainLogin extends AppCompatActivity {
         }
 
         if (cancel) {
-            // Error, do not login
             focusView.requestFocus();
         } else {
-            // Login
             showProgress(true);
 
             RequestQueue mReqQueue;
@@ -124,30 +124,31 @@ public class MainLogin extends AppCompatActivity {
             try {
                 payload.put("username", studentId);
                 payload.put("password", password);
-            } catch (JSONException e) {
-                // TODO: Add error handling
-                e.printStackTrace();
-            }
+            } catch (JSONException e) { e.printStackTrace(); }
 
             JsonObjectRequest jsoReq = new JsonObjectRequest(Request.Method.POST, Vars.APIBASE + "/auth", payload, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        String token = response.getString("token");
-                        Vars.AUTHTOKEN = token;
-                        Toast.makeText(getApplicationContext(), "Login OK.", Toast.LENGTH_SHORT).show();
+                        Vars.AUTHTOKEN = response.getString("token");
                         Intent it = new Intent(MainLogin.this, MainActivity.class);
                         startActivity(it);
                         showProgress(false);
                     } catch (JSONException e) {
                         showProgress(false);
-                        Toast.makeText(getApplicationContext(), "Login error. Username or passwd incorrect.", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(getApplicationContext(), "Login ERR: "+error.getMessage(), Toast.LENGTH_LONG).show();
+                    if (error.networkResponse.statusCode == HttpsURLConnection.HTTP_FORBIDDEN) {
+                        Snackbar.make(findViewById(R.id.login_coord_view), R.string.login_incorrect_account_details, Snackbar.LENGTH_LONG).show();
+                    } else if (error.networkResponse.statusCode == HttpsURLConnection.HTTP_BAD_GATEWAY) {
+                        Snackbar.make(findViewById(R.id.login_coord_view), R.string.login_kreta_unresponsive, Snackbar.LENGTH_LONG).show();
+                    } else {
+                        Snackbar.make(findViewById(R.id.login_coord_view), R.string.login_other_error, Snackbar.LENGTH_LONG).show();
+                    }
                     showProgress(false);
                 }
             });
