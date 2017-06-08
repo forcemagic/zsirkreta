@@ -3,13 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.speedyblur.kretaremastered.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:context="com.speedyblur.kretaremastered.MainActivity">
 
-    <ExpandableListView
-        android:id="@+id/mainGradeView"
+    <ListView
+        android:id="@+id/avg_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </ExpandableListView>
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 </RelativeLayout>

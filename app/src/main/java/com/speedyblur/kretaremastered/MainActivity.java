@@ -13,9 +13,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Cache;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Grades");
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -54,6 +57,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //
+        ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
+
+        // Start request
         RequestQueue mReqQueue;
         Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024);
         mReqQueue = new RequestQueue(cache, new BasicNetwork(new HurlStack()));
@@ -61,15 +68,14 @@ public class MainActivity extends AppCompatActivity
 
         final Context localCtxt = this;
 
-        JsonArrayRequest jsoReq = new JsonArrayRequest(Request.Method.GET, Vars.APIBASE + "/grades", null, new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsoReqGrades = new JsonArrayRequest(Request.Method.GET, Vars.APIBASE + "/grades", null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONArray response) {
-                final JSONArray resp = response;
+            public void onResponse(final JSONArray response) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
-                        lv.setAdapter(new SubjectAdapter(localCtxt, Subject.fromJson(resp)));
+                        lv.setAdapter(new SubjectAdapter(localCtxt, Subject.fromJson(response)));
                     }
                 });
             }
@@ -87,7 +93,33 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
-        mReqQueue.add(jsoReq);
+        JsonArrayRequest jsoReqAvgs = new JsonArrayRequest(Request.Method.GET, Vars.APIBASE + "/avg", null, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(final JSONArray response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ListView lv = (ListView) findViewById(R.id.avg_list);
+                        lv.setAdapter(new AverageAdapter(localCtxt, Average.fromJson(response)));
+                    }
+                });
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(getApplicationContext(), "Login ERR: "+error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("X-Auth-Token", Vars.AUTHTOKEN);
+                return params;
+            }
+        };
+
+        mReqQueue.add(jsoReqGrades);
+        mReqQueue.add(jsoReqAvgs);
     }
 
     @Override
@@ -127,19 +159,12 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        ViewFlipper vf = (ViewFlipper) findViewById(R.id.main_viewflipper);
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_avgs) {
+            vf.setDisplayedChild(1);
+        } else if (id == R.id.nav_grades) {
+            vf.setDisplayedChild(0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

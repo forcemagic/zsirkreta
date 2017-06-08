@@ -9,10 +9,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:background="@drawable/roundrect"
-        android:paddingBottom="12dp"
-        android:paddingEnd="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="12dp"
+        android:paddingBottom="6dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
+        android:paddingTop="6dp"
         android:text="5"
         android:textColor="@android:color/white"
         android:textSize="24sp"
@@ -23,7 +23,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/grade"
-        android:layout_margin="4dp"
         android:layout_toEndOf="@+id/grade"
         android:text="xxxx.yy.zz"
         android:textColor="@android:color/black"
@@ -35,5 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/date"
         android:layout_below="@+id/date"
-        android:text="Desc" />
+        android:text="Desc"
+        android:textSize="12sp" />
 </RelativeLayout>
