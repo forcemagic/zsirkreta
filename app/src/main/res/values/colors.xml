@@ -3,4 +3,8 @@
     <color name="colorPrimary">#222</color>
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#303FAF</color>
+
+    <color name="goodGrade">#FF44AA44</color>
+    <color name="avgGrade">#FFAAAA44</color>
+    <color name="badGrade">#FFAA4444</color>
 </resources>

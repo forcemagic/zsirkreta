@@ -12,14 +12,24 @@ class Grade {
     String teacher;
     String type;
     String theme;
+    int colorId;
 
-    Grade(JSONObject obj) {
+    private Grade(JSONObject obj) {
         try {
             this.grade = obj.getString("grade");
             this.gotDate = obj.getString("date");
             this.teacher = obj.getString("teacher");
             this.theme = obj.getString("theme");
             this.type = obj.getString("type");
+
+            int intGrade = Integer.parseInt(this.grade);
+            if (intGrade > 3) {
+                this.colorId = R.color.goodGrade;
+            } else if (intGrade == 3) {
+                this.colorId = R.color.avgGrade;
+            } else {
+                this.colorId = R.color.badGrade;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

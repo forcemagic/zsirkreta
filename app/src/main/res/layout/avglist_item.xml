@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:background="@drawable/roundrect"
+        android:padding="4dp"
         android:text="5.00"
         android:textColor="@android:color/white"
         android:textSize="24sp" />
@@ -18,8 +19,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/avglabel_average"
+        android:layout_marginStart="2dp"
         android:layout_toEndOf="@+id/avglabel_average"
         android:text="@string/blablabla"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/avglabel_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/avglabel_subject"
+        android:layout_below="@+id/avglabel_subject"
+        android:text="@string/blablabla" />
 </RelativeLayout>
