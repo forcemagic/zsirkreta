@@ -10,12 +10,21 @@ class Average {
     String subject;
     double average;
     double classAverage;
+    int colorId;
 
-    Average(JSONObject jsobj) {
+    private Average(JSONObject jsobj) {
         try {
             this.subject = jsobj.getString("subject");
             this.average = jsobj.getDouble("average");
             this.classAverage = jsobj.getDouble("classAverage");
+
+            if (this.average > 3) {
+                this.colorId = R.color.goodGrade;
+            } else if (Math.round(this.average) == 3) {
+                this.colorId = R.color.avgGrade;
+            } else {
+                this.colorId = R.color.badGrade;
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
