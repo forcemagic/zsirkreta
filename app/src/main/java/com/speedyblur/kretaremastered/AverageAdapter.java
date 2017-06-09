@@ -1,6 +1,8 @@
 package com.speedyblur.kretaremastered;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,7 @@ class AverageAdapter extends ArrayAdapter<Average> {
     }
 
     @Override
-    public View getView(int pos, View convertView, ViewGroup parent) {
+    public View getView(int pos, View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.avglist_item, parent, false);
             Average item = this.getItem(pos);
@@ -25,7 +27,10 @@ class AverageAdapter extends ArrayAdapter<Average> {
             TextView subjView = (TextView) convertView.findViewById(R.id.avglabel_subject);
 
             avgView.setText(String.format(Locale.ENGLISH, "%.2f", item.average));
-            subjView.setText(item.subject);
+            Resources resx = this.getContext().getResources();
+            int resxid = resx.getIdentifier("subject_"+item.subject, "string", convertView.getContext().getPackageName());
+            String outpName = resxid == 0 ? item.subject : resx.getString(resxid);
+            subjView.setText(outpName);
 
             return convertView;
         } else {

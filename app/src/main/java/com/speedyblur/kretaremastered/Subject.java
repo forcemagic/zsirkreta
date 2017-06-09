@@ -13,19 +13,7 @@ class Subject {
 
     Subject(JSONObject subjObj) {
         try {
-            StringBuilder sb = new StringBuilder();
-            String[] origArray = subjObj.getString("subject").split(" ");
-
-            for (String frag : origArray) {
-                if (!frag.equalsIgnoreCase("és")) {
-                    char firstLetter = frag.toCharArray()[0];
-                    sb.append(Character.toUpperCase(firstLetter)).append(frag.substring(1)).append(" ");
-                } else {
-                    sb.append("és ");
-                }
-            }
-
-            this.name = sb.toString().trim();
+            this.name = subjObj.getString("subject");
             this.grades = Grade.fromJson(subjObj.getJSONArray("grades"));
             this.avg = subjObj.getDouble("avg");
         } catch (JSONException e) {
