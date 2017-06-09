@@ -30,4 +30,6 @@
     <string name="subject_pe">Testnevelés</string>
     <string name="subject_physics">Fizika</string>
     <string name="avglabel_desc">Osztályátlag: %1$.2f - Különbség: %2$.2f</string>
+    <string name="grade_unknown_topic">Ismeretlen Téma</string>
+    <string name="subjview_average">ÁTLAG: %1$.2f</string>
 </resources>

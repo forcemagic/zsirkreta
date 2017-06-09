@@ -12,7 +12,6 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 class SubjectAdapter extends BaseExpandableListAdapter {
 
@@ -73,7 +72,7 @@ class SubjectAdapter extends BaseExpandableListAdapter {
         int resxid = resx.getIdentifier("subject_"+subjObj.name, "string", convertView.getContext().getPackageName());
         String outpName = resxid == 0 ? subjObj.name : resx.getString(resxid);
         subjNameView.setText(outpName);
-        avgView.setText(String.format(Locale.ENGLISH, "ÁTLAG: %.2f", subjObj.avg));
+        avgView.setText(convertView.getResources().getString(R.string.subjview_average, subjObj.avg));
 
         return convertView;
     }
@@ -102,7 +101,7 @@ class SubjectAdapter extends BaseExpandableListAdapter {
 
         gradeView.setText(gradeObj.grade);
         dateView.setText(gradeObj.gotDate);
-        if (gradeObj.theme.equals(" - ")) { gradeObj.theme = "Ismeretlen Téma"; }
+        if (gradeObj.theme.equals(" - ")) { gradeObj.theme = convertView.getResources().getString(R.string.grade_unknown_topic); }
         descView.setText(gradeObj.theme+" - "+gradeObj.type+" - "+gradeObj.teacher);
 
         return convertView;
