@@ -1,5 +1,6 @@
 package com.speedyblur.kretaremastered;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,9 +36,10 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
+    private ProgressDialog pd;
 
-    @SuppressWarnings("deprecation")
     @Override
+    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -54,8 +56,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        // Init viewFlipper
+        // Init ViewFlipper
         ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
+
+        // ProgressDialog
+        pd = new ProgressDialog(this);
+        pd.setMessage(getResources().getString(R.string.progress_dialog_loading));
+        pd.setIndeterminate(true);
+        pd.show();
 
         // Start request
         RequestQueue mReqQueue;
@@ -73,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void run() {
                         ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
                         lv.setAdapter(new SubjectAdapter(localCtxt, Subject.fromJson(response)));
+                        pd.dismiss();
                     }
                 });
             }
@@ -80,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onErrorResponse(VolleyError error) {
                 Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.volley_req_error, error.getLocalizedMessage()), Snackbar.LENGTH_LONG);
+                pd.dismiss();
             }
         }) {
             @Override
@@ -98,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void run() {
                         ListView lv = (ListView) findViewById(R.id.avg_list);
                         lv.setAdapter(new AverageAdapter(localCtxt, Average.fromJson(response)));
+                        pd.dismiss();
                     }
                 });
             }
@@ -105,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onErrorResponse(VolleyError error) {
                 Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.volley_req_error, error.getLocalizedMessage()), Snackbar.LENGTH_LONG);
+                pd.dismiss();
             }
         }) {
             @Override
