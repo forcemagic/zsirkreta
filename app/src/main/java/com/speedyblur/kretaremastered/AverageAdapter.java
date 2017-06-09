@@ -25,12 +25,15 @@ class AverageAdapter extends ArrayAdapter<Average> {
 
             TextView avgView = (TextView) convertView.findViewById(R.id.avglabel_average);
             TextView subjView = (TextView) convertView.findViewById(R.id.avglabel_subject);
+            TextView descView = (TextView) convertView.findViewById(R.id.avglabel_desc);
 
             avgView.setText(String.format(Locale.ENGLISH, "%.2f", item.average));
+
             Resources resx = this.getContext().getResources();
             int resxid = resx.getIdentifier("subject_"+item.subject, "string", convertView.getContext().getPackageName());
             String outpName = resxid == 0 ? item.subject : resx.getString(resxid);
             subjView.setText(outpName);
+            descView.setText(resx.getString(R.string.avglabel_desc, item.classAverage, item.average - item.classAverage));
 
             return convertView;
         } else {

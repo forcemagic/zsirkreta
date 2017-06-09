@@ -34,6 +34,6 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/date"
         android:layout_below="@+id/date"
-        android:text="Desc"
+        android:text="@string/blablabla"
         android:textSize="12sp" />
 </RelativeLayout>

@@ -29,4 +29,5 @@
     <string name="subject_music">Ének-Zene</string>
     <string name="subject_pe">Testnevelés</string>
     <string name="subject_physics">Fizika</string>
+    <string name="avglabel_desc">Osztályátlag: %1$.2f - Különbség: %2$.2f</string>
 </resources>
