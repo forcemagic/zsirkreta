@@ -25,7 +25,7 @@
         android:layout_alignTop="@+id/grade"
         android:layout_toEndOf="@+id/grade"
         android:text="xxxx.yy.zz"
-        android:textColor="@android:color/black"
+        android:textColor="?android:attr/textColorPrimary"
         android:textSize="14sp" />
 
     <TextView
