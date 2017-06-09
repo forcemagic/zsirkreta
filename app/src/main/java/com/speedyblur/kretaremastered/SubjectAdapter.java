@@ -1,13 +1,11 @@
 package com.speedyblur.kretaremastered;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -68,7 +66,10 @@ class SubjectAdapter extends BaseExpandableListAdapter {
             TextView subjNameView = (TextView) convertView.findViewById(R.id.subject);
             TextView avgView = (TextView) convertView.findViewById(R.id.avg);
 
-            subjNameView.setText(subjObj.name);
+            Resources resx = convertView.getResources();
+            int resxid = resx.getIdentifier("subject_"+subjObj.name, "string", convertView.getContext().getPackageName());
+            String outpName = resxid == 0 ? subjObj.name : resx.getString(resxid);
+            subjNameView.setText(outpName);
             avgView.setText(String.format(Locale.ENGLISH, "ÁTLAG: %.2f", subjObj.avg));
 
             return convertView;

@@ -15,4 +15,18 @@
     <string name="volley_req_error">Itten valami hiba van. :( Bocsi. (%1$s)</string>
     <string name="title_activity_grades">Jegyek</string>
     <string name="title_activity_avgs">Átlagok</string>
+    <string name="subject_art">Rajz</string>
+    <string name="subject_biology">Biológia</string>
+    <string name="subject_chemistry">Kémia</string>
+    <string name="subject_english_lang">Angol Nyelv</string>
+    <string name="subject_geography">Földrajz</string>
+    <string name="subject_german_lang">Német Nyelv</string>
+    <string name="subject_head_teacher_class">Osztályfőnöki</string>
+    <string name="subject_history">Történelem</string>
+    <string name="subject_hungarian_grammar_literature">Magyar Nyelv és Irodalom</string>
+    <string name="subject_it">Informatika</string>
+    <string name="subject_maths">Matematika</string>
+    <string name="subject_music">Ének-Zene</string>
+    <string name="subject_pe">Testnevelés</string>
+    <string name="subject_physics">Fizika</string>
 </resources>
