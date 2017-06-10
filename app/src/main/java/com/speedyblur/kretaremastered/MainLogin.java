@@ -218,11 +218,11 @@ public class MainLogin extends AppCompatActivity {
             @Override
             public void onFailure(AuthenticationFailureReason failureReason, boolean fatal, CharSequence errorMessage, int moduleTag, int errorCode) {
                 if (!fatal) {
-                    pd.setMessage(getResources().getString(R.string.dialog_fingerprint_error));
+                    pd.setMessage(getResources().getString(R.string.fingerprint_dialog_error));
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            pd.setMessage(getResources().getString(R.string.dialog_awaiting_fingerprint));
+                            pd.setMessage(getResources().getString(R.string.fingerprint_dialog_waiting));
                         }
                     }, 1000);
                 } else {
