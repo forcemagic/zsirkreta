@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -196,11 +197,6 @@ public class MainLogin extends AppCompatActivity {
     @SuppressWarnings("deprecation")
     private void fingerprintAuth() {
         final ProgressDialog pd = new ProgressDialog(this);
-        pd.setMessage(getResources().getString(R.string.dialog_awaiting_fingerprint));
-        pd.setIndeterminateDrawable(getResources().getDrawable(R.drawable.fingerprint_icon_black));
-        pd.setIndeterminate(true);
-        pd.setCancelable(false);
-        pd.show();
 
         Reprint.authenticate(new AuthenticationListener() {
             @Override
@@ -242,6 +238,19 @@ public class MainLogin extends AppCompatActivity {
                 }
             }
         });
+
+        pd.setMessage(getResources().getString(R.string.fingerprint_dialog_waiting));
+        pd.setIndeterminateDrawable(getResources().getDrawable(R.drawable.fingerprint_icon_black));
+        pd.setIndeterminate(true);
+        pd.setCancelable(true);
+        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                Reprint.cancelAuthentication();
+                Snackbar.make(findViewById(R.id.login_coord_view), R.string.fingerprint_auth_cancel, Snackbar.LENGTH_LONG).show();
+            }
+        });
+        pd.show();
     }
 }
 

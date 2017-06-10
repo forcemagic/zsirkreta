@@ -36,8 +36,9 @@
     <string name="fingerprint_auth_success">Igen, ez lesz az a lenyomat! Azonosítás sikeres.</string>
     <string name="fingerprint_auth_success_firsttime">Ez az első alkalom, hogy azonosítottad magad. Jelentkezz be, és az adataid a következő indításnál megmaradnak!</string>
     <string name="fingerprint_dialog_error">Nem, ez nem az a lenyomat.\nPróbáld meg mégegyszer.</string>
-    <string name="fingerprint_dialog_waiting">Várakozás ujjlenyomatra…</string>
+    <string name="fingerprint_dialog_waiting">Várakozás ujjlenyomatra… (Nyomj egy visszát az abbahagyáshoz)</string>
     <string name="fingerprint_fatal_locked_out">Azért ennyiszer ne próbálkozz! Most egy darabig nem tudod használni az ujjlenyomat-olvasót.</string>
     <string name="fingerprint_fatal_no_fingerprints">Úgy látom nincsen ujjlenyomatod regisztrálva. Menj a telefon beállításaihoz, és adj hozzá pár nyomatot!</string>
     <string name="fingerprint_fatal_no_hw">Hát sajnos nincs ujjlenyomat szenzorod. :( Mostanra ki lesz kapcsolva az ujjlenyomat azonosítás.</string>
+    <string name="fingerprint_auth_cancel">Oké, értem. Akkor most kézzel kell beírnod mindent :(</string>
 </resources>
