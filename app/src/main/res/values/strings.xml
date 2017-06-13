@@ -29,14 +29,13 @@
     <string name="subject_history">History</string>
     <string name="subject_head_teacher_class">Class \\w head teacher</string>
 
-    <string name="fingerprint_dialog_waiting">Awaiting fingerprint… (Press back to cancel)</string>
+    <string name="fingerprint_dialog_waiting">Awaiting fingerprint…</string>
     <string name="fingerprint_fatal_locked_out">You\'re trying hard, I can see. Too hard. Take a break and clean your fingers! Try again in a minute or so.</string>
-    <string name="fingerprint_dialog_error">That finger doesn\'t look right to me.\nPlease try again.</string>
+    <string name="fingerprint_wrong_finger">That finger doesn\'t look right to me.\nPlease try again.</string>
     <string name="fingerprint_auth_success">That\'s the print! Authenticated successfully.</string>
-    <string name="fingerprint_auth_success_firsttime">This is your first time authenticating. Log in successfully, and your credentials will be remembered!</string>
-    <string name="fingerprint_auth_cancel">You have canceled the authentication. Now you have to enter things manually. :(</string>
     <string name="fingerprint_fatal_no_fingerprints">You have no fingerprints registered. Head over to your phone settings to add some!</string>
     <string name="fingerprint_fatal_no_hw">You do not have a fingerprint sensor. What a bummer! Fingerprint authentication disabled.</string>
+    <string name="fingerprint_fatal_unknown_error">There\'s a problem with the sensor. Please try again later.</string>
 
     <!-- Misc string values -->
     <string name="subjview_average">AVG: %1$.2f</string>

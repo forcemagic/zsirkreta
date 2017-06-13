@@ -6,16 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.ArraySet;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.Cache;
@@ -31,6 +35,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
+
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -43,11 +52,14 @@ public class MainLogin extends AppCompatActivity {
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private SharedPreferences shPrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        shPrefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
 
         // Set up the login form.
         mIdView = (EditText) findViewById(R.id.studentid);
@@ -64,7 +76,7 @@ public class MainLogin extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        Button mEmailSignInButton = (Button) findViewById(R.id.login_btn);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,6 +86,16 @@ public class MainLogin extends AppCompatActivity {
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        // Populate Spinner
+        Spinner regSpinner = (Spinner) findViewById(R.id.reg_profile_selector);
+        regSpinner.setAdapter(new ProfileAdapter(this, Profile.fromSet(shPrefs.getStringSet("profiles", new ArraySet<String>()))));
+        /*regSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+        });*/
     }
 
     /**
@@ -122,9 +144,12 @@ public class MainLogin extends AppCompatActivity {
                     try {
                         CheckBox rememberCheck = (CheckBox) findViewById(R.id.remember_data_check);
                         if (rememberCheck.isChecked()) {
-                            SharedPreferences.Editor shEdit = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE).edit();
-                            shEdit.putString("username", studentId);
-                            shEdit.putString("password", password);
+                            Set<String> profiles = shPrefs.getStringSet("profiles", new ArraySet<String>());
+                            if (!profiles.contains(studentId+"-"+password)) {
+                                profiles.add(studentId+"-"+password);
+                            }
+                            SharedPreferences.Editor shEdit = shPrefs.edit();
+                            shEdit.putStringSet("profiles", profiles);
                             shEdit.apply();
                         }
 

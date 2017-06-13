@@ -41,7 +41,7 @@
                 android:textSize="30sp" />
 
             <Spinner
-                android:id="@+id/regPeopleSelector"
+                android:id="@+id/reg_profile_selector"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
