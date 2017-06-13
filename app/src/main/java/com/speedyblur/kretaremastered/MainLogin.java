@@ -2,13 +2,10 @@ package com.speedyblur.kretaremastered;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -17,9 +14,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Cache;
 import com.android.volley.Request;
@@ -30,9 +27,6 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.github.ajalt.reprint.core.AuthenticationFailureReason;
-import com.github.ajalt.reprint.core.AuthenticationListener;
-import com.github.ajalt.reprint.core.Reprint;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,8 +38,6 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class MainLogin extends AppCompatActivity {
 
-    private SharedPreferences shPrefs;
-
     // UI references.
     private EditText mIdView;
     private EditText mPasswordView;
@@ -56,14 +48,6 @@ public class MainLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        shPrefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-
-        // Set up fingerprint scan
-        if (shPrefs.getBoolean("fingerprintingEnabled", true)) {
-            Reprint.initialize(this);
-            fingerprintAuth();
-        }
 
         // Set up the login form.
         mIdView = (EditText) findViewById(R.id.studentid);
@@ -136,10 +120,13 @@ public class MainLogin extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONObject response) {
                     try {
-                        SharedPreferences.Editor shEdit = shPrefs.edit();
-                        shEdit.putString("username", studentId);
-                        shEdit.putString("password", password);
-                        shEdit.apply();
+                        CheckBox rememberCheck = (CheckBox) findViewById(R.id.remember_data_check);
+                        if (rememberCheck.isChecked()) {
+                            SharedPreferences.Editor shEdit = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE).edit();
+                            shEdit.putString("username", studentId);
+                            shEdit.putString("password", password);
+                            shEdit.apply();
+                        }
 
                         Vars.AUTHTOKEN = response.getString("token");
                         Intent it = new Intent(MainLogin.this, MainActivity.class);
@@ -192,65 +179,6 @@ public class MainLogin extends AppCompatActivity {
                 mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
-    }
-
-    @SuppressWarnings("deprecation")
-    private void fingerprintAuth() {
-        final ProgressDialog pd = new ProgressDialog(this);
-
-        Reprint.authenticate(new AuthenticationListener() {
-            @Override
-            public void onSuccess(int moduleTag) {
-                pd.dismiss();
-                if (shPrefs.getString("username", "").equals("")) {
-                    Snackbar.make(findViewById(R.id.login_coord_view), R.string.fingerprint_auth_success_firsttime, Snackbar.LENGTH_LONG).show();
-                } else {
-                    mIdView.setText(shPrefs.getString("username", ""));
-                    mPasswordView.setText(shPrefs.getString("password", ""));
-                    Snackbar.make(findViewById(R.id.login_coord_view), R.string.fingerprint_auth_success, Snackbar.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onFailure(AuthenticationFailureReason failureReason, boolean fatal, CharSequence errorMessage, int moduleTag, int errorCode) {
-                if (!fatal) {
-                    pd.setMessage(getResources().getString(R.string.fingerprint_dialog_error));
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            pd.setMessage(getResources().getString(R.string.fingerprint_dialog_waiting));
-                        }
-                    }, 1000);
-                } else {
-                    pd.dismiss();
-                    if (failureReason == AuthenticationFailureReason.LOCKED_OUT) {
-                        Snackbar.make(findViewById(R.id.login_coord_view), R.string.fingerprint_fatal_locked_out, Snackbar.LENGTH_LONG).show();
-                    } else if (failureReason == AuthenticationFailureReason.NO_FINGERPRINTS_REGISTERED) {
-                        Snackbar.make(findViewById(R.id.login_coord_view), R.string.fingerprint_fatal_no_fingerprints, Snackbar.LENGTH_LONG).show();
-                    } else if (failureReason == AuthenticationFailureReason.NO_HARDWARE) {
-                        SharedPreferences.Editor shEdit = shPrefs.edit();
-                        shEdit.putBoolean("fingerprintingEnabled", false);
-                        shEdit.apply();
-                        Snackbar.make(findViewById(R.id.login_coord_view), R.string.fingerprint_fatal_no_hw, Snackbar.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Whoops, a fingerprint error occurred.", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }
-        });
-
-        pd.setMessage(getResources().getString(R.string.fingerprint_dialog_waiting));
-        pd.setIndeterminateDrawable(getResources().getDrawable(R.drawable.fingerprint_icon_black));
-        pd.setIndeterminate(true);
-        pd.setCancelable(true);
-        pd.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                Reprint.cancelAuthentication();
-                Snackbar.make(findViewById(R.id.login_coord_view), R.string.fingerprint_auth_cancel, Snackbar.LENGTH_LONG).show();
-            }
-        });
-        pd.show();
     }
 }
 
