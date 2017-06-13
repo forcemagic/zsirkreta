@@ -9,8 +9,8 @@
     <string name="login_studentcard_hint">Student card ID</string>
     <string name="login_passwd_hint">Password</string>
     <string name="login_remember_checkbox">Remember login data</string>
-    <string name="login_kreta_unresponsive">Whoops. The KRETA servers are having a great time having maintenanced. Check back later.</string>
-    <string name="login_incorrect_account_details">You have not provided the magnificent KRETA with correct account details.</string>
+    <string name="login_kreta_unresponsive">Whoops. The KRETA servers are having a great time being maintenanced. Check back later.</string>
+    <string name="login_incorrect_account_details">You have provided the magnificent KRETA with incorrect account details.</string>
     <string name="login_other_error">There\'s something wrong with your Internet connection. Did you turn on Wifi or Mobile Data?</string>
     <string name="login_copyright">API is Copyleft 2017 Matthew Coal.\nKRETA is Copyright © 2017 eKreta Informatikai Zrt.</string>
 
