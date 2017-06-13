@@ -7,7 +7,7 @@ class Profile {
     String id;
     String pwd;
 
-    Profile(String stored) {
+    private Profile(String stored) {
         String[] sliced = stored.split("-");
         id = sliced[0];
         pwd = sliced[1];

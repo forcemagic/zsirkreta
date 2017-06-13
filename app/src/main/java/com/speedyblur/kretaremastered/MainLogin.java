@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArraySet;
 import android.support.v7.app.AppCompatActivity;
@@ -35,9 +34,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -90,12 +86,20 @@ public class MainLogin extends AppCompatActivity {
         // Populate Spinner
         Spinner regSpinner = (Spinner) findViewById(R.id.reg_profile_selector);
         regSpinner.setAdapter(new ProfileAdapter(this, Profile.fromSet(shPrefs.getStringSet("profiles", new ArraySet<String>()))));
-        /*regSpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        regSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Profile item = (Profile) adapterView.getSelectedItem();
+
+                mIdView.setText(item.id);
+                mPasswordView.setText(item.pwd);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
-        });*/
+        });
     }
 
     /**
