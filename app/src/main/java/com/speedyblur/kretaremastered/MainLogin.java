@@ -149,8 +149,8 @@ public class MainLogin extends AppCompatActivity {
                         CheckBox rememberCheck = (CheckBox) findViewById(R.id.remember_data_check);
                         if (rememberCheck.isChecked()) {
                             Set<String> profiles = shPrefs.getStringSet("profiles", new ArraySet<String>());
-                            if (!profiles.contains(studentId+"-"+password)) {
-                                profiles.add(studentId+"-"+password);
+                            if (!profiles.contains(studentId+"@"+password)) {
+                                profiles.add(studentId+"@"+password);
                             }
                             SharedPreferences.Editor shEdit = shPrefs.edit();
                             shEdit.putStringSet("profiles", profiles);

@@ -8,16 +8,21 @@ class Profile {
     String pwd;
 
     private Profile(String stored) {
-        String[] sliced = stored.split("-");
+        String[] sliced = stored.split("@");
         id = sliced[0];
         pwd = sliced[1];
     }
 
     static ArrayList<Profile> fromSet(Set<String> origSet) {
-        ArrayList<Profile> profArray = new ArrayList<Profile>();
+        ArrayList<Profile> profArray = new ArrayList<>();
         for (String cStr : origSet) {
             profArray.add(new Profile(cStr));
         }
         return profArray;
+    }
+
+    @Override
+    public String toString() {
+        return this.id;
     }
 }
