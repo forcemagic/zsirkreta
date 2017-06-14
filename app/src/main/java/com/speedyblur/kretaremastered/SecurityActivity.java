@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -23,6 +24,9 @@ public class SecurityActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security);
 
+        // Hide soft keyboard
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         ViewFlipper vf = (ViewFlipper) findViewById(R.id.auth_view_flipper);
         shPrefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
         int authType = shPrefs.getInt("security", -1);
@@ -38,8 +42,21 @@ public class SecurityActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(AuthenticationFailureReason failureReason, boolean fatal, CharSequence errorMessage, int moduleTag, int errorCode) {
-                    TextView fingerStatus = (TextView) findViewById(R.id.fingerprint_status);
-                    if (failureReason == AuthenticationFailureReason.LOCKED_OUT) {
+                    final TextView fingerStatus = (TextView) findViewById(R.id.fingerprint_status);
+                    if (failureReason == AuthenticationFailureReason.AUTHENTICATION_FAILED) {
+                        fingerStatus.setText(R.string.fingerprint_wrong_finger);
+                        new android.os.Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        fingerStatus.setText(R.string.fingerprint_dialog_waiting);
+                                    }
+                                });
+                            }
+                        }, 1500);
+                    } else if (failureReason == AuthenticationFailureReason.LOCKED_OUT) {
                         fingerStatus.setText(R.string.fingerprint_fatal_locked_out);
                     } else {
                         fingerStatus.setText(R.string.fingerprint_fatal_unknown_error);
