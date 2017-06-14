@@ -37,6 +37,11 @@
     <string name="fingerprint_fatal_no_hw">You do not have a fingerprint sensor. What a bummer! Fingerprint authentication disabled.</string>
     <string name="fingerprint_fatal_unknown_error">There\'s a problem with the sensor. Please try again later.</string>
 
+    <string name="settings_auth_type">Authentication type</string>
+    <string name="settings_security_none">None</string>
+    <string name="settings_security_fingerprint">Fingerprint (+passcode)</string>
+    <string name="settings_security_passcode">Passcode</string>
+
     <!-- Misc string values -->
     <string name="subjview_average">AVG: %1$.2f</string>
     <string name="grade_unknown_topic">Unknown Topic</string>
