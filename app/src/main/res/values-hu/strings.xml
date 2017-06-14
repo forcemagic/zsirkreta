@@ -40,4 +40,15 @@
     <string name="fingerprint_fatal_no_hw">Hát sajnos nincs ujjlenyomat szenzorod. :( Mostanra ki lesz kapcsolva az ujjlenyomat azonosítás.</string>
     <string name="login_remember_checkbox">Jegyezzen meg!</string>
     <string name="fingerprint_wrong_finger">Ez nem a jó ujjad. Próbáld meg mégegyszer.</string>
+    <string name="fingerprint_fatal_unknown_error">Valami gáz van az olvasóval. Próbáld meg késöbb.</string>
+    <string name="settings_auth_type">Azonosítási mód</string>
+    <string name="settings_passcode_status_again">Mégegyszer légyszi</string>
+    <string name="settings_passcode_status_lengtherr">A jelkód nem 4 jegyü :(</string>
+    <string name="settings_passcode_status_nomatch">A jelkódok nem egyeznek :(</string>
+    <string name="settings_passcode_status_ready">Írja be az új jelkódot</string>
+    <string name="settings_passcode_status_saved">Jelkód mentve</string>
+    <string name="settings_security_fingerprint">Ujjlenyomat</string>
+    <string name="settings_security_none">Semmi</string>
+    <string name="settings_security_passcode">Jelkód</string>
+    <string name="auth_passcode_error">Ez nem az a kód!</string>
 </resources>

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -12,20 +14,21 @@ import com.github.ajalt.reprint.core.AuthenticationFailureReason;
 import com.github.ajalt.reprint.core.AuthenticationListener;
 import com.github.ajalt.reprint.core.Reprint;
 
-import java.security.Security;
-
 public class SecurityActivity extends AppCompatActivity {
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    SharedPreferences shPrefs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security);
 
         ViewFlipper vf = (ViewFlipper) findViewById(R.id.auth_view_flipper);
-        SharedPreferences shPrefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
-        if (shPrefs.getBoolean("fingerprintingEnabled", false)) {
-            vf.setDisplayedChild(0);
+        shPrefs = getSharedPreferences(getPackageName(), Context.MODE_PRIVATE);
+        int authType = shPrefs.getInt("security", -1);
+
+        if (authType == Vars.AuthType.FINGERPRINT) {
+            vf.setDisplayedChild(1);
             Reprint.initialize(this);
             Reprint.authenticate(new AuthenticationListener() {
                 @Override
@@ -43,14 +46,75 @@ public class SecurityActivity extends AppCompatActivity {
                     }
                 }
             });
-        } else if (shPrefs.getBoolean("keycodingEnabled", false)) {
-            vf.setDisplayedChild(1);
+        } else if (authType == Vars.AuthType.PASSCODE) {
+            vf.setDisplayedChild(0);
         } else {
             proceed();
         }
     }
 
+    // Keypad buttons' onClick listeners
+    public void addNum1(View v) {
+        addNum("1");
+    }
+    public void addNum2(View v) {
+        addNum("2");
+    }
+    public void addNum3(View v) {
+        addNum("3");
+    }
+    public void addNum4(View v) {
+        addNum("4");
+    }
+    public void addNum5(View v) {
+        addNum("5");
+    }
+    public void addNum6(View v) {
+        addNum("6");
+    }
+    public void addNum7(View v) {
+        addNum("7");
+    }
+    public void addNum8(View v) {
+        addNum("8");
+    }
+    public void addNum9(View v) {
+        addNum("9");
+    }
+    public void addNum0(View v) {
+        addNum("0");
+    }
+    public void remLastChar(View v) {
+        EditText passcodeIn = (EditText) findViewById(R.id.security_passcode_input);
+        if (passcodeIn.getText().length() <= 1) {
+            passcodeIn.setText("");
+        } else {
+            passcodeIn.setText(passcodeIn.getText().toString().substring(0, passcodeIn.getText().length()-2));
+        }
+    }
+
+    // Helper for the onClick listeners above
+    private void addNum(String toAdd) {
+        EditText passcodeIn = (EditText) findViewById(R.id.security_passcode_input);
+        if (passcodeIn.getText().length() < 4) {
+            passcodeIn.setText(passcodeIn.getText().append(toAdd));
+        }
+    }
+
+    // Authenticate w/ passcode
+    public void validatePasscode(View v) {
+        EditText passcodeIn = (EditText) findViewById(R.id.security_passcode_input);
+        if (passcodeIn.getText().toString().equals(shPrefs.getString("passcode", "!@#$"))) {
+            proceed();
+        } else {
+            passcodeIn.setError(getResources().getString(R.string.auth_passcode_error));
+            passcodeIn.setText("");
+        }
+    }
+
+    // Everything's OK. Let's go!
     private void proceed() {
+        finish();
         Intent it = new Intent(SecurityActivity.this, MainLogin.class);
         this.startActivity(it);
     }

@@ -51,5 +51,40 @@
                 android:layout_weight="1"
                 android:text="@string/settings_security_passcode" />
         </RadioGroup>
+
+        <EditText
+            android:id="@+id/setting_passcode_entry"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/setting_security_group"
+            android:layout_below="@+id/setting_security_group"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="6dp"
+            android:ems="10"
+            android:hint="@string/settings_security_passcode"
+            android:inputType="numberPassword"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/setting_passcode_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/setting_passcode_entry"
+            android:layout_below="@+id/setting_passcode_entry"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/settings_passcode_status_ready"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/setting_passcode_okbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/setting_passcode_entry"
+            android:layout_alignTop="@+id/setting_passcode_entry"
+            android:layout_marginStart="4dp"
+            android:layout_toEndOf="@+id/setting_passcode_entry"
+            android:text="OK"
+            android:visibility="invisible" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

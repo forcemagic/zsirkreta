@@ -41,6 +41,11 @@
     <string name="settings_security_none">None</string>
     <string name="settings_security_fingerprint">Fingerprint (+passcode)</string>
     <string name="settings_security_passcode">Passcode</string>
+    <string name="settings_passcode_status_ready">Enter new passcode</string>
+    <string name="settings_passcode_status_again">Again, please</string>
+    <string name="settings_passcode_status_saved">Passcode saved</string>
+    <string name="settings_passcode_status_nomatch">Passcodes don\'t match :(</string>
+    <string name="settings_passcode_status_lengtherr">Passcode is not 4 digits :(</string>
 
     <!-- Misc string values -->
     <string name="subjview_average">AVG: %1$.2f</string>
@@ -50,6 +55,7 @@
     <string name="blablabla">Something</string>
     <string name="volley_req_error">Some kind of error occurred. :( (%1$s)</string>
     <string name="progress_dialog_loading">Login succeeded. Loading…</string>
+    <string name="auth_passcode_error">This is not the right code!</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

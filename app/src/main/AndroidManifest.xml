@@ -19,6 +19,9 @@
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".SettingsActivity"
+            android:label="@string/action_settings" />
+        <activity
             android:name=".SecurityActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
@@ -27,7 +30,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SettingsActivity"></activity>
     </application>
 
 </manifest>
