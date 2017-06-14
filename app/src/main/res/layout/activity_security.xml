@@ -29,6 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_weight="1"
+                    android:editable="false"
                     android:ems="10"
                     android:hint="####"
                     android:inputType="numberPassword" />

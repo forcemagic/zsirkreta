@@ -89,7 +89,7 @@ public class SecurityActivity extends AppCompatActivity {
         if (passcodeIn.getText().length() <= 1) {
             passcodeIn.setText("");
         } else {
-            passcodeIn.setText(passcodeIn.getText().toString().substring(0, passcodeIn.getText().length()-2));
+            passcodeIn.setText(passcodeIn.getText().toString().substring(0, passcodeIn.getText().length()-1));
         }
     }
 
