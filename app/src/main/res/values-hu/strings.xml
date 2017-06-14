@@ -33,4 +33,22 @@
     <string name="grade_unknown_topic">Ismeretlen Téma</string>
     <string name="subjview_average">ÁTLAG: %1$.2f</string>
     <string name="progress_dialog_loading">A bejelentkezés sikeres. Betöltés…</string>
+    <string name="fingerprint_auth_success">Igen, ez lesz az a lenyomat! Azonosítás sikeres.</string>
+    <string name="fingerprint_dialog_waiting">Várakozás ujjlenyomatra…</string>
+    <string name="fingerprint_fatal_locked_out">Azért ennyiszer ne próbálkozz! Most egy darabig nem tudod használni az ujjlenyomat-olvasót.</string>
+    <string name="fingerprint_fatal_no_fingerprints">Úgy látom nincsen ujjlenyomatod regisztrálva. Menj a telefon beállításaihoz, és adj hozzá pár nyomatot!</string>
+    <string name="fingerprint_fatal_no_hw">Hát sajnos nincs ujjlenyomat szenzorod. :( Mostanra ki lesz kapcsolva az ujjlenyomat azonosítás.</string>
+    <string name="login_remember_checkbox">Jegyezzen meg!</string>
+    <string name="fingerprint_wrong_finger">Ez nem a jó ujjad. Próbáld meg mégegyszer.</string>
+    <string name="fingerprint_fatal_unknown_error">Valami gáz van az olvasóval. Próbáld meg késöbb.</string>
+    <string name="settings_auth_type">Azonosítási mód</string>
+    <string name="settings_passcode_status_again">Mégegyszer légyszi</string>
+    <string name="settings_passcode_status_lengtherr">A jelkód nem 4 jegyü :(</string>
+    <string name="settings_passcode_status_nomatch">A jelkódok nem egyeznek :(</string>
+    <string name="settings_passcode_status_ready">Írja be az új jelkódot</string>
+    <string name="settings_passcode_status_saved">Jelkód mentve</string>
+    <string name="settings_security_fingerprint">Ujjlenyomat</string>
+    <string name="settings_security_none">Semmi</string>
+    <string name="settings_security_passcode">Jelkód</string>
+    <string name="auth_passcode_error">Ez nem az a kód!</string>
 </resources>

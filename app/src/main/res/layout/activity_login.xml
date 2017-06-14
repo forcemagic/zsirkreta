@@ -34,11 +34,16 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="6dp"
                 android:text="@string/app_name"
                 android:textAlignment="center"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="30sp" />
+
+            <Spinner
+                android:id="@+id/reg_profile_selector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -71,12 +76,17 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <CheckBox
+                android:id="@+id/remember_data_check"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login_remember_checkbox" />
+
             <Button
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/login_btn"
                 style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="@string/login_btn"
                 android:textStyle="bold" />
 

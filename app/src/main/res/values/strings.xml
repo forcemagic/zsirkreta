@@ -8,8 +8,9 @@
     <string name="login_btn">Login</string>
     <string name="login_studentcard_hint">Student card ID</string>
     <string name="login_passwd_hint">Password</string>
-    <string name="login_kreta_unresponsive">Whoops. The KRETA servers are having a great time having maintenanced. Check back later.</string>
-    <string name="login_incorrect_account_details">You have not provided the magnificent KRETA with correct account details.</string>
+    <string name="login_remember_checkbox">Remember login data</string>
+    <string name="login_kreta_unresponsive">Whoops. The KRETA servers are having a great time being maintenanced. Check back later.</string>
+    <string name="login_incorrect_account_details">You have provided the magnificent KRETA with incorrect account details.</string>
     <string name="login_other_error">There\'s something wrong with your Internet connection. Did you turn on Wifi or Mobile Data?</string>
     <string name="login_copyright">API is Copyleft 2017 Matthew Coal.\nKRETA is Copyright © 2017 eKreta Informatikai Zrt.</string>
 
@@ -28,6 +29,24 @@
     <string name="subject_history">History</string>
     <string name="subject_head_teacher_class">Class \\w head teacher</string>
 
+    <string name="fingerprint_dialog_waiting">Awaiting fingerprint…</string>
+    <string name="fingerprint_fatal_locked_out">You\'re trying hard, I can see. Too hard. Take a break and clean your fingers! Try again in a minute or so.</string>
+    <string name="fingerprint_wrong_finger">That finger doesn\'t look right to me.\nPlease try again.</string>
+    <string name="fingerprint_auth_success">That\'s the print! Authenticated successfully.</string>
+    <string name="fingerprint_fatal_no_fingerprints">You have no fingerprints registered. Head over to your phone settings to add some!</string>
+    <string name="fingerprint_fatal_no_hw">You do not have a fingerprint sensor. What a bummer! Fingerprint authentication disabled.</string>
+    <string name="fingerprint_fatal_unknown_error">There\'s a problem with the sensor. Please try again later.</string>
+
+    <string name="settings_auth_type">Authentication type</string>
+    <string name="settings_security_none">None</string>
+    <string name="settings_security_fingerprint">Fingerprint (+passcode)</string>
+    <string name="settings_security_passcode">Passcode</string>
+    <string name="settings_passcode_status_ready">Enter new passcode</string>
+    <string name="settings_passcode_status_again">Again, please</string>
+    <string name="settings_passcode_status_saved">Passcode saved</string>
+    <string name="settings_passcode_status_nomatch">Passcodes don\'t match :(</string>
+    <string name="settings_passcode_status_lengtherr">Passcode is not 4 digits :(</string>
+
     <!-- Misc string values -->
     <string name="subjview_average">AVG: %1$.2f</string>
     <string name="grade_unknown_topic">Unknown Topic</string>
@@ -36,13 +55,7 @@
     <string name="blablabla">Something</string>
     <string name="volley_req_error">Some kind of error occurred. :( (%1$s)</string>
     <string name="progress_dialog_loading">Login succeeded. Loading…</string>
-    <string name="dialog_awaiting_fingerprint">Awaiting fingerprint…</string>
-    <string name="fingerprint_fatal_locked_out">Fingerprint sensor unavailable. You have tried to authenticate too many times.</string>
-    <string name="dialog_fingerprint_error">Fingerprint not in enrolled list. Please try again.</string>
-    <string name="fingerprint_auth_success">Authenticated with fingerprint successfully.</string>
-    <string name="fingerprint_auth_success_firsttime">This is your first time authenticating. Log in successfully, and your credentials will be remembered!</string>
-    <string name="fingerprint_fatal_no_fingerprints">You have no fingerprints registered. Head over to your phone settings to add some!</string>
-    <string name="fingerprint_fatal_no_hw">You do not have a fingerprint sensor. What a bummer! Fingerprint authentication disabled.</string>
+    <string name="auth_passcode_error">This is not the right code!</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

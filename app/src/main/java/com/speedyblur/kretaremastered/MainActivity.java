@@ -2,6 +2,7 @@ package com.speedyblur.kretaremastered;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -153,7 +154,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            this.startActivity(settingsIntent);
         }
 
         return super.onOptionsItemSelected(item);
