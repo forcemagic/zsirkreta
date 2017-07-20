@@ -12,27 +12,22 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
 import android.widget.ViewFlipper;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Cache;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonArrayRequest;
-
 import org.json.JSONArray;
+import org.json.JSONException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -66,70 +61,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         pd.setIndeterminate(true);
         pd.show();
 
-        // Start request
-        RequestQueue mReqQueue;
-        Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024);
-        mReqQueue = new RequestQueue(cache, new BasicNetwork(new HurlStack()));
-        mReqQueue.start();
+        // TODO: Request to /grades and /avg
 
-        final Context localCtxt = this;
+        OkHttpClient htcli = new OkHttpClient();
+        final Context sharedCtxt = this;
 
-        JsonArrayRequest jsoReqGrades = new JsonArrayRequest(Request.Method.GET, Vars.APIBASE + "/grades", null, new Response.Listener<JSONArray>() {
+        Request req = new Request.Builder().header("X-Auth-Token", Vars.AUTHTOKEN).url(Vars.APIBASE+"/grades").build();
+        htcli.newCall(req).enqueue(new Callback() {
             @Override
-            public void onResponse(final JSONArray response) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
-                        lv.setAdapter(new SubjectAdapter(localCtxt, Subject.fromJson(response)));
-                        pd.dismiss();
-                    }
-                });
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.volley_req_error, error.getLocalizedMessage()), Snackbar.LENGTH_LONG);
-                pd.dismiss();
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("X-Auth-Token", Vars.AUTHTOKEN);
-                return params;
-            }
-        };
 
-        JsonArrayRequest jsoReqAvgs = new JsonArrayRequest(Request.Method.GET, Vars.APIBASE + "/avg", null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(final JSONArray response) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ListView lv = (ListView) findViewById(R.id.avg_list);
-                        lv.setAdapter(new AverageAdapter(localCtxt, Average.fromJson(response)));
-                        pd.dismiss();
-                    }
-                });
+            public void onResponse(Call call, final Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    Log.d("HttpClient", "Got 200 OK.");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("PopulateView", "Populating ExpandableListView...");
+                            ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
+                            try {
+                                lv.setAdapter(new SubjectAdapter(sharedCtxt, Subject.fromJson(new JSONArray(response.body().string()))));
+                            } catch (JSONException | IOException e) {
+                                dispatchError("Unable to populate ExpandableListView.", R.string.volley_req_error); // TODO: Anomaly - this is no longer volley :)
+                                e.printStackTrace();
+                            }
+                            Log.d("PopulateView", "Success!");
+                        }
+                    });
+                }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.volley_req_error, error.getLocalizedMessage()), Snackbar.LENGTH_LONG);
-                pd.dismiss();
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("X-Auth-Token", Vars.AUTHTOKEN);
-                return params;
-            }
-        };
+        });
+        Log.d("HttpClient", "Enqueued request. Waiting for response...");
+    }
 
-        mReqQueue.add(jsoReqGrades);
-        mReqQueue.add(jsoReqAvgs);
+    private void dispatchError(String message, final int localizedMsgId) {
+        Log.e("CoreHandler", message);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Snackbar.make(findViewById(R.id.main_coord_view), localizedMsgId, Snackbar.LENGTH_LONG);
+            }
+        });
     }
 
     @Override

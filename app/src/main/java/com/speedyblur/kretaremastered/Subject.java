@@ -1,5 +1,7 @@
 package com.speedyblur.kretaremastered;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +24,7 @@ class Subject {
     }
 
     static ArrayList<Subject> fromJson(JSONArray jsonObjects) {
+        Log.d("Subject", "Converting JSON Array...");
         ArrayList<Subject> grades = new ArrayList<>();
         for (int i = 0; i < jsonObjects.length(); i++) {
             try {
@@ -30,6 +33,8 @@ class Subject {
                 e.printStackTrace();
             }
         }
+        // TODO: IMPORTANT!!! CHANGE THIS ASAP!
+        Log.d("Subject", String.format("Complete. We have %d grades in total.", grades.size()));
         return grades;
     }
 }
