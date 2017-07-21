@@ -1,5 +1,7 @@
 package com.speedyblur.models;
 
+import android.util.Log;
+
 import com.speedyblur.kretaremastered.R;
 
 import org.json.JSONArray;
@@ -14,21 +16,19 @@ public class Average {
     public double classAverage;
     public int colorId;
 
-    public Average(JSONObject jsobj) {
-        try {
-            this.subject = jsobj.getString("subject");
-            this.average = jsobj.getDouble("average");
-            this.classAverage = jsobj.getDouble("classAverage");
+    public Average(JSONObject jsobj) throws JSONException {
+        this.subject = jsobj.getString("subject");
+        this.average = jsobj.getDouble("average");
+        this.classAverage = jsobj.getDouble("classAverage");
 
-            if (this.average > 3) {
-                this.colorId = R.color.goodGrade;
-            } else if (Math.round(this.average) == 3) {
-                this.colorId = R.color.avgGrade;
-            } else {
-                this.colorId = R.color.badGrade;
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (this.average == 5) {
+            this.colorId = R.color.excellentGrade;
+        } else if (Math.round(this.average) > 3) {
+            this.colorId = R.color.goodGrade;
+        } else if (Math.round(this.average) == 3) {
+            this.colorId = R.color.avgGrade;
+        } else {
+            this.colorId = R.color.badGrade;
         }
     }
 
@@ -38,6 +38,7 @@ public class Average {
             try {
                 grades.add(new Average(jsonObjects.getJSONObject(i)));
             } catch (JSONException e) {
+                Log.w("Average", "Unable to add average.");
                 e.printStackTrace();
             }
         }

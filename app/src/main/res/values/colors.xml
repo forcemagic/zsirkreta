@@ -4,7 +4,8 @@
     <color name="colorPrimaryDark">#000</color>
     <color name="colorAccent">#303FAF</color>
 
-    <color name="goodGrade">#FF44AA44</color>
-    <color name="avgGrade">#FFAAAA44</color>
-    <color name="badGrade">#FFAA4444</color>
+    <color name="excellentGrade">#FF22EE22</color>
+    <color name="goodGrade">#FF44CC44</color>
+    <color name="avgGrade">#FFCCCC44</color>
+    <color name="badGrade">#FFCC4444</color>
 </resources>

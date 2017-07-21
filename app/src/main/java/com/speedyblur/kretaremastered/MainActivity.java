@@ -15,9 +15,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.ViewFlipper;
 
+import com.speedyblur.adapters.AverageAdapter;
 import com.speedyblur.adapters.SubjectAdapter;
+import com.speedyblur.models.Average;
 import com.speedyblur.models.Subject;
 
 import org.json.JSONArray;
@@ -62,10 +65,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         OkHttpClient htcli = new OkHttpClient();
         final Context sharedCtxt = this;
 
-        Request req = new Request.Builder().header("X-Auth-Token", Vars.AUTHTOKEN).url(Vars.APIBASE+"/grades").build();
-        htcli.newCall(req).enqueue(new Callback() {
+        Request gradeReq = new Request.Builder().header("X-Auth-Token", Vars.AUTHTOKEN).url(Vars.APIBASE+"/grades").build();
+        htcli.newCall(gradeReq).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                dispatchError("Unable to fetch.", R.string.http_req_error);
                 e.printStackTrace();
             }
 
@@ -73,13 +77,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @SuppressWarnings("ConstantConditions")     // TODO: Get rid of this ASAP.
             public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
                 if (!response.isSuccessful()) {
-                    throw new IOException("Unexpected code " + response);
+                    dispatchError(String.format("I got a weird response (%s).", response), R.string.http_req_error);
                 } else {
                     Log.d("HttpClient", "Got 200 OK.");
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Log.d("PopulateView", "Populating ExpandableListView...");
+                            Log.d("PopulateView", "Populating subjects and grades...");
                             try {
                                 ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
                                 JSONArray jsObj = new JSONArray(response.body().string());
@@ -96,7 +100,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         Log.d("HttpClient", "Enqueued request. Waiting for response...");
 
-        // TODO: /avg request
+        Request avgReq = new Request.Builder().header("X-Auth-Token", Vars.AUTHTOKEN).url(Vars.APIBASE+"/avg").build();
+        htcli.newCall(avgReq).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                dispatchError("Unable to fetch.", R.string.http_req_error);
+                e.printStackTrace();
+            }
+
+            @Override
+            @SuppressWarnings("ConstantConditions")     // TODO: Get rid of this ASAP.
+            public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+                Log.d("HttpClient", "Got 200 OK.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d("PopulateView", "Populating averages...");
+                        try {
+                            ListView lv = (ListView) findViewById(R.id.avg_list);
+                            JSONArray jsObj = new JSONArray(response.body().string());
+                            lv.setAdapter(new AverageAdapter(sharedCtxt, Average.fromJson(jsObj)));
+                        } catch (JSONException | IOException e) {
+                            dispatchError("Unable to populate ListView.", R.string.http_req_error);
+                            e.printStackTrace();
+                        }
+                        Log.d("PopulateView", "Done populating.");
+                    }
+                });
+            }
+        });
+        Log.d("HttpClient", "Enqueued request. Waiting for response...");
     }
 
     private void dispatchError(String message, final int localizedMsgId) {

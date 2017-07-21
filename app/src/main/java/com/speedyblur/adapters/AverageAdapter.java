@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class AverageAdapter extends ArrayAdapter<Average> {
-    AverageAdapter(Context ctxt, ArrayList<Average> items) {
+    public AverageAdapter(Context ctxt, ArrayList<Average> items) {
         super(ctxt, 0, items);
     }
 
