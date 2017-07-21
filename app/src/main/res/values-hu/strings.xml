@@ -12,7 +12,6 @@
     <string name="navigation_drawer_close">Navigációs menü bezárása</string>
     <string name="navigation_drawer_open">Navigációs menü megnyitása</string>
     <string name="action_settings">Beállítások</string>
-    <string name="volley_req_error">Itten valami hiba van. :( Bocsi. (%1$s)</string>
     <string name="title_activity_grades">Jegyek</string>
     <string name="title_activity_avgs">Átlagok</string>
     <string name="subject_art">Rajz</string>
@@ -51,4 +50,6 @@
     <string name="settings_security_none">Semmi</string>
     <string name="settings_security_passcode">Jelkód</string>
     <string name="auth_passcode_error">Ez nem az a kód!</string>
+    <string name="http_req_error">Valami hiba tortent :( Nem tudom pontosan mi. Bocsi!</string>
+    <string name="login_myserver_unresponsive">Bocsi. Most az egyszer az en szerverem az, ami nem mukodik. Probald ujra kesobb.</string>
 </resources>

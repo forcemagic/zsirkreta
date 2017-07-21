@@ -1,6 +1,5 @@
 package com.speedyblur.kretaremastered;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,37 +11,39 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Cache;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.BasicNetwork;
-import com.android.volley.toolbox.DiskBasedCache;
-import com.android.volley.toolbox.HurlStack;
-import com.android.volley.toolbox.JsonArrayRequest;
+import com.speedyblur.adapters.AverageAdapter;
+import com.speedyblur.adapters.SubjectAdapter;
+import com.speedyblur.models.Average;
+import com.speedyblur.models.Subject;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
-    private ProgressDialog pd;
 
     @Override
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(this.getClass().getSimpleName(), "Setting up View...");
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_activity_grades);
@@ -59,77 +60,86 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Init ViewFlipper
         ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
+        Log.d(this.getClass().getSimpleName(), "Done setting up.");
 
-        // ProgressDialog
-        pd = new ProgressDialog(this);
-        pd.setMessage(getResources().getString(R.string.progress_dialog_loading));
-        pd.setIndeterminate(true);
-        pd.show();
+        OkHttpClient htcli = new OkHttpClient();
+        final Context sharedCtxt = this;
 
-        // Start request
-        RequestQueue mReqQueue;
-        Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024);
-        mReqQueue = new RequestQueue(cache, new BasicNetwork(new HurlStack()));
-        mReqQueue.start();
-
-        final Context localCtxt = this;
-
-        JsonArrayRequest jsoReqGrades = new JsonArrayRequest(Request.Method.GET, Vars.APIBASE + "/grades", null, new Response.Listener<JSONArray>() {
+        Request gradeReq = new Request.Builder().header("X-Auth-Token", Vars.AUTHTOKEN).url(Vars.APIBASE+"/grades").build();
+        htcli.newCall(gradeReq).enqueue(new Callback() {
             @Override
-            public void onResponse(final JSONArray response) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                dispatchError("Unable to fetch.", R.string.http_req_error);
+                e.printStackTrace();
+            }
+
+            @Override
+            @SuppressWarnings("ConstantConditions")     // TODO: Get rid of this ASAP.
+            public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    dispatchError(String.format("I got a weird response (%s).", response), R.string.http_req_error);
+                } else {
+                    Log.d("HttpClient", "Got 200 OK.");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.d("PopulateView", "Populating subjects and grades...");
+                            try {
+                                ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
+                                JSONArray jsObj = new JSONArray(response.body().string());
+                                lv.setAdapter(new SubjectAdapter(sharedCtxt, Subject.fromJson(jsObj)));
+                            } catch (JSONException | IOException e) {
+                                dispatchError("Unable to populate ExpandableListView.", R.string.http_req_error);
+                                e.printStackTrace();
+                            }
+                            Log.d("PopulateView", "Done populating.");
+                        }
+                    });
+                }
+            }
+        });
+        Log.d("HttpClient", "Enqueued request. Waiting for response...");
+
+        Request avgReq = new Request.Builder().header("X-Auth-Token", Vars.AUTHTOKEN).url(Vars.APIBASE+"/avg").build();
+        htcli.newCall(avgReq).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                dispatchError("Unable to fetch.", R.string.http_req_error);
+                e.printStackTrace();
+            }
+
+            @Override
+            @SuppressWarnings("ConstantConditions")     // TODO: Get rid of this ASAP.
+            public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
+                Log.d("HttpClient", "Got 200 OK.");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
-                        lv.setAdapter(new SubjectAdapter(localCtxt, Subject.fromJson(response)));
-                        pd.dismiss();
+                        Log.d("PopulateView", "Populating averages...");
+                        try {
+                            ListView lv = (ListView) findViewById(R.id.avg_list);
+                            JSONArray jsObj = new JSONArray(response.body().string());
+                            lv.setAdapter(new AverageAdapter(sharedCtxt, Average.fromJson(jsObj)));
+                        } catch (JSONException | IOException e) {
+                            dispatchError("Unable to populate ListView.", R.string.http_req_error);
+                            e.printStackTrace();
+                        }
+                        Log.d("PopulateView", "Done populating.");
                     }
                 });
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.volley_req_error, error.getLocalizedMessage()), Snackbar.LENGTH_LONG);
-                pd.dismiss();
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("X-Auth-Token", Vars.AUTHTOKEN);
-                return params;
-            }
-        };
+        });
+        Log.d("HttpClient", "Enqueued request. Waiting for response...");
+    }
 
-        JsonArrayRequest jsoReqAvgs = new JsonArrayRequest(Request.Method.GET, Vars.APIBASE + "/avg", null, new Response.Listener<JSONArray>() {
+    private void dispatchError(String message, final int localizedMsgId) {
+        Log.e("CoreHandler", message);
+        runOnUiThread(new Runnable() {
             @Override
-            public void onResponse(final JSONArray response) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ListView lv = (ListView) findViewById(R.id.avg_list);
-                        lv.setAdapter(new AverageAdapter(localCtxt, Average.fromJson(response)));
-                        pd.dismiss();
-                    }
-                });
+            public void run() {
+                Snackbar.make(findViewById(R.id.main_coord_view), localizedMsgId, Snackbar.LENGTH_LONG).show();
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.volley_req_error, error.getLocalizedMessage()), Snackbar.LENGTH_LONG);
-                pd.dismiss();
-            }
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("X-Auth-Token", Vars.AUTHTOKEN);
-                return params;
-            }
-        };
-
-        mReqQueue.add(jsoReqGrades);
-        mReqQueue.add(jsoReqAvgs);
+        });
     }
 
     @Override
