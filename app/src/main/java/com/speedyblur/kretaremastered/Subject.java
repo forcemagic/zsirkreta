@@ -13,28 +13,30 @@ class Subject {
     ArrayList<Grade> grades;
     double avg;
 
-    Subject(JSONObject subjObj) {
-        try {
-            this.name = subjObj.getString("subject");
-            this.grades = Grade.fromJson(subjObj.getJSONArray("grades"));
-            this.avg = subjObj.getDouble("avg");
-        } catch (JSONException e) {
-            e.printStackTrace();
+    Subject(JSONObject subjObj) throws JSONException, IllegalArgumentException {
+        this.name = subjObj.getString("subject");
+        this.grades = Grade.fromJson(subjObj.getJSONArray("grades"));
+        // We don't have any grades, so why show the subject?
+        if (this.grades.size() == 0) {
+            throw new IllegalArgumentException("Grades not present.");
         }
+        this.avg = subjObj.getDouble("avg");
     }
 
-    static ArrayList<Subject> fromJson(JSONArray jsonObjects) {
-        Log.d("Subject", "Converting JSON Array...");
-        ArrayList<Subject> grades = new ArrayList<>();
+    static ArrayList<Subject> fromJson(JSONArray jsonObjects) throws JSONException {
+        Log.d("Subject", "About to parse JSON array...");
+        int gradeCount = 0;
+        ArrayList<Subject> subjects = new ArrayList<>();
         for (int i = 0; i < jsonObjects.length(); i++) {
             try {
-                grades.add(new Subject(jsonObjects.getJSONObject(i)));
-            } catch (JSONException e) {
-                e.printStackTrace();
+                Subject cSubj = new Subject(jsonObjects.getJSONObject(i));
+                subjects.add(cSubj);
+                gradeCount += jsonObjects.getJSONObject(i).getJSONArray("grades").length();
+            } catch (IllegalArgumentException e) {
+                Log.w("Subject", "Skipping subject, because it does not have any grades!");
             }
         }
-        // TODO: IMPORTANT!!! CHANGE THIS ASAP!
-        Log.d("Subject", String.format("Complete. We have %d grades in total.", grades.size()));
-        return grades;
+        Log.d("Subject", String.format("DONE! We have a total of %d subjects and %d grades.", subjects.size(), gradeCount));
+        return subjects;
     }
 }

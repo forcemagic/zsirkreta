@@ -1,6 +1,5 @@
 package com.speedyblur.kretaremastered;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,12 +31,13 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
-    private ProgressDialog pd;
 
     @Override
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d(this.getClass().getSimpleName(), "Setting up View...");
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_activity_grades);
@@ -54,14 +54,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Init ViewFlipper
         ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
+        Log.d(this.getClass().getSimpleName(), "Done setting up.");
 
-        // ProgressDialog
-        pd = new ProgressDialog(this);
-        pd.setMessage(getResources().getString(R.string.progress_dialog_loading));
-        pd.setIndeterminate(true);
-        pd.show();
 
-        // TODO: Request to /grades and /avg
 
         OkHttpClient htcli = new OkHttpClient();
         final Context sharedCtxt = this;
@@ -69,12 +64,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Request req = new Request.Builder().header("X-Auth-Token", Vars.AUTHTOKEN).url(Vars.APIBASE+"/grades").build();
         htcli.newCall(req).enqueue(new Callback() {
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 e.printStackTrace();
             }
 
             @Override
-            public void onResponse(Call call, final Response response) throws IOException {
+            @SuppressWarnings("ConstantConditions")     // TODO: Get rid of this ASAP.
+            public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 } else {
@@ -83,20 +79,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void run() {
                             Log.d("PopulateView", "Populating ExpandableListView...");
-                            ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
                             try {
-                                lv.setAdapter(new SubjectAdapter(sharedCtxt, Subject.fromJson(new JSONArray(response.body().string()))));
+                                ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
+                                JSONArray jsObj = new JSONArray(response.body().string());
+                                lv.setAdapter(new SubjectAdapter(sharedCtxt, Subject.fromJson(jsObj)));
                             } catch (JSONException | IOException e) {
-                                dispatchError("Unable to populate ExpandableListView.", R.string.volley_req_error); // TODO: Anomaly - this is no longer volley :)
+                                dispatchError("Unable to populate ExpandableListView.", R.string.http_req_error);
                                 e.printStackTrace();
                             }
-                            Log.d("PopulateView", "Success!");
+                            Log.d("PopulateView", "Done populating.");
                         }
                     });
                 }
             }
         });
         Log.d("HttpClient", "Enqueued request. Waiting for response...");
+
+        // TODO: /avg request
     }
 
     private void dispatchError(String message, final int localizedMsgId) {
@@ -104,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Snackbar.make(findViewById(R.id.main_coord_view), localizedMsgId, Snackbar.LENGTH_LONG);
+                Snackbar.make(findViewById(R.id.main_coord_view), localizedMsgId, Snackbar.LENGTH_LONG).show();
             }
         });
     }
