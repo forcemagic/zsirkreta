@@ -1,4 +1,6 @@
-package com.speedyblur.kretaremastered;
+package com.speedyblur.models;
+
+import com.speedyblur.kretaremastered.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -6,13 +8,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-class Average {
-    String subject;
-    double average;
-    double classAverage;
-    int colorId;
+public class Average {
+    public String subject;
+    public double average;
+    public double classAverage;
+    public int colorId;
 
-    private Average(JSONObject jsobj) {
+    public Average(JSONObject jsobj) {
         try {
             this.subject = jsobj.getString("subject");
             this.average = jsobj.getDouble("average");
@@ -30,7 +32,7 @@ class Average {
         }
     }
 
-    static ArrayList<Average> fromJson(JSONArray jsonObjects) {
+    public static ArrayList<Average> fromJson(JSONArray jsonObjects) {
         ArrayList<Average> grades = new ArrayList<>();
         for (int i = 0; i < jsonObjects.length(); i++) {
             try {

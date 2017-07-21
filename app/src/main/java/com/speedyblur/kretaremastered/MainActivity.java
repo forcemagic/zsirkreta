@@ -17,6 +17,9 @@ import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.ViewFlipper;
 
+import com.speedyblur.adapters.SubjectAdapter;
+import com.speedyblur.models.Subject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -55,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Init ViewFlipper
         ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
         Log.d(this.getClass().getSimpleName(), "Done setting up.");
-
-
 
         OkHttpClient htcli = new OkHttpClient();
         final Context sharedCtxt = this;

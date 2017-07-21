@@ -1,21 +1,23 @@
-package com.speedyblur.kretaremastered;
+package com.speedyblur.adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.speedyblur.kretaremastered.R;
+import com.speedyblur.models.Average;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
-class AverageAdapter extends ArrayAdapter<Average> {
+public class AverageAdapter extends ArrayAdapter<Average> {
     AverageAdapter(Context ctxt, ArrayList<Average> items) {
         super(ctxt, 0, items);
     }

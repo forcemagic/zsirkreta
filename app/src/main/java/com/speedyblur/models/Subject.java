@@ -1,4 +1,4 @@
-package com.speedyblur.kretaremastered;
+package com.speedyblur.models;
 
 import android.util.Log;
 
@@ -8,12 +8,12 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-class Subject {
-    String name;
-    ArrayList<Grade> grades;
-    double avg;
-
-    Subject(JSONObject subjObj) throws JSONException, IllegalArgumentException {
+public class Subject {
+    public String name;
+    public ArrayList<Grade> grades;
+    public double avg;
+    
+    public Subject(JSONObject subjObj) throws JSONException, IllegalArgumentException {
         this.name = subjObj.getString("subject");
         this.grades = Grade.fromJson(subjObj.getJSONArray("grades"));
         // We don't have any grades, so why show the subject?
@@ -23,7 +23,7 @@ class Subject {
         this.avg = subjObj.getDouble("avg");
     }
 
-    static ArrayList<Subject> fromJson(JSONArray jsonObjects) throws JSONException {
+    public static ArrayList<Subject> fromJson(JSONArray jsonObjects) throws JSONException {
         Log.d("Subject", "About to parse JSON array...");
         int gradeCount = 0;
         ArrayList<Subject> subjects = new ArrayList<>();

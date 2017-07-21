@@ -1,6 +1,8 @@
-package com.speedyblur.kretaremastered;
+package com.speedyblur.models;
 
 import android.util.Log;
+
+import com.speedyblur.kretaremastered.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -8,13 +10,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-class Grade {
-    String grade;
-    String gotDate;
-    String teacher;
-    String type;
-    String theme;
-    int colorId;
+public class Grade {
+    public String grade;
+    public String gotDate;
+    public String teacher;
+    public String type;
+    public String theme;
+    public int colorId;
 
     private Grade(JSONObject obj) throws JSONException {
         this.grade = obj.getString("grade");
@@ -33,7 +35,7 @@ class Grade {
         }
     }
 
-    static ArrayList<Grade> fromJson(JSONArray jsonObjects) throws JSONException {
+    public static ArrayList<Grade> fromJson(JSONArray jsonObjects) throws JSONException {
         Log.d("Grade", "About to parse JSON array...");
         ArrayList<Grade> grades = new ArrayList<>();
         for (int i = 0; i < jsonObjects.length(); i++) {

@@ -1,25 +1,28 @@
-package com.speedyblur.kretaremastered;
+package com.speedyblur.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.speedyblur.kretaremastered.R;
+import com.speedyblur.models.Grade;
+import com.speedyblur.models.Subject;
+
 import java.util.ArrayList;
 
-class SubjectAdapter extends BaseExpandableListAdapter {
+public class SubjectAdapter extends BaseExpandableListAdapter {
 
     private final ArrayList<Subject> subjects;
     private final LayoutInflater inflater;
 
-    SubjectAdapter(Context context, ArrayList<Subject> subjs) {
+    public SubjectAdapter(Context context, ArrayList<Subject> subjs) {
         this.inflater = LayoutInflater.from(context);
         this.subjects = subjs;
     }

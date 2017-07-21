@@ -22,6 +22,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.speedyblur.adapters.ProfileAdapter;
+import com.speedyblur.models.Profile;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
