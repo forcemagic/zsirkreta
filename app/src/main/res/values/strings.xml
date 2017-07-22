@@ -48,6 +48,13 @@
     <string name="settings_passcode_status_nomatch">Passcodes don\'t match :(</string>
     <string name="settings_passcode_status_lengtherr">Passcode is not 4 digits :(</string>
 
+    <!-- HTTP errors -->
+    <string name="http_unauthorized">You did not supply the correct credentials.</string>
+    <string name="http_server_error">Something\'s wrong with my server. I\'m sorry :(</string>
+    <string name="http_timeout">Request timed out. (Are you connected to the Internet?)</string>
+    <string name="http_unknown">This error… I have no idea what it is actually.</string>
+    <string name="http_bad_gateway">Kreta is having some issues… (Not surprising) Try again later.</string>
+
     <!-- Misc string values -->
     <string name="subjview_average">AVG: %1$.2f</string>
     <string name="grade_unknown_topic">Unknown Topic</string>
