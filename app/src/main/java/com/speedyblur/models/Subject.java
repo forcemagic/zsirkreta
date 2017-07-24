@@ -24,7 +24,6 @@ public class Subject {
     }
 
     public static ArrayList<Subject> fromJson(JSONArray jsonObjects) throws JSONException {
-        Log.d("Subject", "About to parse JSON array...");
         int gradeCount = 0;
         ArrayList<Subject> subjects = new ArrayList<>();
         for (int i = 0; i < jsonObjects.length(); i++) {
@@ -33,10 +32,10 @@ public class Subject {
                 subjects.add(cSubj);
                 gradeCount += jsonObjects.getJSONObject(i).getJSONArray("grades").length();
             } catch (IllegalArgumentException e) {
-                Log.w("Subject", "Skipping subject, because it does not have any grades!");
+                Log.w("Subject", String.format("Skipping subject (%s), because it does not have any grades!", jsonObjects.getJSONObject(i).getString("subject")));
             }
         }
-        Log.d("Subject", String.format("DONE! We have a total of %d subjects and %d grades.", subjects.size(), gradeCount));
+        Log.d("Subject", String.format("We have a total of %d subjects and %d grades.", subjects.size(), gradeCount));
         return subjects;
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.ArrayMap;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,22 +23,21 @@ import com.speedyblur.adapters.AverageAdapter;
 import com.speedyblur.adapters.SubjectAdapter;
 import com.speedyblur.models.Average;
 import com.speedyblur.models.Subject;
+import com.speedyblur.shared.HttpHandler;
 import com.speedyblur.shared.Vars;
 
-import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import static android.support.design.widget.Snackbar.make;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
+    private ArrayMap<String, String> heads;
+    private final Context sharedCtxt = this;
 
     @Override
     @SuppressWarnings("deprecation")
@@ -63,82 +63,67 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
         Log.d(this.getClass().getSimpleName(), "Done setting up.");
 
-        OkHttpClient htcli = new OkHttpClient();
-        final Context sharedCtxt = this;
+        //OkHttpClient htcli = new OkHttpClient();
 
-        Request gradeReq = new Request.Builder().header("X-Auth-Token", Vars.AUTHTOKEN).url(Vars.APIBASE+"/grades").build();
-        htcli.newCall(gradeReq).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                dispatchError("Unable to fetch.", R.string.http_req_error);
-                e.printStackTrace();
-            }
+        heads = new ArrayMap<>();
+        heads.put("X-Auth-Token", Vars.AUTHTOKEN);
 
-            @Override
-            @SuppressWarnings("ConstantConditions")     // TODO: Get rid of this ASAP.
-            public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    dispatchError(String.format("I got a weird response (%s).", response), R.string.http_req_error);
-                } else {
-                    Log.d("HttpClient", "Got 200 OK.");
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.d("PopulateView", "Populating subjects and grades...");
-                            try {
-                                ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
-                                JSONArray jsObj = new JSONArray(response.body().string());
-                                lv.setAdapter(new SubjectAdapter(sharedCtxt, Subject.fromJson(jsObj)));
-                            } catch (JSONException | IOException e) {
-                                dispatchError("Unable to populate ExpandableListView.", R.string.http_req_error);
-                                e.printStackTrace();
-                            }
-                            Log.d("PopulateView", "Done populating.");
-                        }
-                    });
-                }
-            }
-        });
-        Log.d("HttpClient", "Enqueued request. Waiting for response...");
+        fetchGrades();
+    }
 
-        Request avgReq = new Request.Builder().header("X-Auth-Token", Vars.AUTHTOKEN).url(Vars.APIBASE+"/avg").build();
-        htcli.newCall(avgReq).enqueue(new Callback() {
+    private void fetchGrades() {
+        make(findViewById(R.id.main_coord_view), R.string.loading_grades, Snackbar.LENGTH_INDEFINITE).show();
+        HttpHandler.getJson(Vars.APIBASE + "/grades", heads, new HttpHandler.JsonRequestCallback() {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                dispatchError("Unable to fetch.", R.string.http_req_error);
-                e.printStackTrace();
-            }
-
-            @Override
-            @SuppressWarnings("ConstantConditions")     // TODO: Get rid of this ASAP.
-            public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
-                Log.d("HttpClient", "Got 200 OK.");
+            public void onComplete(JSONObject resp) throws JSONException {
+                final ArrayList<Subject> subjects = Subject.fromJson(resp.getJSONArray("grades"));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("PopulateView", "Populating averages...");
-                        try {
-                            ListView lv = (ListView) findViewById(R.id.avg_list);
-                            JSONArray jsObj = new JSONArray(response.body().string());
-                            lv.setAdapter(new AverageAdapter(sharedCtxt, Average.fromJson(jsObj)));
-                        } catch (JSONException | IOException e) {
-                            dispatchError("Unable to populate ListView.", R.string.http_req_error);
-                            e.printStackTrace();
-                        }
-                        Log.d("PopulateView", "Done populating.");
+                        ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
+                        lv.setAdapter(new SubjectAdapter(sharedCtxt, subjects));
+                        fetchAverages();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(final int localizedError) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        make(findViewById(R.id.main_coord_view), localizedError, Snackbar.LENGTH_LONG).show();
                     }
                 });
             }
         });
-        Log.d("HttpClient", "Enqueued request. Waiting for response...");
     }
 
-    private void dispatchError(String message, final int localizedMsgId) {
-        Log.e("CoreHandler", message);
-        runOnUiThread(new Runnable() {
+    private void fetchAverages() {
+        final Snackbar snackHandle = Snackbar.make(findViewById(R.id.main_coord_view), R.string.loading_averages, Snackbar.LENGTH_INDEFINITE);
+        snackHandle.show();
+        HttpHandler.getJson(Vars.APIBASE + "/avg", heads, new HttpHandler.JsonRequestCallback() {
             @Override
-            public void run() {
-                Snackbar.make(findViewById(R.id.main_coord_view), localizedMsgId, Snackbar.LENGTH_LONG).show();
+            public void onComplete(JSONObject resp) throws JSONException {
+                final ArrayList<Average> averages = Average.fromJson(resp.getJSONArray("averages"));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ListView lv = (ListView) findViewById(R.id.avg_list);
+                        lv.setAdapter(new AverageAdapter(sharedCtxt, averages));
+                        snackHandle.dismiss();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(final int localizedError) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        make(findViewById(R.id.main_coord_view), localizedError, Snackbar.LENGTH_LONG).show();
+                    }
+                });
             }
         });
     }

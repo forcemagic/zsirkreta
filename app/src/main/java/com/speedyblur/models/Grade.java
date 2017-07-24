@@ -1,7 +1,5 @@
 package com.speedyblur.models;
 
-import android.util.Log;
-
 import com.speedyblur.kretaremastered.R;
 
 import org.json.JSONArray;
@@ -36,12 +34,10 @@ public class Grade {
     }
 
     public static ArrayList<Grade> fromJson(JSONArray jsonObjects) throws JSONException {
-        Log.d("Grade", "About to parse JSON array...");
         ArrayList<Grade> grades = new ArrayList<>();
         for (int i = 0; i < jsonObjects.length(); i++) {
             grades.add(new Grade(jsonObjects.getJSONObject(i)));
         }
-        Log.d("Grade", String.format("DONE! This subject had a total of %d grades.", grades.size()));
         return grades;
     }
 }

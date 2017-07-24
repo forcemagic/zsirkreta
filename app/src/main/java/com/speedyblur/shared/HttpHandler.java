@@ -69,26 +69,21 @@ public class HttpHandler {
     }
 
     private static Request buildReq(String method, String url, @Nullable RequestBody payload, ArrayMap<String, String> headers) {
-        Log.d("HttpHandler", String.format("Building request: %s %s", method, url));
         Request.Builder reqBuild = new Request.Builder().url(url);
         for (int i=0; i<headers.size(); i++) {
             reqBuild.header(headers.keyAt(i), headers.valueAt(i));
         }
 
         if (method.equals("GET")) {
-            Log.d("HttpHandler", "This is a GET request. Ignoring payload (if present).");
             return reqBuild.get().build();
         } else if (method.equals("DELETE")) {
             // DELETE can have a body
             if (payload != null) {
-                Log.d("HttpHandler", "Request built with payload.");
                 return reqBuild.delete(payload).build();
             } else {
-                Log.d("HttpHandler", "Request DELETE built without payload.");
                 return reqBuild.delete().build();
             }
         } else if (payload != null) {
-            Log.d("HttpHandler", "Request built with payload.");
             // POST, PUT and PATCH (should) all have bodies
             return reqBuild.method(method, payload).build();
         } else {

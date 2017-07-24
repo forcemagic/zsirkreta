@@ -9,10 +9,7 @@
     <string name="login_studentcard_hint">Student card ID</string>
     <string name="login_passwd_hint">Password</string>
     <string name="login_remember_checkbox">Remember login data</string>
-    <string name="login_kreta_unresponsive">Whoops. The KRETA servers are having a great time being maintenanced. Check back later.</string>
     <string name="login_myserver_unresponsive">I\'m sorry. For once, my servers are not working. Check back later.</string>
-    <string name="login_incorrect_account_details">You have provided the magnificent KRETA with incorrect account details.</string>
-    <string name="login_other_error">There\'s something wrong with your Internet connection. Did you turn on Wifi or Mobile Data?</string>
     <string name="login_copyright">API is Copyleft 2017 Matthew Coal.\nKRETA is Copyright © 2017 eKreta Informatikai Zrt.</string>
 
     <string name="subject_english_lang">English</string>
@@ -47,6 +44,10 @@
     <string name="settings_passcode_status_saved">Passcode saved</string>
     <string name="settings_passcode_status_nomatch">Passcodes don\'t match :(</string>
     <string name="settings_passcode_status_lengtherr">Passcode is not 4 digits :(</string>
+
+    <!-- Loading messages (proc. indicators) -->
+    <string name="loading_grades">Loading grades…</string>
+    <string name="loading_averages">Loading averages…</string>
 
     <!-- HTTP errors -->
     <string name="http_unauthorized">You did not supply the correct credentials.</string>
