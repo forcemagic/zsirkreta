@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.speedyblur.adapters.ProfileAdapter;
 import com.speedyblur.models.Profile;
+import com.speedyblur.shared.Vars;
 
 import org.json.JSONException;
 import org.json.JSONObject;

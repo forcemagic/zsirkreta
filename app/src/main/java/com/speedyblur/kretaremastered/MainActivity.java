@@ -22,6 +22,7 @@ import com.speedyblur.adapters.AverageAdapter;
 import com.speedyblur.adapters.SubjectAdapter;
 import com.speedyblur.models.Average;
 import com.speedyblur.models.Subject;
+import com.speedyblur.shared.Vars;
 
 import org.json.JSONArray;
 import org.json.JSONException;
