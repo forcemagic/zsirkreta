@@ -106,7 +106,7 @@ public class HttpHandler {
          * (The status code must be 200 OK)
          * @param resp the response body (parsed JSON)
          */
-        void onComplete(JSONObject resp);
+        void onComplete(JSONObject resp) throws JSONException;
 
         /**
          * Function is called when a request fails.
@@ -144,7 +144,7 @@ public class HttpHandler {
                     jsCallback.onComplete(new JSONObject(response.body().string()));
                     Log.d("HttpHandler", "Successfully parsed JSON.");
                 } catch (JSONException e) {
-                    Log.e("HttpHandler", "Unable to parse JSON. Dumping request...");
+                    Log.e("HttpHandler", "Unable to parse JSON (or tried to get a nonexistent object). Dumping request...");
                     jsCallback.onFailure(Resources.getSystem().getString(R.string.http_server_error));
                     e.printStackTrace();
                 }
