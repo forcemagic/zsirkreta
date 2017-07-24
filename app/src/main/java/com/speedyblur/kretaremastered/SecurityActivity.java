@@ -14,6 +14,7 @@ import android.widget.ViewFlipper;
 import com.github.ajalt.reprint.core.AuthenticationFailureReason;
 import com.github.ajalt.reprint.core.AuthenticationListener;
 import com.github.ajalt.reprint.core.Reprint;
+import com.speedyblur.shared.Vars;
 
 public class SecurityActivity extends AppCompatActivity {
 
