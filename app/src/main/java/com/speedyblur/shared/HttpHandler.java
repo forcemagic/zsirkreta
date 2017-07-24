@@ -112,7 +112,7 @@ public class HttpHandler {
          * Function is called when a request fails.
          * @param localizedError the error message (localized)
          */
-        void onFailure(String localizedError);
+        void onFailure(final String localizedError);
     }
 
     private static class MainCallbackHandler implements Callback {
