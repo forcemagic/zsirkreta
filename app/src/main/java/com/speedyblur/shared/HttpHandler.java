@@ -1,6 +1,5 @@
 package com.speedyblur.shared;
 
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
@@ -110,9 +109,9 @@ public class HttpHandler {
 
         /**
          * Function is called when a request fails.
-         * @param localizedError the error message (localized)
+         * @param localizedError a string resource ID containing the (localized) error explanation
          */
-        void onFailure(final String localizedError);
+        void onFailure(final int localizedError);
     }
 
     private static class MainCallbackHandler implements Callback {
@@ -128,10 +127,10 @@ public class HttpHandler {
             Log.e("HttpHandler", "Failed to complete request.");
             if (e.getMessage().equals("timeout")) {
                 Log.e("HttpHandler", "Timeout error.");
-                jsCallback.onFailure(Resources.getSystem().getString(R.string.http_timeout));
+                jsCallback.onFailure(R.string.http_timeout);
             } else {
                 Log.e("HttpHandler", "Unknown error: "+e.getMessage());
-                jsCallback.onFailure(Resources.getSystem().getString(R.string.http_unknown));
+                jsCallback.onFailure(R.string.http_unknown);
             }
         }
 
@@ -145,19 +144,19 @@ public class HttpHandler {
                     Log.d("HttpHandler", "Successfully parsed JSON.");
                 } catch (JSONException e) {
                     Log.e("HttpHandler", "Unable to parse JSON (or tried to get a nonexistent object). Dumping request...");
-                    jsCallback.onFailure(Resources.getSystem().getString(R.string.http_server_error));
+                    jsCallback.onFailure(R.string.http_server_error);
                     e.printStackTrace();
                 }
             } else {
                 if (response.code() == 403) {
                     Log.e("HttpHandler", "Got 403 (Forbidden) from server.");
-                    jsCallback.onFailure(Resources.getSystem().getString(R.string.http_unauthorized));
+                    jsCallback.onFailure(R.string.http_unauthorized);
                 } else if (response.code() == 502) {
                     Log.e("HttpHandler", "Got 502 (Bad Gateway) from server.");
-                    jsCallback.onFailure(Resources.getSystem().getString(R.string.http_bad_gateway));
+                    jsCallback.onFailure(R.string.http_bad_gateway);
                 } else {
                     Log.e("HttpHandler", "Got unknown error code from server: "+response.code());
-                    jsCallback.onFailure(Resources.getSystem().getString(R.string.http_server_error));
+                    jsCallback.onFailure(R.string.http_server_error);
                 }
             }
         }
