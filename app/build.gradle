@@ -29,5 +29,6 @@ dependencies {
     compile 'com.android.support:design:26.0.0-alpha1'
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'com.github.ajalt.reprint:core:3.1.0@aar'
+    compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
     testCompile 'junit:junit:4.12'
 }

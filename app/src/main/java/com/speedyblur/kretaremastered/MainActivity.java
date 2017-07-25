@@ -1,7 +1,6 @@
 package com.speedyblur.kretaremastered;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -62,8 +61,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Init ViewFlipper
         ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
         Log.d(this.getClass().getSimpleName(), "Done setting up.");
-
-        //OkHttpClient htcli = new OkHttpClient();
 
         heads = new ArrayMap<>();
         heads.put("X-Auth-Token", Vars.AUTHTOKEN);
@@ -146,14 +143,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
-            this.startActivity(settingsIntent);
-        }
-
         return super.onOptionsItemSelected(item);
     }
 

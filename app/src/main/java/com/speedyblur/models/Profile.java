@@ -1,28 +1,21 @@
 package com.speedyblur.models;
 
-import java.util.ArrayList;
-import java.util.Set;
-
 public class Profile {
-    public String id;
-    public String pwd;
+    public String cardid;
+    private String passwd;      // Not that this adds much to security, but just in case
+    public String friendlyName;
 
-    public Profile(String stored) {
-        String[] sliced = stored.split("@");
-        id = sliced[0];
-        pwd = sliced[1];
+    public Profile(String cardid, String passwd, String friendlyName) {
+        this.cardid = cardid;
+        this.passwd = passwd;
+        this.friendlyName = friendlyName;
     }
 
-    public static ArrayList<Profile> fromSet(Set<String> origSet) {
-        ArrayList<Profile> profArray = new ArrayList<>();
-        for (String cStr : origSet) {
-            profArray.add(new Profile(cStr));
-        }
-        return profArray;
+    public String getPasswd() {
+        return this.passwd;
     }
 
-    @Override
-    public String toString() {
-        return this.id;
+    public boolean hasFriendlyName() {
+        return !this.friendlyName.equals("");
     }
 }
