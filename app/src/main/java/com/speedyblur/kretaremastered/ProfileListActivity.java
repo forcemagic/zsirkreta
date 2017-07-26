@@ -77,10 +77,8 @@ public class ProfileListActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int reqCode, int resCode, Intent data) {
-        switch (reqCode) {
-            case INTENT_REQ_NEWPROF:
-                updateProfileList();
-                break;
+        if (reqCode == INTENT_REQ_NEWPROF) {
+            updateProfileList();
         }
     }
 }
