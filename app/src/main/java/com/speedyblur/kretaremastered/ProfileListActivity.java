@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 public class ProfileListActivity extends AppCompatActivity {
 
+    private final static int INTENT_REQ_NEWPROF = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +30,7 @@ public class ProfileListActivity extends AppCompatActivity {
 
     public void goToNewProfile(View v) {
         Intent it = new Intent(ProfileListActivity.this, NewProfileActivity.class);
-        this.startActivity(it);
+        startActivityForResult(it, INTENT_REQ_NEWPROF);
     }
 
     public void updateProfileList() {
@@ -70,6 +72,15 @@ public class ProfileListActivity extends AppCompatActivity {
             Log.d("ProfileList", String.format("We have %s profiles. List population complete.", profiles.size()));
         } catch (AccountStoreHelper.DatabaseDecryptionException e) {
             Snackbar.make(findViewById(R.id.profListCoordinator), R.string.decrypt_database_fail, Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int reqCode, int resCode, Intent data) {
+        switch (reqCode) {
+            case INTENT_REQ_NEWPROF:
+                updateProfileList();
+                break;
         }
     }
 }
