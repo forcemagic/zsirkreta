@@ -40,6 +40,10 @@
     <!-- Introduction messages -->
     <string name="welcome_first_title">Welcome to Kreta Remastered!</string>
     <string name="welcome_first_subtitle">Let\'s get you set up.</string>
+    <string name="welcome_sqlpass_title">Set encryption password</string>
+    <string name="welcome_sqlpass_subtitle">This password will be used to encrypt all your profiles in this app. While providing a password is STRONGLY ADVISED, it is not mandatory. But if you don\'t provide one, your credentials will be available to almost anyone with a little knowledge of Android.</string>
+    <string name="welcome_end_title">That\'s it!</string>
+    <string name="welcome_end_subtitle">Just one more thing: You can not change your password after you hit the check mark. Also, if you lose it, you\'ll have to reinstall.</string>
 
     <!-- Misc string values -->
     <string name="welcome_title">Welcome!</string>

@@ -1,14 +1,19 @@
 package com.speedyblur.kretaremastered;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import com.speedyblur.models.CustomViewPager;
+import com.speedyblur.shared.Vars;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -35,9 +40,23 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
+    public void commitSqlPassword(View v) {
+        EditText mSqlPass = (EditText) findViewById(R.id.sqlPass);
+        String gotPasswd = mSqlPass.getText().toString().trim();
+        if (!TextUtils.isEmpty(gotPasswd)) {
+            Vars.SQLCRYPT_PWD = gotPasswd;
+            Log.d("Setup", "Password set.");
+        }
+        goToNext(v);
+    }
+
     public void goToNext(View v) {
-        if (mPager.getCurrentItem() != 2) {
+        if (mPager.getCurrentItem() < 2) {
             mPager.setCurrentItem(mPager.getCurrentItem() + 1, true);
+        } else {
+            finish();
+            Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
+            startActivity(it);
         }
     }
 
@@ -50,9 +69,10 @@ public class WelcomeActivity extends AppCompatActivity {
         public Fragment getItem(int pos) {
             if (pos == 0) {
                 return new WelcomeSlideFirstFragment();
+            } else if (pos == 1) {
+                return new WelcomeSlideSetsqlpassFragment();
             } else {
-                // TODO: Add more views
-                return new WelcomeSlideFirstFragment();
+                return new WelcomeSlideEndFragment();
             }
         }
 
