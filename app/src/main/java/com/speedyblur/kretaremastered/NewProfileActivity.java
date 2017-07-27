@@ -117,7 +117,7 @@ public class NewProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
                 try {
-                    AccountStoreHelper ash = new AccountStoreHelper(getApplicationContext(), "asd");
+                    AccountStoreHelper ash = new AccountStoreHelper(getApplicationContext(), Vars.SQLCRYPT_PWD);
                     ash.addAccount(new Profile(studentId, passwd, friendlyName));
                     ash.close();
                     finish();

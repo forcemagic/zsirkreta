@@ -46,4 +46,7 @@
     <string name="http_bad_gateway">A Kréta szerverek pont most kapják az új verziót. Nézd csak meg, nem hazudok.</string>
     <string name="decrypt_database_fail">A profiladatbázis jelszava helytelen.</string>
     <string name="logging_in">Bejelentkezés…</string>
+    <string name="welcome_legal_content">Mielött hozzákezdhetnénk, közölnöm kell pár fontos jogi információt.\n\nEz a program az MIT licensz alatt áll.\n\nA licensz angol nyelvü, ezért egy rövid kivonata található alább:\n\nÖnnek jogában áll a szoftvert (annak részét, vagy dokumentációját):\n- használni\n- lemásolni\n- módosítani\n- más szoftverben hasznosítani\n- eladni\n- al-licenszelni\n\nA következö feltételek mellett:\n- A terméknek tartalmaznia kell az eredeti MIT licensz másolatát\n  (mely itt megtalálható: https://gitlab.speedyblur.com/forcemagic/kreta-remastered/blob/master/LICENSE)\n- A terméknek tartalmaznia kell a másolásvédelmi sort (\"Copyright © 2017 ForceMagic\")\n\nAz alkalmazás készítöje SEMMIFÉLE KÖRÜLMÉNYEK KÖZÖTT NEM VÁLLAL FELELÖSSÉGET meghibásodás esetén.\n\nAz ELFOGAD gombra nyomva Ön elfogadja a licensz feltételeit.</string>
+    <string name="welcome_legal_accept">Elfogad</string>
+    <string name="welcome_legal_header">Ez a Kreta Remastered.\nÚgy látom, ez az elsö indítás.</string>
 </resources>

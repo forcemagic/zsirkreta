@@ -48,7 +48,7 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
             @Override
             public void onClick(View v) {
                 try {
-                    AccountStoreHelper ash = new AccountStoreHelper(getContext().getApplicationContext(), "asd");
+                    AccountStoreHelper ash = new AccountStoreHelper(getContext().getApplicationContext(), Vars.SQLCRYPT_PWD);
                     ash.dropAccount(p.cardid);
                     ash.close();
                     cback.onDeleteOk();
@@ -94,7 +94,11 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
                 @Override
                 public void onComplete(JSONObject resp) throws JSONException {
                     Vars.AUTHTOKEN = resp.getString("token");
-                    cback.onLoginOk();
+                    if (p.hasFriendlyName()) {
+                        cback.onLoginOk(p.friendlyName);
+                    } else {
+                        cback.onLoginOk(p.cardid);
+                    }
                 }
 
                 @Override
@@ -111,6 +115,6 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
         void onDeleteError(int errorMsgRes);
         void onLoginBegin();
         void onLoginError(int errorMsgRes);
-        void onLoginOk();
+        void onLoginOk(String profileName);
     }
 }

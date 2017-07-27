@@ -37,6 +37,10 @@
     <string name="http_unknown">This error… I have no idea what it is actually.</string>
     <string name="http_bad_gateway">Kreta is having some issues… (Not surprising) Try again later.</string>
 
+    <!-- Introduction messages -->
+    <string name="welcome_first_title">Welcome to Kreta Remastered!</string>
+    <string name="welcome_first_subtitle">Let\'s get you set up.</string>
+
     <!-- Misc string values -->
     <string name="welcome_title">Welcome!</string>
     <string name="welcome_subtitle">Choose a profile</string>

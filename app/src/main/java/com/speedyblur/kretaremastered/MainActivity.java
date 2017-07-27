@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.speedyblur.adapters.AverageAdapter;
@@ -50,13 +51,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.mainNav);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Set profile name to drawer header
+        TextView profNameHead = navigationView.getHeaderView(0).findViewById(R.id.profileNameHead);
+        profNameHead.setText(getIntent().getStringExtra("profileName"));
 
         // Init ViewFlipper
         ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
