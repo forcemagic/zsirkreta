@@ -79,6 +79,7 @@ public class WelcomeActivity extends AppCompatActivity {
     public void tryDecryptSqlite(View v) {
         EditText mDbPasswd = (EditText) findViewById(R.id.unlockDbPassword);
         if (canDecryptSqlite(mDbPasswd.getText().toString())) {
+            Vars.SQLCRYPT_PWD = mDbPasswd.getText().toString();
             finish();
             Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
             startActivity(it);
