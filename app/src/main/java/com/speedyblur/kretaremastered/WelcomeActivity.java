@@ -35,7 +35,14 @@ public class WelcomeActivity extends AppCompatActivity {
             PagerAdapter mPgAdapter = new WelcomeSlidePageAdapter(getSupportFragmentManager());
             mPager.setAdapter(mPgAdapter);
         } else {
-            setContentView(R.layout.activity_unlockdb);
+            if (!canDecryptSqlite(Vars.SQLCRYPT_PWD)) {
+                setContentView(R.layout.activity_unlockdb);
+            } else {
+                // We can use the base password, as nothing else has been provided previously
+                finish();
+                Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
+                startActivity(it);
+            }
         }
     }
 
@@ -71,16 +78,24 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void tryDecryptSqlite(View v) {
         EditText mDbPasswd = (EditText) findViewById(R.id.unlockDbPassword);
-        try {
-            AccountStoreHelper ash = new AccountStoreHelper(this, mDbPasswd.getText().toString());
-            ash.close();
-            Log.d("DecryptDB", "Decryption succeeded.");
+        if (canDecryptSqlite(mDbPasswd.getText().toString())) {
             finish();
             Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
             startActivity(it);
+        } else {
+            mDbPasswd.setError(getResources().getString(R.string.decrypt_database_fail));
+        }
+    }
+
+    private boolean canDecryptSqlite(String passwd) {
+        try {
+            AccountStoreHelper ash = new AccountStoreHelper(this, passwd);
+            ash.close();
+            Log.d("DecryptDB", "Decryption succeeded.");
+            return true;
         } catch (AccountStoreHelper.DatabaseDecryptionException e) {
             Log.w("DecryptDB", "Decryption failed.");
-            mDbPasswd.setError(getResources().getString(R.string.decrypt_database_fail));
+            return false;
         }
     }
 

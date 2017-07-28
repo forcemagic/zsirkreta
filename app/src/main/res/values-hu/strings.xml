@@ -32,7 +32,7 @@
     <string name="auth_passcode_error">Ez nem az a kód!</string>
     <string name="http_req_error">Valami hiba tortent :( Nem tudom pontosan mi. Bocsi!</string>
     <string name="login_myserver_unresponsive">Bocsi. Most az egyszer az en szerverem az, ami nem mukodik. Probald ujra kesobb.</string>
-    <string name="welcome_subtitle">V</string>
+    <string name="welcome_subtitle">Válassz profilt!</string>
     <string name="http_server_error">Valami gáz van a szerveremmel. Bocsi :(</string>
     <string name="welcome_title">Üdvözöllek!</string>
     <string name="profile_delete_success">Profil sikeresen törölve.</string>
@@ -46,7 +46,11 @@
     <string name="http_bad_gateway">A Kréta szerverek pont most kapják az új verziót. Nézd csak meg, nem hazudok.</string>
     <string name="decrypt_database_fail">A profiladatbázis jelszava helytelen.</string>
     <string name="logging_in">Bejelentkezés…</string>
-    <string name="welcome_legal_content">Mielött hozzákezdhetnénk, közölnöm kell pár fontos jogi információt.\n\nEz a program az MIT licensz alatt áll.\n\nA licensz angol nyelvü, ezért egy rövid kivonata található alább:\n\nÖnnek jogában áll a szoftvert (annak részét, vagy dokumentációját):\n- használni\n- lemásolni\n- módosítani\n- más szoftverben hasznosítani\n- eladni\n- al-licenszelni\n\nA következö feltételek mellett:\n- A terméknek tartalmaznia kell az eredeti MIT licensz másolatát\n  (mely itt megtalálható: https://gitlab.speedyblur.com/forcemagic/kreta-remastered/blob/master/LICENSE)\n- A terméknek tartalmaznia kell a másolásvédelmi sort (\"Copyright © 2017 ForceMagic\")\n\nAz alkalmazás készítöje SEMMIFÉLE KÖRÜLMÉNYEK KÖZÖTT NEM VÁLLAL FELELÖSSÉGET meghibásodás esetén.\n\nAz ELFOGAD gombra nyomva Ön elfogadja a licensz feltételeit.</string>
-    <string name="welcome_legal_accept">Elfogad</string>
-    <string name="welcome_legal_header">Ez a Kreta Remastered.\nÚgy látom, ez az elsö indítás.</string>
+    <string name="unlockdb_title">Kérem a jelszót</string>
+    <string name="welcome_end_subtitle">Még valami: Késöbb már nem változtathatod meg a jelszót. (Ha kell, nyomj egy visszát!) Hogyha elveszted, újra kell telepítened az alkalmazást.</string>
+    <string name="welcome_end_title">És kész!</string>
+    <string name="welcome_first_subtitle">Kezdjünk is hozzá.</string>
+    <string name="welcome_first_title">Üdvözöl a Kréta Remastered!</string>
+    <string name="welcome_sqlpass_subtitle">Ez a jelszó lesz használva a profiljaid titkosításánál. Egy jelszót megadni ERÖSEN AJÁNLOTT, de nem kötelezö. Fontos tudni, hogy ha nem adsz meg jelszót, bárkinek, akinek egy kis fogalma is van az Android rendszerröl, elérheti a profiljaidat.</string>
+    <string name="welcome_sqlpass_title">Titkosítási jelszó megadása</string>
 </resources>
