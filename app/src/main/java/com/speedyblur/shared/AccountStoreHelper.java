@@ -58,6 +58,7 @@ public class AccountStoreHelper {
             c.close();
             return profiles;
         } else {
+            c.close();
             return new ArrayList<>();
         }
     }

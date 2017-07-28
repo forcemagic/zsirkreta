@@ -46,6 +46,7 @@
     <string name="welcome_end_subtitle">Just one more thing: You can not change your password after you hit the check mark. Also, if you lose it, you\'ll have to reinstall.</string>
 
     <!-- Misc string values -->
+    <string name="unlockdb_title">Enter encryption password</string>
     <string name="welcome_title">Welcome!</string>
     <string name="welcome_subtitle">Choose a profile</string>
     <string name="profile_add">Add Profile</string>

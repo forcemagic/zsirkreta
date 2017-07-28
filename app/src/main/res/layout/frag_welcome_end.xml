@@ -32,7 +32,7 @@
                 android:textSize="14sp" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/welcomeEndConfirm"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/sqlPass"

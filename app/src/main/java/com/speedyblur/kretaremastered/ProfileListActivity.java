@@ -1,18 +1,13 @@
 package com.speedyblur.kretaremastered;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import com.speedyblur.adapters.ProfileAdapter;
@@ -30,30 +25,7 @@ public class ProfileListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilelist);
-
-        // First run operations
-        SharedPreferences shPrefs = getSharedPreferences("firstrun", MODE_PRIVATE);
-        //if (shPrefs.getBoolean("isFirstRun", true)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Title");
-            final EditText inText = new EditText(this);
-            inText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            builder.setView(inText);
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    String passwd = inText.getText().toString();
-                    if (tryDecryptSqlite(passwd)) {
-                        Vars.SQLCRYPT_PWD = passwd;
-                        updateProfileList();
-                    } else {
-                        Snackbar.make(findViewById(R.id.profListCoordinator), R.string.decrypt_database_fail, Snackbar.LENGTH_LONG).show();
-                    }
-                }
-            });
-            builder.show();
-        //}
-        shPrefs.edit().putBoolean("isFirstRun", false).apply();
+        updateProfileList();
     }
 
     public void goToNewProfile(View v) {
@@ -108,18 +80,6 @@ public class ProfileListActivity extends AppCompatActivity {
     protected void onActivityResult(int reqCode, int resCode, Intent data) {
         if (reqCode == INTENT_REQ_NEWPROF) {
             updateProfileList();
-        }
-    }
-
-    private boolean tryDecryptSqlite(String passwd) {
-        try {
-            AccountStoreHelper ash = new AccountStoreHelper(this, passwd);
-            ash.close();
-            Log.d("DecryptDB", "Decryption succeeded.");
-            return true;
-        } catch (AccountStoreHelper.DatabaseDecryptionException e) {
-            Log.w("DecryptDB", "Decryption failed.");
-            return false;
         }
     }
 }
