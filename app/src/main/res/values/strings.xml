@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">Kreta Remastered</string>
-    <string name="title_activity_main" translatable="false">Kreta Remastered</string>
     <string name="title_activity_grades">Grades</string>
     <string name="title_activity_avgs">Averages</string>
 
@@ -8,7 +7,7 @@
     <string name="login_btn">Login</string>
     <string name="login_studentcard_hint">Student card ID</string>
     <string name="login_passwd_hint">Password</string>
-    <string name="login_remember_checkbox">Remember login data</string>
+    <string name="login_friendlyname_hint">Friendly Name (Optional)</string>
     <string name="login_myserver_unresponsive">I\'m sorry. For once, my servers are not working. Check back later.</string>
     <string name="login_copyright">API is Copyleft 2017 Matthew Coal.\nKRETA is Copyright © 2017 eKreta Informatikai Zrt.</string>
 
@@ -27,24 +26,6 @@
     <string name="subject_history">History</string>
     <string name="subject_head_teacher_class">Class \\w head teacher</string>
 
-    <string name="fingerprint_dialog_waiting">Awaiting fingerprint…</string>
-    <string name="fingerprint_fatal_locked_out">You\'re trying hard, I can see. Too hard. Take a break and clean your fingers! Try again in a minute or so.</string>
-    <string name="fingerprint_wrong_finger">That finger doesn\'t look right to me.\nPlease try again.</string>
-    <string name="fingerprint_auth_success">That\'s the print! Authenticated successfully.</string>
-    <string name="fingerprint_fatal_no_fingerprints">You have no fingerprints registered. Head over to your phone settings to add some!</string>
-    <string name="fingerprint_fatal_no_hw">You do not have a fingerprint sensor. What a bummer! Fingerprint authentication disabled.</string>
-    <string name="fingerprint_fatal_unknown_error">There\'s a problem with the sensor. Please try again later.</string>
-
-    <string name="settings_auth_type">Authentication type</string>
-    <string name="settings_security_none">None</string>
-    <string name="settings_security_fingerprint">Fingerprint (+passcode)</string>
-    <string name="settings_security_passcode">Passcode</string>
-    <string name="settings_passcode_status_ready">Enter new passcode</string>
-    <string name="settings_passcode_status_again">Again, please</string>
-    <string name="settings_passcode_status_saved">Passcode saved</string>
-    <string name="settings_passcode_status_nomatch">Passcodes don\'t match :(</string>
-    <string name="settings_passcode_status_lengtherr">Passcode is not 4 digits :(</string>
-
     <!-- Loading messages (proc. indicators) -->
     <string name="loading_grades">Loading grades…</string>
     <string name="loading_averages">Loading averages…</string>
@@ -56,7 +37,19 @@
     <string name="http_unknown">This error… I have no idea what it is actually.</string>
     <string name="http_bad_gateway">Kreta is having some issues… (Not surprising) Try again later.</string>
 
+    <!-- Introduction messages -->
+    <string name="welcome_first_title">Welcome to Kreta Remastered!</string>
+    <string name="welcome_first_subtitle">Let\'s get you set up.</string>
+    <string name="welcome_sqlpass_title">Set encryption password</string>
+    <string name="welcome_sqlpass_subtitle">This password will be used to encrypt all your profiles in this app. While providing a password is STRONGLY ADVISED, it is not mandatory. But if you don\'t provide one, your credentials will be available to almost anyone with a little knowledge of Android.</string>
+    <string name="welcome_end_title">That\'s it!</string>
+    <string name="welcome_end_subtitle">Just one more thing: You can not change your password after you hit the check mark. Also, if you lose it, you\'ll have to reinstall.</string>
+
     <!-- Misc string values -->
+    <string name="unlockdb_title">Enter encryption password</string>
+    <string name="welcome_title">Welcome!</string>
+    <string name="welcome_subtitle">Choose a profile!</string>
+    <string name="profile_add">Add Profile</string>
     <string name="subjview_average">AVG: %1$.2f</string>
     <string name="grade_unknown_topic">Unknown Topic</string>
     <string name="avglabel_desc">Class average: %1$.2f - Delta: %2$.2f</string>
@@ -65,6 +58,9 @@
     <string name="http_req_error">Some kind of error occurred. :(</string>
     <string name="progress_dialog_loading">Login succeeded. Loading…</string>
     <string name="auth_passcode_error">This is not the right code!</string>
+    <string name="decrypt_database_fail">Unable to decrypt profile store database.</string>
+    <string name="profile_delete_success">Successfully deleted profile.</string>
+    <string name="logging_in">Logging in…</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

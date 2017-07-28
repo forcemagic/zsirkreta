@@ -134,9 +134,8 @@ public class HttpHandler {
             Log.d("HttpHandler", "Got response. Parsing...");
             if (response.isSuccessful()) {
                 try {
-                    Log.d("HttpHandler", "200 OK. Parsing JSON...");
                     jsCallback.onComplete(new JSONObject(response.body().string()));
-                    Log.d("HttpHandler", "Successfully parsed JSON.");
+                    Log.d("HttpHandler", "Got 200 OK, callback finished.");
                 } catch (JSONException e) {
                     Log.e("HttpHandler", "Unable to parse JSON (or tried to get a nonexistent object). Dumping request...");
                     jsCallback.onFailure(R.string.http_server_error);
