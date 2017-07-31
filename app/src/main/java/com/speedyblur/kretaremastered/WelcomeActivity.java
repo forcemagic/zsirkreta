@@ -10,8 +10,11 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.speedyblur.models.CustomViewPager;
 import com.speedyblur.shared.AccountStoreHelper;
@@ -37,8 +40,21 @@ public class WelcomeActivity extends AppCompatActivity {
         } else {
             if (!canDecryptSqlite(Vars.SQLCRYPT_PWD)) {
                 setContentView(R.layout.activity_unlockdb);
+
+                // Set up "Enter" key action
+                EditText mPasswdView = (EditText) findViewById(R.id.unlockDbPassword);
+                mPasswdView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                    @Override
+                    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                        if (i == R.id.unlockDb || i == EditorInfo.IME_NULL) {
+                            tryDecryptSqlite(null);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
             } else {
-                // We can use the base password, as nothing else has been provided previously
+                // We can use the default password, as nothing else has been provided previously
                 finish();
                 Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
                 startActivity(it);
