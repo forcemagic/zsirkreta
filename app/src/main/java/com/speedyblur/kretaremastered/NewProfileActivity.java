@@ -19,6 +19,8 @@ import com.speedyblur.shared.AccountStoreHelper;
 import com.speedyblur.shared.HttpHandler;
 import com.speedyblur.shared.Vars;
 
+import net.sqlcipher.database.SQLiteConstraintException;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -126,6 +128,13 @@ public class NewProfileActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             Snackbar.make(findViewById(R.id.login_coord_view), R.string.decrypt_database_fail, Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (SQLiteConstraintException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Snackbar.make(findViewById(R.id.login_coord_view), R.string.profile_exists, Snackbar.LENGTH_LONG).show();
                         }
                     });
                 }

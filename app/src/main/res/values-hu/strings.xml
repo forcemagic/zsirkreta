@@ -54,4 +54,5 @@
     <string name="welcome_sqlpass_subtitle">Ez a jelszó lesz használva a profiljaid titkosításánál. Egy jelszót megadni ERÖSEN AJÁNLOTT, de nem kötelezö. Fontos tudni, hogy ha nem adsz meg jelszót, bárkinek, akinek egy kis fogalma is van az Android rendszerröl, elérheti a profiljaidat.</string>
     <string name="welcome_sqlpass_title">Titkosítási jelszó megadása</string>
     <string name="empty_profilelist">Ide jönnének a profilok, de úgy látszik, most egy sincs belöle. Adj hozzá egyet!</string>
+    <string name="profile_exists">A profil már létezik.</string>
 </resources>
