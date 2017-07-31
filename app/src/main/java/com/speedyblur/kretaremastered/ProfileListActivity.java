@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ViewFlipper;
 
 import com.speedyblur.adapters.ProfileAdapter;
 import com.speedyblur.models.Profile;
@@ -21,6 +22,7 @@ public class ProfileListActivity extends AppCompatActivity {
 
     private final static int INTENT_REQ_NEWPROF = 1;
     private ListView mProfileList;
+    private ViewFlipper mViewFlipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,10 @@ public class ProfileListActivity extends AppCompatActivity {
         // Setting up ListView
         mProfileList = (ListView) findViewById(R.id.profileList);
         mProfileList.setEmptyView(findViewById(R.id.emptyListViewText));
+
+        // Setting up ViewFlipper (for the progressBar)
+        mViewFlipper = (ViewFlipper) findViewById(R.id.profileSelectorFlipper);
+        mViewFlipper.setDisplayedChild(0);
 
         updateProfileList();
     }
@@ -53,16 +59,33 @@ public class ProfileListActivity extends AppCompatActivity {
 
                 @Override
                 public void onLoginBegin() {
-                    Snackbar.make(findViewById(R.id.profListCoordinator), R.string.logging_in, Snackbar.LENGTH_LONG).show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewFlipper.setDisplayedChild(1);
+                        }
+                    });
                 }
 
                 @Override
                 public void onLoginError(int errorMsgRes) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewFlipper.setDisplayedChild(0);
+                        }
+                    });
                     Snackbar.make(findViewById(R.id.profListCoordinator), errorMsgRes, Snackbar.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onLoginOk(String profileName) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewFlipper.setDisplayedChild(0);
+                        }
+                    });
                     Intent it = new Intent(ProfileListActivity.this, MainActivity.class);
                     it.putExtra("profileName", profileName);
                     fixCtxt.startActivity(it);
