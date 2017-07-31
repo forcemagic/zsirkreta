@@ -24,6 +24,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:imeActionLabel="Unlock"
+            android:imeActionId="@+id/unlockDb"
+            android:imeOptions="actionUnspecified"
             android:ems="10"
             android:inputType="textPassword" />
 

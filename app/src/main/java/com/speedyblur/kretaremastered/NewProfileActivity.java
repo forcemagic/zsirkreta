@@ -3,6 +3,7 @@ package com.speedyblur.kretaremastered;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
+import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -18,6 +19,8 @@ import com.speedyblur.models.Profile;
 import com.speedyblur.shared.AccountStoreHelper;
 import com.speedyblur.shared.HttpHandler;
 import com.speedyblur.shared.Vars;
+
+import net.sqlcipher.database.SQLiteConstraintException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,9 +89,6 @@ public class NewProfileActivity extends AppCompatActivity {
             mIdView.setError(getString(R.string.error_field_required));
             focusView = mIdView; cancel = true;
         }
-        if (TextUtils.isEmpty(friendlyName)) {
-            friendlyName = studentId;
-        }
 
         if (cancel) {
             focusView.requestFocus();
@@ -125,7 +125,30 @@ public class NewProfileActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Snackbar.make(findViewById(R.id.login_coord_view), R.string.decrypt_database_fail, Snackbar.LENGTH_LONG).show();
+                            Snackbar sBar = Snackbar.make(findViewById(R.id.login_coord_view), R.string.decrypt_database_fail, Snackbar.LENGTH_LONG);
+                            sBar.show();
+                            sBar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                                @Override
+                                public void onDismissed(Snackbar transientBottomBar, int event) {
+                                    super.onDismissed(transientBottomBar, event);
+                                    finish();
+                                }
+                            });
+                        }
+                    });
+                } catch (SQLiteConstraintException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Snackbar sBar = Snackbar.make(findViewById(R.id.login_coord_view), R.string.profile_exists, Snackbar.LENGTH_LONG);
+                            sBar.show();
+                            sBar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                                @Override
+                                public void onDismissed(Snackbar transientBottomBar, int event) {
+                                    super.onDismissed(transientBottomBar, event);
+                                    finish();
+                                }
+                            });
                         }
                     });
                 }

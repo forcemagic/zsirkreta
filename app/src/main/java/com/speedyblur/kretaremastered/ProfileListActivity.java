@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ViewFlipper;
 
 import com.speedyblur.adapters.ProfileAdapter;
 import com.speedyblur.models.Profile;
@@ -20,11 +21,22 @@ import java.util.ArrayList;
 public class ProfileListActivity extends AppCompatActivity {
 
     private final static int INTENT_REQ_NEWPROF = 1;
+    private ListView mProfileList;
+    private ViewFlipper mViewFlipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilelist);
+
+        // Setting up ListView
+        mProfileList = (ListView) findViewById(R.id.profileList);
+        mProfileList.setEmptyView(findViewById(R.id.emptyListViewText));
+
+        // Setting up ViewFlipper (for the progressBar)
+        mViewFlipper = (ViewFlipper) findViewById(R.id.profileSelectorFlipper);
+        mViewFlipper.setDisplayedChild(0);
+
         updateProfileList();
     }
 
@@ -38,7 +50,6 @@ public class ProfileListActivity extends AppCompatActivity {
             AccountStoreHelper ash = new AccountStoreHelper(getApplicationContext(), Vars.SQLCRYPT_PWD);
             ArrayList<Profile> profiles = ash.getAccounts();
             ash.close();
-            ListView lv = (ListView) findViewById(R.id.profileList);
             final Context fixCtxt = this;
             ArrayAdapter strAdapter = new ProfileAdapter(this, profiles, new ProfileAdapter.ProfileAdapterCallback() {
                 @Override
@@ -48,16 +59,33 @@ public class ProfileListActivity extends AppCompatActivity {
 
                 @Override
                 public void onLoginBegin() {
-                    Snackbar.make(findViewById(R.id.profListCoordinator), R.string.logging_in, Snackbar.LENGTH_LONG).show();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewFlipper.setDisplayedChild(1);
+                        }
+                    });
                 }
 
                 @Override
                 public void onLoginError(int errorMsgRes) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewFlipper.setDisplayedChild(0);
+                        }
+                    });
                     Snackbar.make(findViewById(R.id.profListCoordinator), errorMsgRes, Snackbar.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onLoginOk(String profileName) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mViewFlipper.setDisplayedChild(0);
+                        }
+                    });
                     Intent it = new Intent(ProfileListActivity.this, MainActivity.class);
                     it.putExtra("profileName", profileName);
                     fixCtxt.startActivity(it);
@@ -69,7 +97,7 @@ public class ProfileListActivity extends AppCompatActivity {
                     updateProfileList();
                 }
             });
-            lv.setAdapter(strAdapter);
+            mProfileList.setAdapter(strAdapter);
             Log.d("ProfileList", String.format("We have %s profiles. List population complete.", profiles.size()));
         } catch (AccountStoreHelper.DatabaseDecryptionException e) {
             Snackbar.make(findViewById(R.id.profListCoordinator), R.string.decrypt_database_fail, Snackbar.LENGTH_LONG).show();

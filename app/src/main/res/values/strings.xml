@@ -49,6 +49,8 @@
     <string name="unlockdb_title">Enter encryption password</string>
     <string name="welcome_title">Welcome!</string>
     <string name="welcome_subtitle">Choose a profile!</string>
+    <string name="empty_profilelist">Looks like nothing\'s here. Go ahead, add some profiles!</string>
+    <string name="profile_exists">Profile already exists.</string>
     <string name="profile_add">Add Profile</string>
     <string name="subjview_average">AVG: %1$.2f</string>
     <string name="grade_unknown_topic">Unknown Topic</string>
