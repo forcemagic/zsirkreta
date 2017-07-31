@@ -89,9 +89,6 @@ public class NewProfileActivity extends AppCompatActivity {
             mIdView.setError(getString(R.string.error_field_required));
             focusView = mIdView; cancel = true;
         }
-        if (TextUtils.isEmpty(friendlyName)) {
-            friendlyName = studentId;
-        }
 
         if (cancel) {
             focusView.requestFocus();

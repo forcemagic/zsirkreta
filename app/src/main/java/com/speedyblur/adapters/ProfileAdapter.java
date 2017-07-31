@@ -2,6 +2,7 @@ package com.speedyblur.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,9 +43,7 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
         final Profile p = this.getItem(pos);
         assert p != null;
 
-        mProfileName.setOnClickListener(new LoginClickListener(p, this.cback));
-        mProfileId.setOnClickListener(new LoginClickListener(p, this.cback));
-
+        convertView.setOnClickListener(new LoginClickListener(p, this.cback));
         mProfileDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,10 +60,11 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
 
         if (p.hasFriendlyName()) {
             mProfileName.setText(p.friendlyName);
-            mProfileId.setText("("+p.cardid+")");
+            mProfileId.setText(p.cardid);
         } else {
             mProfileName.setText(p.cardid);
-            mProfileId.setText("");
+            mProfileName.setGravity(Gravity.CENTER_VERTICAL);
+            mProfileId.setVisibility(View.GONE);
         }
 
         if (pos == getCount() - 1) {

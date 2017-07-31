@@ -8,8 +8,10 @@
     tools:context="com.speedyblur.kretaremastered.ProfileListActivity">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minHeight="8dp"
         android:padding="16dp">
 
         <TextView
@@ -27,24 +29,32 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/welcomeTitle"
+            android:layout_marginBottom="8dp"
             android:text="@string/welcome_subtitle"
             android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/emptyListViewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@id/welcomeSubTitle"
+            android:text="@string/empty_profilelist" />
 
         <ListView
             android:id="@+id/profileList"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/addProfileButton"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@+id/welcomeSubTitle"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/emptyListViewText"
             android:divider="@null" />
 
         <Button
             android:id="@+id/addProfileButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
+            android:layout_below="@+id/profileList"
             android:onClick="goToNewProfile"
             android:text="@string/profile_add" />
     </RelativeLayout>

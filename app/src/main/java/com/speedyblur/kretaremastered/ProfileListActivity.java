@@ -1,19 +1,14 @@
 package com.speedyblur.kretaremastered;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.speedyblur.adapters.ProfileAdapter;
 import com.speedyblur.models.Profile;
@@ -34,11 +29,7 @@ public class ProfileListActivity extends AppCompatActivity {
 
         // Setting up ListView
         mProfileList = (ListView) findViewById(R.id.profileList);
-        TextView emptyView = new TextView(this);
-        emptyView.setText(R.string.empty_profilelist);
-        emptyView.setGravity(Gravity.CENTER);
-        addContentView(emptyView, new AppBarLayout.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        mProfileList.setEmptyView(emptyView);
+        mProfileList.setEmptyView(findViewById(R.id.emptyListViewText));
 
         updateProfileList();
     }
