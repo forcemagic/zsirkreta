@@ -38,6 +38,7 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
         TextView mProfileName = convertView.findViewById(R.id.profileName);
         TextView mProfileId = convertView.findViewById(R.id.profileId);
         ImageButton mProfileDelete = convertView.findViewById(R.id.deleteProfileBtn);
+        View mProfLineSep = convertView.findViewById(R.id.profileLineSeparator);
         final Profile p = this.getItem(pos);
         assert p != null;
 
@@ -64,6 +65,12 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
         } else {
             mProfileName.setText(p.cardid);
             mProfileId.setText("");
+        }
+
+        if (pos == getCount() - 1) {
+            mProfLineSep.setVisibility(View.INVISIBLE);
+        } else {
+            mProfLineSep.setVisibility(View.VISIBLE);
         }
 
         return convertView;

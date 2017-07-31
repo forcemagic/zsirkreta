@@ -1,14 +1,19 @@
 package com.speedyblur.kretaremastered;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.speedyblur.adapters.ProfileAdapter;
 import com.speedyblur.models.Profile;
@@ -20,11 +25,21 @@ import java.util.ArrayList;
 public class ProfileListActivity extends AppCompatActivity {
 
     private final static int INTENT_REQ_NEWPROF = 1;
+    private ListView mProfileList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profilelist);
+
+        // Setting up ListView
+        mProfileList = (ListView) findViewById(R.id.profileList);
+        TextView emptyView = new TextView(this);
+        emptyView.setText(R.string.empty_profilelist);
+        emptyView.setGravity(Gravity.CENTER);
+        addContentView(emptyView, new AppBarLayout.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mProfileList.setEmptyView(emptyView);
+
         updateProfileList();
     }
 
@@ -38,7 +53,6 @@ public class ProfileListActivity extends AppCompatActivity {
             AccountStoreHelper ash = new AccountStoreHelper(getApplicationContext(), Vars.SQLCRYPT_PWD);
             ArrayList<Profile> profiles = ash.getAccounts();
             ash.close();
-            ListView lv = (ListView) findViewById(R.id.profileList);
             final Context fixCtxt = this;
             ArrayAdapter strAdapter = new ProfileAdapter(this, profiles, new ProfileAdapter.ProfileAdapterCallback() {
                 @Override
@@ -69,7 +83,7 @@ public class ProfileListActivity extends AppCompatActivity {
                     updateProfileList();
                 }
             });
-            lv.setAdapter(strAdapter);
+            mProfileList.setAdapter(strAdapter);
             Log.d("ProfileList", String.format("We have %s profiles. List population complete.", profiles.size()));
         } catch (AccountStoreHelper.DatabaseDecryptionException e) {
             Snackbar.make(findViewById(R.id.profListCoordinator), R.string.decrypt_database_fail, Snackbar.LENGTH_LONG).show();

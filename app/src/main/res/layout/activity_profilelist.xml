@@ -36,7 +36,8 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/addProfileButton"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/welcomeSubTitle" />
+            android:layout_below="@+id/welcomeSubTitle"
+            android:divider="@null" />
 
         <Button
             android:id="@+id/addProfileButton"

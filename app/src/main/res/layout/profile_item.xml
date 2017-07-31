@@ -34,4 +34,13 @@
         android:layout_alignParentTop="true"
         app:srcCompat="@drawable/delete_icon_black" />
 
+    <View
+        android:id="@+id/profileLineSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/deleteProfileBtn"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="#FFAAAAAA" />
+
 </RelativeLayout>
