@@ -3,6 +3,7 @@ package com.speedyblur.kretaremastered;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
+import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -127,14 +128,30 @@ public class NewProfileActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Snackbar.make(findViewById(R.id.login_coord_view), R.string.decrypt_database_fail, Snackbar.LENGTH_LONG).show();
+                            Snackbar sBar = Snackbar.make(findViewById(R.id.login_coord_view), R.string.decrypt_database_fail, Snackbar.LENGTH_LONG);
+                            sBar.show();
+                            sBar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                                @Override
+                                public void onDismissed(Snackbar transientBottomBar, int event) {
+                                    super.onDismissed(transientBottomBar, event);
+                                    finish();
+                                }
+                            });
                         }
                     });
                 } catch (SQLiteConstraintException e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Snackbar.make(findViewById(R.id.login_coord_view), R.string.profile_exists, Snackbar.LENGTH_LONG).show();
+                            Snackbar sBar = Snackbar.make(findViewById(R.id.login_coord_view), R.string.profile_exists, Snackbar.LENGTH_LONG);
+                            sBar.show();
+                            sBar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                                @Override
+                                public void onDismissed(Snackbar transientBottomBar, int event) {
+                                    super.onDismissed(transientBottomBar, event);
+                                    finish();
+                                }
+                            });
                         }
                     });
                 }
