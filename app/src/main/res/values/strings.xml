@@ -8,7 +8,7 @@
     <string name="login_studentcard_hint">Student card ID</string>
     <string name="login_passwd_hint">Password</string>
     <string name="login_friendlyname_hint">Friendly Name (Optional)</string>
-    <string name="login_myserver_unresponsive">I\'m sorry. For once, my servers are not working. Check back later.</string>
+    <string name="login_myserver_unresponsive">I\'m sorry. For some reason, my servers are not working. Check back later.</string>
     <string name="login_copyright">API is Copyleft 2017 Matthew Coal.\nKRETA is Copyright © 2017 eKreta Informatikai Zrt.</string>
 
     <string name="subject_english_lang">English</string>
@@ -33,8 +33,10 @@
     <!-- HTTP errors -->
     <string name="http_unauthorized">You did not supply the correct credentials.</string>
     <string name="http_server_error">Something\'s wrong with my server. I\'m sorry :(</string>
-    <string name="http_timeout">Request timed out. (Are you connected to the Internet?)</string>
-    <string name="http_unknown">This error… I have no idea what it is actually.</string>
+    <string name="http_timeout">The Kreta servers are not responding.</string>
+    <string name="http_connect_timeout">Connection timed out. Either your network is too slow or my servers are having some issues.</string>
+    <string name="http_cant_resolve">You are not connected to the Internet. Please turn on Mobile Data or Wifi to continue.</string>
+    <string name="http_unknown">This error… I have no idea what it is actually. Sorry. :(</string>
     <string name="http_bad_gateway">Kreta is having some issues… (Not surprising) Try again later.</string>
 
     <!-- Introduction messages -->

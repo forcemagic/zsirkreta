@@ -55,4 +55,6 @@
     <string name="welcome_sqlpass_title">Titkosítási jelszó megadása</string>
     <string name="empty_profilelist">Ide jönnének a profilok, de úgy látszik, most egy sincs belöle. Adj hozzá egyet!</string>
     <string name="profile_exists">A profil már létezik.</string>
+    <string name="http_cant_resolve">Nem vagy csatlakozva az Internethez. Kapcsold be a mobilnetet vagy a wifit.</string>
+    <string name="http_connect_timeout">Idötúllépés a kapcsolatban. Vagy a neted lassú, vagy a szerveremmel vannak gondok.</string>
 </resources>
