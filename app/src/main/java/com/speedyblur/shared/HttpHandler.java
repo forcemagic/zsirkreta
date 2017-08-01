@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.HttpURLConnection;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -123,6 +124,12 @@ public class HttpHandler {
             if (e.getMessage().equals("timeout")) {
                 Log.e("HttpHandler", "Timeout error.");
                 jsCallback.onFailure(R.string.http_timeout);
+            } else if (e.getMessage().equals("connect timed out")) {
+                Log.e("HttpHandler", "Request timeout error (server not responding).");
+                jsCallback.onFailure(R.string.http_connect_timeout);
+            } else if (e.getMessage().contains("No address associated with hostname")) {
+                Log.e("HttpHandler", "Unable to connect: Can't resolve hostname.");
+                jsCallback.onFailure(R.string.http_cant_resolve);
             } else {
                 Log.e("HttpHandler", "Unknown error: "+e.getMessage());
                 jsCallback.onFailure(R.string.http_unknown);
@@ -142,10 +149,10 @@ public class HttpHandler {
                     e.printStackTrace();
                 }
             } else {
-                if (response.code() == 403) {
+                if (response.code() == HttpURLConnection.HTTP_FORBIDDEN) {
                     Log.e("HttpHandler", "Got 403 (Forbidden) from server.");
                     jsCallback.onFailure(R.string.http_unauthorized);
-                } else if (response.code() == 502) {
+                } else if (response.code() == HttpURLConnection.HTTP_BAD_GATEWAY) {
                     Log.e("HttpHandler", "Got 502 (Bad Gateway) from server.");
                     jsCallback.onFailure(R.string.http_bad_gateway);
                 } else {
