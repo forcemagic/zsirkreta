@@ -30,7 +30,9 @@ public class AverageGraphActivity extends AppCompatActivity {
         chart.getXAxis().setValueFormatter(new EpochToDateFormatter());
         chart.getXAxis().setAvoidFirstLastClipping(true);
         chart.getAxisLeft().setTextSize(16f);
-        chart.getAxisRight().setDrawAxisLine(false);
+        chart.getDescription().setEnabled(false);
+        chart.getLegend().setEnabled(false);
+        chart.getAxisRight().setDrawLabels(false);
         chart.setData(new LineData(dataSet));
         chart.invalidate();
     }

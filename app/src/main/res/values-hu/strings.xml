@@ -57,4 +57,5 @@
     <string name="profile_exists">A profil már létezik.</string>
     <string name="http_cant_resolve">Nem vagy csatlakozva az Internethez. Kapcsold be a mobilnetet vagy a wifit.</string>
     <string name="http_connect_timeout">Idötúllépés a kapcsolatban. Vagy a neted lassú, vagy a szerveremmel vannak gondok.</string>
+    <string name="main_load_complete">Betöltés kész! Krétával való kommunikálással töltött idö: %1$.2f másodperc.</string>
 </resources>
