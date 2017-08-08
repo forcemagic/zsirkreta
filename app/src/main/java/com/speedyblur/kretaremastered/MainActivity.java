@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HttpHandler.getJson(Vars.APIBASE + "/grades", heads, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
-                final ArrayList<Subject> subjects = Subject.fromJson(resp.getJSONArray("grades"));
+                final ArrayList<Subject> subjects = Subject.fromJson(resp.getJSONArray("data"));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HttpHandler.getJson(Vars.APIBASE + "/avg", heads, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
-                final ArrayList<Average> averages = Average.fromJson(resp.getJSONArray("averages"));
+                final ArrayList<Average> averages = Average.fromJson(resp.getJSONArray("data"));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
