@@ -1,5 +1,7 @@
 package com.speedyblur.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -8,7 +10,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Subject {
+public class Subject implements Parcelable {
     public String name;
     public ArrayList<Grade> grades;
     public double avg;
@@ -22,6 +24,24 @@ public class Subject {
         }
         this.avg = subjObj.getDouble("avg");
     }
+
+    protected Subject(Parcel in) {
+        name = in.readString();
+        in.readTypedList(grades, Grade.CREATOR);
+        avg = in.readDouble();
+    }
+
+    public static final Creator<Subject> CREATOR = new Creator<Subject>() {
+        @Override
+        public Subject createFromParcel(Parcel in) {
+            return new Subject(in);
+        }
+
+        @Override
+        public Subject[] newArray(int size) {
+            return new Subject[size];
+        }
+    };
 
     public static ArrayList<Subject> fromJson(JSONArray jsonObjects) throws JSONException {
         int gradeCount = 0;
@@ -37,5 +57,18 @@ public class Subject {
         }
         Log.d("Subject", String.format("We have a total of %d subjects and %d grades.", subjects.size(), gradeCount));
         return subjects;
+    }
+
+    @Override
+    public int describeContents() {
+        // Method stub
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
+        parcel.writeTypedList(grades);
+        parcel.writeDouble(avg);
     }
 }

@@ -11,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
@@ -42,15 +41,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Toolbar toolbar;
     private ArrayMap<String, String> heads;
+    private ArrayList<Subject> subjects;
+    private ArrayList<Average> averages;
     private final Context sharedCtxt = this;
     private double loadTime;
+
+    // UI ref
+    private ViewFlipper vf;
 
     @Override
     @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d(this.getClass().getSimpleName(), "Setting up View...");
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_activity_grades);
@@ -68,14 +71,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView profNameHead = navigationView.getHeaderView(0).findViewById(R.id.profileNameHead);
         profNameHead.setText(getIntent().getStringExtra("profileName"));
 
-        // Init ViewFlipper
-        ((ViewFlipper) findViewById(R.id.main_viewflipper)).setDisplayedChild(0);
-        Log.d(this.getClass().getSimpleName(), "Done setting up.");
+        vf = (ViewFlipper) findViewById(R.id.main_viewflipper);
 
         heads = new ArrayMap<>();
         heads.put("X-Auth-Token", Vars.AUTHTOKEN);
 
-        fetchGrades();
+        if (savedInstanceState != null) {
+            subjects = savedInstanceState.getParcelableArrayList("subjects");
+            averages = savedInstanceState.getParcelableArrayList("averages");
+
+            // Repopulate views
+            ExpandableListView gradeList = (ExpandableListView) findViewById(R.id.mainGradeView);
+            gradeList.setAdapter(new SubjectAdapter(sharedCtxt, subjects));
+            ListView avgList = (ListView) findViewById(R.id.avg_list);
+            avgList.setAdapter(new AverageAdapter(sharedCtxt, averages));
+
+            // Viewflipper reset
+            vf.setDisplayedChild(savedInstanceState.getInt("viewFlipperState"));
+        } else {
+            vf.setDisplayedChild(0);
+            fetchGrades();
+        }
     }
 
     private void fetchGrades() {
@@ -83,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HttpHandler.getJson(Vars.APIBASE + "/grades", heads, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
-                final ArrayList<Subject> subjects = Subject.fromJson(resp.getJSONArray("data"));
+                subjects = Subject.fromJson(resp.getJSONArray("data"));
                 loadTime = resp.getDouble("fetch_time");
                 runOnUiThread(new Runnable() {
                     @Override
@@ -112,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HttpHandler.getJson(Vars.APIBASE + "/avg", heads, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
-                final ArrayList<Average> averages = Average.fromJson(resp.getJSONArray("data"));
+                averages = Average.fromJson(resp.getJSONArray("data"));
                 loadTime += resp.getDouble("fetch_time");
                 runOnUiThread(new Runnable() {
                     @Override
@@ -173,6 +189,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle b) {
+        b.putParcelableArrayList("subjects", subjects);
+        b.putParcelableArrayList("averages", averages);
+        b.putInt("viewFlipperState", vf.getDisplayedChild());
+        super.onSaveInstanceState(b);
+    }
+
+    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -196,7 +220,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-        ViewFlipper vf = (ViewFlipper) findViewById(R.id.main_viewflipper);
 
         if (id == R.id.nav_avgs) {
             toolbar.setTitle(R.string.title_activity_avgs);

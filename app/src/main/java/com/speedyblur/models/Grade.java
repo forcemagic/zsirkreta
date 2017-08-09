@@ -1,5 +1,8 @@
 package com.speedyblur.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.speedyblur.kretaremastered.R;
 
 import org.json.JSONArray;
@@ -8,7 +11,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Grade {
+public class Grade implements Parcelable {
     public String grade;
     public String gotDate;
     public String teacher;
@@ -33,11 +36,48 @@ public class Grade {
         }
     }
 
+    protected Grade(Parcel in) {
+        grade = in.readString();
+        gotDate = in.readString();
+        teacher = in.readString();
+        type = in.readString();
+        theme = in.readString();
+        colorId = in.readInt();
+    }
+
+    public static final Creator<Grade> CREATOR = new Creator<Grade>() {
+        @Override
+        public Grade createFromParcel(Parcel in) {
+            return new Grade(in);
+        }
+
+        @Override
+        public Grade[] newArray(int size) {
+            return new Grade[size];
+        }
+    };
+
     public static ArrayList<Grade> fromJson(JSONArray jsonObjects) throws JSONException {
         ArrayList<Grade> grades = new ArrayList<>();
         for (int i = 0; i < jsonObjects.length(); i++) {
             grades.add(new Grade(jsonObjects.getJSONObject(i)));
         }
         return grades;
+    }
+
+    @Override
+    public int describeContents() {
+        // Method stub
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(grade);
+        parcel.writeString(gotDate);
+        parcel.writeString(teacher);
+        parcel.writeString(type);
+        parcel.writeString(theme);
+        parcel.writeInt(colorId);
     }
 }
