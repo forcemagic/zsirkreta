@@ -1,4 +1,5 @@
 image: speedy/android
+pull_policy: never
 
 before_script:
   - chmod +x ./gradlew
