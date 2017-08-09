@@ -1,6 +1,7 @@
 package com.speedyblur.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.speedyblur.kretaremastered.AverageGraphActivity;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.models.Average;
 
@@ -27,11 +29,11 @@ public class AverageAdapter extends ArrayAdapter<Average> {
     @SuppressWarnings("deprecation")
     public View getView(int pos, View convertView, @NonNull ViewGroup parent) {
         convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.avglist_item, parent, false);
-        Average item = this.getItem(pos);
+        final Average item = this.getItem(pos);
 
-        TextView avgView = (TextView) convertView.findViewById(R.id.avglabel_average);
-        TextView subjView = (TextView) convertView.findViewById(R.id.avglabel_subject);
-        TextView descView = (TextView) convertView.findViewById(R.id.avglabel_desc);
+        TextView avgView = convertView.findViewById(R.id.avglabel_average);
+        TextView subjView = convertView.findViewById(R.id.avglabel_subject);
+        TextView descView = convertView.findViewById(R.id.avglabel_desc);
 
         assert item != null;
 
@@ -48,6 +50,16 @@ public class AverageAdapter extends ArrayAdapter<Average> {
         String outpName = resxid == 0 ? item.subject : resx.getString(resxid);
         subjView.setText(outpName);
         descView.setText(resx.getString(R.string.avglabel_desc, item.classAverage, item.average - item.classAverage));
+
+        final Context sharedCtxt = this.getContext();
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(sharedCtxt, AverageGraphActivity.class);
+                it.putExtra("subject", item.subject);
+                sharedCtxt.startActivity(it);
+            }
+        });
 
         return convertView;
     }

@@ -29,6 +29,7 @@
     <!-- Loading messages (proc. indicators) -->
     <string name="loading_grades">Loading grades…</string>
     <string name="loading_averages">Loading averages…</string>
+    <string name="main_load_complete">Load complete! Time spent with Kreta communication: %1$.2f seconds.</string>
 
     <!-- HTTP errors -->
     <string name="http_unauthorized">You did not supply the correct credentials.</string>

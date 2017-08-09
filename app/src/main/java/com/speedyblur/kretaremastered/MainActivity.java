@@ -19,6 +19,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.Utils;
 import com.speedyblur.adapters.AverageAdapter;
 import com.speedyblur.adapters.SubjectAdapter;
 import com.speedyblur.models.Average;
@@ -26,10 +29,12 @@ import com.speedyblur.models.Subject;
 import com.speedyblur.shared.HttpHandler;
 import com.speedyblur.shared.Vars;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.support.design.widget.Snackbar.make;
 
@@ -38,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private ArrayMap<String, String> heads;
     private final Context sharedCtxt = this;
+    private double loadTime;
 
     @Override
     @SuppressWarnings("deprecation")
@@ -77,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HttpHandler.getJson(Vars.APIBASE + "/grades", heads, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
-                final ArrayList<Subject> subjects = Subject.fromJson(resp.getJSONArray("grades"));
+                final ArrayList<Subject> subjects = Subject.fromJson(resp.getJSONArray("data"));
+                loadTime = resp.getDouble("fetch_time");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -101,18 +108,54 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void fetchAverages() {
-        final Snackbar snackHandle = Snackbar.make(findViewById(R.id.main_coord_view), R.string.loading_averages, Snackbar.LENGTH_INDEFINITE);
-        snackHandle.show();
+        Snackbar.make(findViewById(R.id.main_coord_view), R.string.loading_averages, Snackbar.LENGTH_INDEFINITE).show();
         HttpHandler.getJson(Vars.APIBASE + "/avg", heads, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
-                final ArrayList<Average> averages = Average.fromJson(resp.getJSONArray("averages"));
+                final ArrayList<Average> averages = Average.fromJson(resp.getJSONArray("data"));
+                loadTime += resp.getDouble("fetch_time");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         ListView lv = (ListView) findViewById(R.id.avg_list);
                         lv.setAdapter(new AverageAdapter(sharedCtxt, averages));
-                        snackHandle.dismiss();
+                        fetchAverageGraph();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(final int localizedError) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        make(findViewById(R.id.main_coord_view), localizedError, Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void fetchAverageGraph() {
+        HttpHandler.getJson(Vars.APIBASE + "/avggraph", heads, new HttpHandler.JsonRequestCallback() {
+            @Override
+            public void onComplete(JSONObject resp) throws JSONException {
+                Utils.init(getApplicationContext());
+                JSONArray graphDataCollection = resp.getJSONArray("data");
+                for (int i=0; i<graphDataCollection.length(); i++) {
+                    JSONObject graphData = graphDataCollection.getJSONObject(i);
+                    List<Entry> graphDataEntries = new ArrayList<>();
+                    for (int j=0; j<graphData.getJSONArray("points").length(); j++) {
+                        JSONObject current = graphData.getJSONArray("points").getJSONObject(j);
+                        graphDataEntries.add(new Entry((float)current.getDouble("x"), (float)current.getDouble("y")));
+                    }
+                    Vars.averageGraphData.put(graphData.getString("subject"), new LineDataSet(graphDataEntries, graphData.getString("subject")));
+                }
+                loadTime += resp.getDouble("fetch_time");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.main_load_complete, (float)loadTime), Snackbar.LENGTH_LONG).show();
                     }
                 });
             }
