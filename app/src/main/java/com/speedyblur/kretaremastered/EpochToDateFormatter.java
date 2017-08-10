@@ -13,7 +13,7 @@ public class EpochToDateFormatter implements IAxisValueFormatter {
 
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
-        SimpleDateFormat dFormat = new SimpleDateFormat("M-d", Locale.getDefault());
+        SimpleDateFormat dFormat = new SimpleDateFormat("MMM d", Locale.getDefault());
         return dFormat.format(new Date((long) value*1000));
     }
 }
