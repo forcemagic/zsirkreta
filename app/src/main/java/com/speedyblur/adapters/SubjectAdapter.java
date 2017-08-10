@@ -127,7 +127,7 @@ public class SubjectAdapter extends BaseExpandableListAdapter {
                 descView1.setText(capitalize(gradeObj.theme) + " - " + gradeObj.teacher);
             }
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("Y. m. d.", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("Y. M. d.", Locale.getDefault());
             descView2.setText(dateFormat.format(new Date((long)gradeObj.gotDate*1000)));
         }
 
