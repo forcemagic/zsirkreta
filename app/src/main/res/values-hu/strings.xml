@@ -59,4 +59,6 @@
     <string name="http_connect_timeout">Idötúllépés a kapcsolatban. Vagy a neted lassú, vagy a szerveremmel vannak gondok.</string>
     <string name="main_load_complete">Betöltés kész! Krétával való kommunikálással töltött idö: %1$.2f másodperc.</string>
     <string name="avggraph_termseparator">Félév vége</string>
+    <string name="grade_end_of_halfterm">Félévi jegy</string>
+    <string name="grade_end_of_year">Év végi jegy</string>
 </resources>
