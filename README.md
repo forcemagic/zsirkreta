@@ -1,6 +1,6 @@
 # Kreta Remastered
 
-[![Build status](https://gitlab.speedyblur.com/forcemagic/kreta-remastered/badges/master/build.svg)](https://gitlab.speedyblur.com/forcemagic/kreta-remastered/commits/master)
+[![Build Status](https://travis-ci.org/forcemagic/kreta-remastered.svg?branch=master)](https://travis-ci.org/forcemagic/kreta-remastered)
 
 # Features
 
