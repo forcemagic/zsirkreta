@@ -164,6 +164,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     for (int j=0; j<graphData.getJSONArray("points").length(); j++) {
                         JSONObject current = graphData.getJSONArray("points").getJSONObject(j);
                         graphDataEntries.add(new Entry((float)current.getDouble("x"), (float)current.getDouble("y")));
+                        if (current.getBoolean("ishalftermgrade")) {
+                            Vars.halfTermTimes.put(graphData.getString("subject"), (int)current.getDouble("x"));
+                        }
                     }
                     Vars.averageGraphData.put(graphData.getString("subject"), new LineDataSet(graphDataEntries, graphData.getString("subject")));
                 }

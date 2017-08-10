@@ -66,6 +66,7 @@
     <string name="decrypt_database_fail">Unable to decrypt profile store database.</string>
     <string name="profile_delete_success">Successfully deleted profile.</string>
     <string name="logging_in">Logging in…</string>
+    <string name="avggraph_termseparator">End of term</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
