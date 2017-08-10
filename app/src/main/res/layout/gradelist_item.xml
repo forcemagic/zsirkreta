@@ -10,21 +10,21 @@
         android:layout_margin="4dp"
         android:background="@drawable/roundrect"
         android:paddingBottom="6dp"
-        android:paddingEnd="8dp"
-        android:paddingStart="8dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
         android:paddingTop="6dp"
         android:text="5"
         android:textColor="@android:color/white"
-        android:textSize="24sp"
+        android:textSize="30sp"
         android:typeface="normal" />
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/gradeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/grade"
         android:layout_toEndOf="@+id/grade"
-        android:text="xxxx.yy.zz"
+        android:text="@string/blablabla"
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="14sp" />
 
@@ -32,8 +32,18 @@
         android:id="@+id/gradeDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/date"
-        android:layout_below="@+id/date"
         android:text="@string/blablabla"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:layout_below="@+id/gradeTitle"
+        android:layout_toEndOf="@+id/grade" />
+
+    <TextView
+        android:id="@+id/gradeDesc2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/blablabla"
+        android:textSize="12sp"
+        android:layout_below="@+id/gradeDesc"
+        android:layout_toEndOf="@+id/grade" />
+
 </RelativeLayout>
