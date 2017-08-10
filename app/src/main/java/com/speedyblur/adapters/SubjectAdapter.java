@@ -15,7 +15,10 @@ import com.speedyblur.kretaremastered.R;
 import com.speedyblur.models.Grade;
 import com.speedyblur.models.Subject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class SubjectAdapter extends BaseExpandableListAdapter {
 
@@ -85,30 +88,57 @@ public class SubjectAdapter extends BaseExpandableListAdapter {
     @SuppressWarnings("deprecation")
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
-        convertView = inflater.inflate(R.layout.gradelist_item, null);
-
         Grade gradeObj = getChild(groupPosition, childPosition);
 
-        TextView gradeView = (TextView) convertView.findViewById(R.id.grade);
-        TextView dateView = (TextView) convertView.findViewById(R.id.date);
-        TextView descView = (TextView) convertView.findViewById(R.id.gradeDesc);
+        if (gradeObj.type.contains("végi") || gradeObj.type.contains("Félévi")) {
+            convertView = inflater.inflate(R.layout.gradelist_importantitem, null);
+        } else {
+            convertView = inflater.inflate(R.layout.gradelist_item, null);
+        }
 
-        assert gradeObj != null;
+        // Common things
+        TextView gradeView = convertView.findViewById(R.id.grade);
+        TextView titleView = convertView.findViewById(R.id.gradeTitle);
 
+        // Set bg color
         GradientDrawable grDrawable = (GradientDrawable) gradeView.getBackground();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             grDrawable.setColor(convertView.getResources().getColor(gradeObj.colorId, null));
         } else {
             grDrawable.setColor(convertView.getResources().getColor(gradeObj.colorId));
         }
-        gradeView.setBackground(grDrawable.getCurrent());
 
         gradeView.setText(gradeObj.grade);
-        dateView.setText(gradeObj.gotDate);
-        if (gradeObj.theme.equals(" - ")) { gradeObj.theme = convertView.getResources().getString(R.string.grade_unknown_topic); }
-        descView.setText(gradeObj.theme+" - "+gradeObj.type+" - "+gradeObj.teacher);
+
+        // Not common things
+        if (gradeObj.type.contains("Félévi")) {
+            titleView.setText(R.string.grade_end_of_halfterm);
+        } else if (gradeObj.type.contains("végi")) {
+            titleView.setText(R.string.grade_end_of_year);
+        } else {
+            titleView.setText(capitalize(gradeObj.type));
+
+            TextView descView1 = convertView.findViewById(R.id.gradeDesc);
+            TextView descView2 = convertView.findViewById(R.id.gradeDesc2);
+
+            if (gradeObj.theme.equals(" - ")) {
+                descView1.setText(gradeObj.teacher);
+            } else {
+                descView1.setText(capitalize(gradeObj.theme) + " - " + gradeObj.teacher);
+            }
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("Y. m. d.", Locale.getDefault());
+            descView2.setText(dateFormat.format(new Date((long)gradeObj.gotDate*1000)));
+        }
 
         return convertView;
+    }
+
+    /**
+     *  Helper function to capitalize first letter of string
+     */
+    private String capitalize(final String line) {
+        return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
 
     @Override
