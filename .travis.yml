@@ -6,5 +6,9 @@ android:
     - tools
     - build-tools-26.0.1
     - android-26
-  script:
-    - ./gradlew build
+before_install:
+  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+  - emulator -avd test -no-skin -no-audio -no-window &
+before_script:
+  - ./ci/wait_for_emulator
+  - adb shell input keyevent 82 &
