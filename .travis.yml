@@ -6,4 +6,5 @@ android:
     - tools
     - build-tools-26.0.1
     - android-26
-    
+  script:
+    - ./gradlew build
