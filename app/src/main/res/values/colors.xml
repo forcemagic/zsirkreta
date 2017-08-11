@@ -8,4 +8,8 @@
     <color name="goodGrade">#FF44CC44</color>
     <color name="avgGrade">#FFCCCC44</color>
     <color name="badGrade">#FFCC4444</color>
+
+    <color name="gradebar">#FFCCCC22</color>
+
+    <color name="transparent">#00000000</color>
 </resources>

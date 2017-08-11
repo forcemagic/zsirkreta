@@ -3,16 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <View
+        android:id="@+id/gradeBar"
+        android:layout_width="8dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="34dp"
+        android:background="@color/gradebar" />
+
     <TextView
         android:id="@+id/grade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@drawable/roundrect"
-        android:paddingBottom="6dp"
-        android:paddingEnd="10dp"
-        android:paddingStart="10dp"
-        android:paddingTop="6dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/roundgrade"
+        android:gravity="center"
         android:text="5"
         android:textColor="@android:color/white"
         android:textSize="30sp"
@@ -22,28 +29,30 @@
         android:id="@+id/gradeTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/grade"
-        android:layout_toEndOf="@+id/grade"
         android:text="@string/blablabla"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:layout_alignTop="@+id/grade"
+        android:layout_toEndOf="@+id/grade" />
 
     <TextView
         android:id="@+id/gradeDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/blablabla"
-        android:textSize="12sp"
         android:layout_below="@+id/gradeTitle"
-        android:layout_toEndOf="@+id/grade" />
+        android:layout_marginStart="2dp"
+        android:layout_toEndOf="@+id/grade"
+        android:text="@string/blablabla"
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/gradeDesc2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/blablabla"
-        android:textSize="12sp"
         android:layout_below="@+id/gradeDesc"
-        android:layout_toEndOf="@+id/grade" />
+        android:layout_marginStart="2dp"
+        android:layout_toEndOf="@+id/grade"
+        android:text="@string/blablabla"
+        android:textSize="12sp" />
 
 </RelativeLayout>
