@@ -4,25 +4,36 @@
     android:layout_height="wrap_content">
 
     <View
-        android:id="@+id/gradeBar"
+        android:id="@+id/gradeBarTop"
         android:layout_width="8dp"
-        android:layout_height="66dp"
+        android:layout_height="6dp"
         android:layout_marginStart="34dp"
         android:background="@color/gradebar" />
 
-    <TextView
-        android:id="@+id/grade"
+    <View
+        android:id="@+id/gradeBullet"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginStart="13dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/roundgrade"
-        android:gravity="center"
+        android:background="@drawable/roundgrade" />
+
+    <TextView
+        android:id="@+id/grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/gradeBullet"
+        android:layout_alignTop="@+id/gradeBullet"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="13dp"
+        android:layout_toEndOf="@+id/gradeBullet"
+        android:gravity="center_vertical"
         android:text="5"
-        android:textColor="@android:color/white"
-        android:textSize="30sp"
+        android:textColor="@android:color/black"
+        android:textSize="36sp"
         android:typeface="normal" />
 
     <TextView
@@ -33,7 +44,7 @@
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="14sp"
         android:layout_alignTop="@+id/grade"
-        android:layout_toEndOf="@+id/grade" />
+        android:layout_alignStart="@+id/gradeDesc" />
 
     <TextView
         android:id="@+id/gradeDesc"
@@ -54,5 +65,13 @@
         android:layout_toEndOf="@+id/grade"
         android:text="@string/blablabla"
         android:textSize="12sp" />
+
+    <View
+        android:id="@+id/gradeBarBottom"
+        android:layout_width="8dp"
+        android:layout_height="6dp"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="60dp"
+        android:background="@color/gradebar" />
 
 </RelativeLayout>

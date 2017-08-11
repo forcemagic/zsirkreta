@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,7 +86,6 @@ public class SubjectAdapter extends BaseExpandableListAdapter {
     }
 
     @SuppressLint("InflateParams")
-    @SuppressWarnings("deprecation")
     @Override
     public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
         Grade gradeObj = getChild(groupPosition, childPosition);
@@ -97,14 +97,16 @@ public class SubjectAdapter extends BaseExpandableListAdapter {
         }
 
         // Common things
+        View gradeBullet = convertView.findViewById(R.id.gradeBullet);
         TextView gradeView = convertView.findViewById(R.id.grade);
         TextView titleView = convertView.findViewById(R.id.gradeTitle);
 
         // Set bg color
-        GradientDrawable grDrawable = (GradientDrawable) gradeView.getBackground();
+        GradientDrawable grDrawable = (GradientDrawable) ((LayerDrawable) gradeBullet.getBackground()).getDrawable(1);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             grDrawable.setColor(convertView.getResources().getColor(gradeObj.colorId, null));
         } else {
+            //noinspection deprecation
             grDrawable.setColor(convertView.getResources().getColor(gradeObj.colorId));
         }
 
