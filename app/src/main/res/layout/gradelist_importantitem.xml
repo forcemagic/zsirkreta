@@ -1,55 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <View
-        android:id="@+id/importantGradeBarTop"
-        android:layout_width="8dp"
-        android:layout_height="6dp"
-        android:layout_marginStart="34dp"
-        android:background="@color/gradebar" />
+        android:id="@+id/gradeBarTop"
+        android:layout_width="4dp"
+        android:layout_height="22dp"
+        android:layout_marginStart="18dp"
+        android:background="@drawable/gradebar_top" />
 
-    <View
+    <ImageView
         android:id="@+id/gradeBullet"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="8dp"
-        android:background="@drawable/roundgrade" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="25.5dp"
+        app:srcCompat="@drawable/importantgrade" />
 
-    <TextView
-        android:id="@+id/grade"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/gradeBullet"
-        android:layout_alignTop="@+id/gradeBullet"
-        android:layout_marginEnd="8dp"
+        android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/gradeBullet"
-        android:gravity="center_vertical"
-        android:text="5"
-        android:textColor="@android:color/black"
-        android:textSize="36sp"
-        android:typeface="normal" />
+        android:orientation="horizontal"
+        android:id="@+id/linearLayout"
+        android:layout_alignBottom="@+id/gradeBarBottom">
 
-    <TextView
-        android:id="@+id/gradeTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/grade"
-        android:layout_alignTop="@+id/grade"
-        android:layout_toEndOf="@+id/grade"
-        android:gravity="center_vertical"
-        android:text="@string/blablabla"
-        android:textColor="@android:color/black" />
+        <TextView
+            android:id="@+id/grade"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center_vertical"
+            android:text="5"
+            android:textColor="@android:color/black"
+            android:textSize="36sp"
+            android:typeface="normal" />
+
+        <TextView
+            android:id="@+id/gradeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:text="@string/blablabla"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
 
     <View
-        android:id="@+id/importantGradeBarBottom"
-        android:layout_width="8dp"
-        android:layout_height="6dp"
-        android:layout_marginStart="34dp"
-        android:layout_marginTop="70dp"
-        android:background="@color/gradebar" />
+        android:id="@+id/gradeBarBottom"
+        android:layout_width="4dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/gradebar_bottom" />
 
 </RelativeLayout>

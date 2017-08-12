@@ -14,7 +14,7 @@
         android:layout_marginTop="12dp"
         android:text="@string/blablabla"
         android:textColor="?android:attr/textColorPrimary"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:typeface="normal" />
 
     <TextView

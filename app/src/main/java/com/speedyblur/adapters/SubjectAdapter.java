@@ -3,13 +3,13 @@ package com.speedyblur.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
+import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.speedyblur.kretaremastered.R;
@@ -21,14 +21,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static com.speedyblur.kretaremastered.R.id.grade;
+
 public class SubjectAdapter extends BaseExpandableListAdapter {
 
     private final ArrayList<Subject> subjects;
     private final LayoutInflater inflater;
+    private Context context;
 
     public SubjectAdapter(Context context, ArrayList<Subject> subjs) {
         this.inflater = LayoutInflater.from(context);
         this.subjects = subjs;
+        this.context = context;
     }
 
     @Override
@@ -97,20 +101,12 @@ public class SubjectAdapter extends BaseExpandableListAdapter {
         }
 
         // Common things
-        View gradeBullet = convertView.findViewById(R.id.gradeBullet);
-        TextView gradeView = convertView.findViewById(R.id.grade);
+        ImageView gradeBullet = convertView.findViewById(R.id.gradeBullet);
+        TextView gradeView = convertView.findViewById(grade);
         TextView titleView = convertView.findViewById(R.id.gradeTitle);
 
-        // Set bg color
-        GradientDrawable grDrawable = (GradientDrawable) ((LayerDrawable) gradeBullet.getBackground()).getDrawable(1);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            grDrawable.setColor(convertView.getResources().getColor(gradeObj.colorId, null));
-        } else {
-            //noinspection deprecation
-            grDrawable.setColor(convertView.getResources().getColor(gradeObj.colorId));
-        }
-
         gradeView.setText(gradeObj.grade);
+        gradeBullet.setColorFilter(ContextCompat.getColor(context, gradeObj.colorId), PorterDuff.Mode.SRC_ATOP);
 
         // Not common things
         if (gradeObj.type.contains("Félévi")) {
@@ -129,8 +125,16 @@ public class SubjectAdapter extends BaseExpandableListAdapter {
                 descView1.setText(capitalize(gradeObj.theme) + " - " + gradeObj.teacher);
             }
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("Y. M. d.", Locale.getDefault());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. M. d.", Locale.getDefault());
             descView2.setText(dateFormat.format(new Date((long)gradeObj.gotDate*1000)));
+        }
+
+        if (childPosition == 0) {
+            convertView.findViewById(R.id.gradeBarTop).setVisibility(View.INVISIBLE);
+        }
+
+        if (isLastChild) {
+            convertView.findViewById(R.id.gradeBarBottom).setVisibility(View.INVISIBLE);
         }
 
         return convertView;

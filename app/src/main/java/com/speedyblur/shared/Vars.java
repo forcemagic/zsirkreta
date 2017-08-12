@@ -5,7 +5,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import java.util.HashMap;
 
 public class Vars {
-    public static final String APIBASE = "https://www.speedyblur.com/kretaapi/v2.0";
+    public static final String APIBASE = "https://staging.speedyblur.com/kretaapi/dummy-withgrades";
     public static String AUTHTOKEN = "";
     public static String SQLCRYPT_PWD = "weeee";
     public static int VIEWPAGER_SCROLLDUR = 500;
