@@ -37,7 +37,7 @@ public class AccountStoreHelper {
         if (p.cardid.length() > 12 || p.friendlyName.length() > 50 || p.getPasswd().length() > 50) {
             throw new SQLiteException("Unable to create record: parameter length(s) mismatch");
         }
-        db.execSQL("INSERT INTO accounts VALUES ('" + p.cardid + "', '" + p.friendlyName + "', '" + p.getPasswd() + "');");
+        db.rawQuery("INSERT INTO accounts VALUES (?, ?, ?);", new String[] {p.cardid, p.friendlyName, p.getPasswd()});
         Log.d("AccountStore", "DB Commit OK. Added 1 record.");
     }
 
