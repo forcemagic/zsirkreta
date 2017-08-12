@@ -29,14 +29,11 @@ public class AccountStoreHelper {
             Log.e("AccountStore", "DB INIT: Unable to open DB. (Assuming incorrect password)");
             throw new DatabaseDecryptionException("Unable to open database. (Is encrypted or is not a DB)");
         }
-        db.execSQL("CREATE TABLE IF NOT EXISTS accounts(cardid VARCHAR(12) PRIMARY KEY NOT NULL, friendlyname VARCHAR(50), passwd VARCHAR(50) NOT NULL);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS accounts(cardid VARCHAR(12) PRIMARY KEY NOT NULL, friendlyname VARCHAR(16), passwd VARCHAR(30) NOT NULL);");
         Log.d("AccountStore", "DB INIT: OK.");
     }
 
     public void addAccount(Profile p) throws SQLiteConstraintException {
-        if (p.cardid.length() > 12 || p.friendlyName.length() > 50 || p.getPasswd().length() > 50) {
-            throw new SQLiteException("Unable to create record: parameter length(s) mismatch");
-        }
         db.rawQuery("INSERT INTO accounts VALUES (?, ?, ?);", new String[] {p.cardid, p.friendlyName, p.getPasswd()});
         Log.d("AccountStore", "DB Commit OK. Added 1 record.");
     }

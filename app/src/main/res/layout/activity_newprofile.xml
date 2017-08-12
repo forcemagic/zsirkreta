@@ -53,11 +53,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/login_passwd_hint"
-                    android:imeActionId="@+id/login"
-                    android:imeActionLabel="@string/login_btn"
-                    android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:maxLines="1"
+                    android:maxLength="30" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -74,7 +72,10 @@
                     android:ems="10"
                     android:hint="@string/login_friendlyname_hint"
                     android:inputType="text"
-                    android:maxLength="50" />
+                    android:imeActionId="@+id/login"
+                    android:imeActionLabel="@string/login_btn"
+                    android:imeOptions="actionUnspecified"
+                    android:maxLength="16" />
             </android.support.design.widget.TextInputLayout>
 
             <Button
