@@ -34,7 +34,7 @@ public class AccountStoreHelper {
     }
 
     public void addAccount(Profile p) throws SQLiteConstraintException {
-        db.rawQuery("INSERT INTO accounts VALUES (?, ?, ?);", new String[] {p.cardid, p.friendlyName, p.getPasswd()});
+        db.execSQL("INSERT INTO accounts VALUES (?, ?, ?);", new String[] {p.cardid, p.friendlyName, p.getPasswd()});
         Log.d("AccountStore", "DB Commit OK. Added 1 record.");
     }
 
