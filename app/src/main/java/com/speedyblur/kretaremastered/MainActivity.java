@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ViewFlipper vf;
 
     @Override
-    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //noinspection deprecation
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Repopulate views
             ExpandableListView gradeList = (ExpandableListView) findViewById(R.id.mainGradeView);
+            gradeList.setDividerHeight(0);
             gradeList.setAdapter(new SubjectAdapter(sharedCtxt, subjects));
             ListView avgList = (ListView) findViewById(R.id.avg_list);
             avgList.setAdapter(new AverageAdapter(sharedCtxt, averages));
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void run() {
                         ExpandableListView lv = (ExpandableListView) findViewById(R.id.mainGradeView);
+                        lv.setDividerHeight(0);
                         lv.setAdapter(new SubjectAdapter(sharedCtxt, subjects));
                         fetchAverages();
                     }
