@@ -2,7 +2,6 @@ package com.speedyblur.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -14,85 +13,82 @@ import android.widget.TextView;
 
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.models.Grade;
-import com.speedyblur.models.Subject;
+import com.speedyblur.models.GradeGroup;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.speedyblur.kretaremastered.R.id.grade;
+public class GroupedGradeAdapter extends BaseExpandableListAdapter {
 
-public class SubjectAdapter extends BaseExpandableListAdapter {
-
-    private final ArrayList<Subject> subjects;
-    private final LayoutInflater inflater;
+    private ArrayList<GradeGroup> gradeGroups;
+    private LayoutInflater inflater;
     private Context context;
+    private GradeGroup.FormatHelper fHelper;
 
-    public SubjectAdapter(Context context, ArrayList<Subject> subjs) {
-        this.inflater = LayoutInflater.from(context);
-        this.subjects = subjs;
+    public GroupedGradeAdapter(Context context, ArrayList<Grade> allGrades, String groupCrieria, GradeGroup.FormatHelper fHelper) {
         this.context = context;
+        this.inflater = LayoutInflater.from(context);
+        try {
+            this.gradeGroups = GradeGroup.assembleGroups(allGrades, groupCrieria);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        this.fHelper = fHelper;
     }
 
     @Override
     public int getGroupCount() {
-        return subjects.size();
+        return gradeGroups.size();
     }
 
     @Override
-    public int getChildrenCount(int groupPosition) {
-        return subjects.get(groupPosition).grades.size();
+    public int getChildrenCount(int i) {
+        return gradeGroups.get(i).grades.size();
     }
 
     @Override
-    public Subject getGroup(int groupPosition) {
-        return subjects.get(groupPosition);
+    public GradeGroup getGroup(int i) {
+        return gradeGroups.get(i);
     }
 
     @Override
-    public Grade getChild(int groupPosition, int childPosition) {
-        return subjects.get(groupPosition).grades.get(childPosition);
+    public Grade getChild(int i, int i1) {
+        return gradeGroups.get(i).grades.get(i1);
     }
 
     @Override
-    public long getGroupId(final int groupPosition) {
-        return groupPosition;
+    public long getGroupId(int i) {
+        return i;
     }
 
     @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
+    public long getChildId(int i, int i1) {
+        return i1;
     }
 
     @Override
     public boolean hasStableIds() {
-        return true;
+        return false;
     }
 
-    @SuppressLint("InflateParams")
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, final ViewGroup parent) {
-        convertView = inflater.inflate(R.layout.subjlist_item, null);
+    @SuppressLint("inflateparams")
+    public View getGroupView(int i, boolean b, View convertView, ViewGroup viewGroup) {
+        convertView = inflater.inflate(R.layout.gradegroup_item, null);
 
-        Subject subjObj = getGroup(groupPosition);
-
-        TextView subjNameView = (TextView) convertView.findViewById(R.id.subject);
-        TextView avgView = (TextView) convertView.findViewById(R.id.avg);
-
-        Resources resx = convertView.getResources();
-        int resxid = resx.getIdentifier("subject_"+subjObj.name, "string", convertView.getContext().getPackageName());
-        String outpName = resxid == 0 ? subjObj.name : resx.getString(resxid);
-        subjNameView.setText(outpName);
-        avgView.setText(convertView.getResources().getString(R.string.subjview_average, subjObj.avg));
+        GradeGroup datedGrade = getGroup(i);
+        TextView subjNameView = convertView.findViewById(R.id.gradeGroupTitle);
+        subjNameView.setText(datedGrade.getFormattedId(fHelper));
 
         return convertView;
     }
 
-    @SuppressLint("InflateParams")
     @Override
-    public View getChildView(final int groupPosition, int childPosition, boolean isLastChild, View convertView, final ViewGroup parent) {
-        Grade gradeObj = getChild(groupPosition, childPosition);
+    @SuppressLint("inflateparams")
+    public View getChildView(int i, int i1, boolean isLastChild, View convertView, ViewGroup viewGroup) {
+        Grade gradeObj = getChild(i, i1);
 
         if (gradeObj.type.contains("végi") || gradeObj.type.contains("Félévi")) {
             convertView = inflater.inflate(R.layout.gradelist_importantitem, null);
@@ -102,7 +98,7 @@ public class SubjectAdapter extends BaseExpandableListAdapter {
 
         // Common things
         ImageView gradeBullet = convertView.findViewById(R.id.gradeBullet);
-        TextView gradeView = convertView.findViewById(grade);
+        TextView gradeView = convertView.findViewById(R.id.grade);
         TextView titleView = convertView.findViewById(R.id.gradeTitle);
 
         gradeView.setText(gradeObj.grade);
@@ -129,7 +125,7 @@ public class SubjectAdapter extends BaseExpandableListAdapter {
             descView2.setText(dateFormat.format(new Date((long)gradeObj.gotDate*1000)));
         }
 
-        if (childPosition == 0) {
+        if (i1 == 0) {
             convertView.findViewById(R.id.gradeBarTop).setVisibility(View.INVISIBLE);
         }
 
@@ -148,7 +144,7 @@ public class SubjectAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+    public boolean isChildSelectable(int i, int i1) {
+        return false;
     }
 }

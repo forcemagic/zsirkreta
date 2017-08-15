@@ -60,7 +60,8 @@
     <string name="grade_end_of_halfterm">Half-year grade</string>
     <string name="grade_end_of_year">End of year grade</string>
     <string name="avglabel_desc">Class average: %1$.2f - Delta: %2$.2f</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_sortbysubject">Sort by subject</string>
+    <string name="action_sortbydate">Sort by date</string>
     <string name="blablabla">Something</string><!-- TODO: Remove this placeholder -->
     <string name="http_req_error">Some kind of error occurred. :(</string>
     <string name="progress_dialog_loading">Login succeeded. Loading…</string>
