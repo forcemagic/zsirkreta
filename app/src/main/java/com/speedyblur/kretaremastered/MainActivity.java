@@ -13,8 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewStub;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,11 +34,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 import static android.support.design.widget.Snackbar.make;
 
@@ -97,8 +93,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             gradeList.setAdapter(new GroupedGradeAdapter(sharedCtxt, allGrades, "subject", new GradeGroup.FormatHelper() {
                 @Override
                 public String doFormat(String in) {
-                    int gotResxId = getResources().getIdentifier("subject_"+in, "string", getPackageName());
+                    int gotResxId = getResources().getIdentifier("subject_" + in, "string", getPackageName());
                     return gotResxId == 0 ? in : getResources().getString(gotResxId);
+                }
+            }, new GradeGroup.SameGroupComparator() {
+                @Override
+                public boolean compare(String id1, String id2) {
+                    return id1.equals(id2);
                 }
             }));
 
@@ -107,7 +108,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             ListView dateOrderedLv = (ListView) findViewById(R.id.datedGradeList);
             try {
-                dateOrderedLv.setAdapter(new DatedGradeAdapter(sharedCtxt, GradeGroup.assembleGroups(allGrades, "gotDate")));
+                dateOrderedLv.setAdapter(new DatedGradeAdapter(sharedCtxt, GradeGroup.assembleGroups(allGrades, "gotDate", new GradeGroup.SameGroupComparator() {
+                    @Override
+                    public boolean compare(String id1, String id2) {
+                        Calendar cal1 = Calendar.getInstance();
+                        Calendar cal2 = Calendar.getInstance();
+                        cal1.setTimeInMillis(Long.parseLong(id1)*1000);
+                        cal2.setTimeInMillis(Long.parseLong(id2)*1000);
+                        return (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH));
+                    }
+                }, false, true)));
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -141,12 +151,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 int gotResxId = getResources().getIdentifier("subject_"+in, "string", getPackageName());
                                 return gotResxId == 0 ? in : getResources().getString(gotResxId);
                             }
+                        }, new GradeGroup.SameGroupComparator() {
+                            @Override
+                            public boolean compare(String id1, String id2) {
+                                return id1.equals(id2);
+                            }
                         }));
 
                         // Date-ordered
                         ListView dateOrderedLv = (ListView) findViewById(R.id.datedGradeList);
                         try {
-                            dateOrderedLv.setAdapter(new DatedGradeAdapter(sharedCtxt, GradeGroup.assembleGroups(allGrades, "gotDate")));
+                            dateOrderedLv.setAdapter(new DatedGradeAdapter(sharedCtxt, GradeGroup.assembleGroups(allGrades, "gotDate", new GradeGroup.SameGroupComparator() {
+                                @Override
+                                public boolean compare(String id1, String id2) {
+                                    Calendar cal1 = Calendar.getInstance();
+                                    Calendar cal2 = Calendar.getInstance();
+                                    cal1.setTimeInMillis(Long.parseLong(id1)*1000);
+                                    cal2.setTimeInMillis(Long.parseLong(id2)*1000);
+                                    return (cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH));
+                                }
+                            }, false, true)));
                         } catch (NoSuchFieldException | IllegalAccessException e) {
                             e.printStackTrace();
                         }

@@ -27,11 +27,12 @@ public class GroupedGradeAdapter extends BaseExpandableListAdapter {
     private Context context;
     private GradeGroup.FormatHelper fHelper;
 
-    public GroupedGradeAdapter(Context context, ArrayList<Grade> allGrades, String groupCrieria, GradeGroup.FormatHelper fHelper) {
+    public GroupedGradeAdapter(Context context, ArrayList<Grade> allGrades, String groupCrieria,
+                               GradeGroup.FormatHelper fHelper, GradeGroup.SameGroupComparator comp) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         try {
-            this.gradeGroups = GradeGroup.assembleGroups(allGrades, groupCrieria);
+            this.gradeGroups = GradeGroup.assembleGroups(allGrades, groupCrieria, comp);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }

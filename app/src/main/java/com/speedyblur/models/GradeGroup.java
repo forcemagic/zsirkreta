@@ -46,14 +46,24 @@ public class GradeGroup implements Parcelable {
         return fHelper.doFormat(groupId);
     }
 
-    public static ArrayList<GradeGroup> assembleGroups(ArrayList<Grade> allGrades, String groupParam) throws NoSuchFieldException, IllegalAccessException {
+    public static ArrayList<GradeGroup> assembleGroups(ArrayList<Grade> allGrades, String groupParam, SameGroupComparator cp) throws NoSuchFieldException, IllegalAccessException {
+        return assembleGroups(allGrades, groupParam, cp, true, false);
+    }
+
+    public static ArrayList<GradeGroup> assembleGroups(ArrayList<Grade> allGrades, String groupParam, SameGroupComparator cp,
+                                                       boolean doShowHalfterm) throws NoSuchFieldException, IllegalAccessException {
+        return assembleGroups(allGrades, groupParam, cp, doShowHalfterm, false);
+    }
+
+    public static ArrayList<GradeGroup> assembleGroups(ArrayList<Grade> allGrades, String groupParam, SameGroupComparator cp,
+                                                       boolean doShowHalfterm, final boolean reverseChildSort) throws NoSuchFieldException, IllegalAccessException {
         ArrayList<GradeGroup> complete = new ArrayList<>();
         for (int i=0; i<allGrades.size(); i++) {
             Grade current = allGrades.get(i);
-            if (current.type.contains("végi") || current.type.contains("Félévi")) continue;
+            if ((current.type.contains("végi") || current.type.contains("Félévi")) && !doShowHalfterm) continue;
             boolean found = false;
             for (int j=0; j<complete.size(); j++) {
-                if (complete.get(j).groupId.equals(current.getClass().getDeclaredField(groupParam).get(current).toString())) {
+                if (cp.compare(complete.get(j).groupId, current.getClass().getDeclaredField(groupParam).get(current).toString())) {
                     found = true;
                     complete.get(j).grades.add(current);
                 }
@@ -64,12 +74,30 @@ public class GradeGroup implements Parcelable {
                 complete.add(new GradeGroup(current.getClass().getDeclaredField(groupParam).get(current).toString(), newGradeList));
             }
         }
+
+        // Mass sorting
         Collections.sort(complete, new Comparator<GradeGroup>() {
             @Override
             public int compare(GradeGroup g1, GradeGroup g2) {
-                return g1.groupId.compareTo(g2.groupId);
+                return g2.groupId.compareTo(g1.groupId);
             }
         });
+        for (int i=0; i<complete.size(); i++) {
+            // We'll always want date-sort here
+            ArrayList<Grade> sortedGrades = complete.get(i).grades;
+            Collections.sort(sortedGrades, new Comparator<Grade>() {
+                @Override
+                public int compare(Grade g1, Grade g2) {
+                    if (reverseChildSort) {
+                        return g2.gotDate - g1.gotDate;
+                    } else {
+                        return g1.gotDate - g2.gotDate;
+                    }
+                }
+            });
+            complete.get(i).grades = sortedGrades;
+        }
+
         return complete;
     }
 
@@ -87,5 +115,9 @@ public class GradeGroup implements Parcelable {
 
     public interface FormatHelper {
         String doFormat(String in);
+    }
+
+    public interface SameGroupComparator {
+        boolean compare(String id1, String id2);
     }
 }

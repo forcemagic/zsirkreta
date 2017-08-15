@@ -38,7 +38,7 @@ public class DatedGradeAdapter extends ArrayAdapter<GradeGroup> {
         titleView.setText(groups.get(pos).getFormattedId(new GradeGroup.FormatHelper() {
             @Override
             public String doFormat(String in) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy. M. d.", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MMM", Locale.getDefault());
                 return sdf.format(new Date(Long.parseLong(in)*1000));
             }
         }));
