@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Viewflipper reset
             vf.setDisplayedChild(savedInstanceState.getInt("viewFlipperState"));
             gVf.setDisplayedChild(savedInstanceState.getInt("gradeViewFlipperState"));
+            shouldShowMenu = savedInstanceState.getBoolean("shouldShowMenu");
             if (shouldShowMenu) lastMenuState = savedInstanceState.getString("sortingTitle");
             toolbar.setTitle(savedInstanceState.getString("toolbarTitle"));
         } else {
@@ -269,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         b.putParcelableArrayList("averages", averages);
         b.putInt("viewFlipperState", vf.getDisplayedChild());
         b.putInt("gradeViewFlipperState", gVf.getDisplayedChild());
+        b.putBoolean("shouldShowMenu", shouldShowMenu);
         if (shouldShowMenu) b.putString("sortingTitle", menu.getItem(0).getTitle().toString());
         b.putString("toolbarTitle", toolbar.getTitle().toString());
         super.onSaveInstanceState(b);
