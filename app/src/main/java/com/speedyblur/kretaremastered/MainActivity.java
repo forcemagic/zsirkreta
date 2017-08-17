@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private final Context sharedCtxt = this;
     private double loadTime;
     private boolean shouldShowMenu = true;
+    private String lastMenuState;
 
     // UI ref
     private ViewFlipper vf;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Viewflipper reset
             vf.setDisplayedChild(savedInstanceState.getInt("viewFlipperState"));
             gVf.setDisplayedChild(savedInstanceState.getInt("gradeViewFlipperState"));
+            if (shouldShowMenu) lastMenuState = savedInstanceState.getString("sortingTitle");
         } else {
             vf.setDisplayedChild(0);
             gVf.setDisplayedChild(0);
@@ -266,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         b.putParcelableArrayList("averages", averages);
         b.putInt("viewFlipperState", vf.getDisplayedChild());
         b.putInt("gradeViewFlipperState", gVf.getDisplayedChild());
+        if (shouldShowMenu) b.putString("sortingTitle", menu.getItem(0).getTitle().toString());
         super.onSaveInstanceState(b);
     }
 
@@ -283,6 +286,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem mChangeSort = menu.getItem(0);
+        mChangeSort.setTitle(lastMenuState == null ? getResources().getString(R.string.action_sortbydate) : lastMenuState);
         return true;
     }
 
