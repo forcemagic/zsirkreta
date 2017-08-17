@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             vf.setDisplayedChild(savedInstanceState.getInt("viewFlipperState"));
             gVf.setDisplayedChild(savedInstanceState.getInt("gradeViewFlipperState"));
             if (shouldShowMenu) lastMenuState = savedInstanceState.getString("sortingTitle");
+            toolbar.setTitle(savedInstanceState.getString("toolbarTitle"));
         } else {
             vf.setDisplayedChild(0);
             gVf.setDisplayedChild(0);
@@ -269,6 +270,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         b.putInt("viewFlipperState", vf.getDisplayedChild());
         b.putInt("gradeViewFlipperState", gVf.getDisplayedChild());
         if (shouldShowMenu) b.putString("sortingTitle", menu.getItem(0).getTitle().toString());
+        b.putString("toolbarTitle", toolbar.getTitle().toString());
         super.onSaveInstanceState(b);
     }
 
