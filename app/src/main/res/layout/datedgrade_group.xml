@@ -10,7 +10,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_margin="12dp"
-        android:text="TextView"
+        android:text="@string/blablabla"
         android:textColor="@android:color/black"
         android:textSize="22sp" />
 
