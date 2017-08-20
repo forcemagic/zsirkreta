@@ -6,10 +6,24 @@
     tools:context="com.speedyblur.kretaremastered.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <ExpandableListView
-        android:id="@+id/mainGradeView"
+    <ViewFlipper
+        android:id="@+id/gradeOrderFlipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </ExpandableListView>
+        <ExpandableListView
+            android:id="@+id/mainGradeView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </ExpandableListView>
+
+        <ListView
+            android:id="@+id/datedGradeList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
+    </ViewFlipper>
+
 </RelativeLayout>

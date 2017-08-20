@@ -5,7 +5,7 @@
     android:layout_margin="2dp">
 
     <TextView
-        android:id="@+id/subject"
+        android:id="@+id/gradeGroupTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -16,17 +16,5 @@
         android:textColor="?android:attr/textColorPrimary"
         android:textSize="22sp"
         android:typeface="normal" />
-
-    <TextView
-        android:id="@+id/avg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="12dp"
-        android:fontFamily="monospace"
-        android:text="@string/blablabla"
-        android:textSize="14sp" />
 
 </RelativeLayout>

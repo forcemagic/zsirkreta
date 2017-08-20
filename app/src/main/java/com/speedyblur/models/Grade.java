@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Grade implements Parcelable {
+    public String subject;
     public String grade;
     public int gotDate;
     public String teacher;
@@ -19,7 +20,8 @@ public class Grade implements Parcelable {
     public String theme;
     public int colorId;
 
-    private Grade(JSONObject obj) throws JSONException {
+    public Grade(JSONObject obj) throws JSONException {
+        this.subject = obj.getString("subject");
         this.grade = obj.getString("grade");
         this.gotDate = obj.getInt("date");
         this.teacher = obj.getString("teacher");
@@ -37,6 +39,7 @@ public class Grade implements Parcelable {
     }
 
     protected Grade(Parcel in) {
+        subject = in.readString();
         grade = in.readString();
         gotDate = in.readInt();
         teacher = in.readString();
@@ -73,6 +76,7 @@ public class Grade implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(subject);
         parcel.writeString(grade);
         parcel.writeInt(gotDate);
         parcel.writeString(teacher);

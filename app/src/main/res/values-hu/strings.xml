@@ -8,7 +8,6 @@
     <string name="login_studentcard_hint">Diákigazolvány Kódja</string>
     <string name="navigation_drawer_close">Navigációs menü bezárása</string>
     <string name="navigation_drawer_open">Navigációs menü megnyitása</string>
-    <string name="action_settings">Beállítások</string>
     <string name="title_activity_grades">Jegyek</string>
     <string name="title_activity_avgs">Átlagok</string>
     <string name="subject_art">Rajz</string>
@@ -61,4 +60,6 @@
     <string name="avggraph_termseparator">Félév vége</string>
     <string name="grade_end_of_halfterm">Félévi jegy</string>
     <string name="grade_end_of_year">Év végi jegy</string>
+    <string name="action_sortbydate">Rendezés dátum szerint</string>
+    <string name="action_sortbysubject">Rendezés tantárgy szerint</string>
 </resources>
