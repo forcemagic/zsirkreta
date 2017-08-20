@@ -6,12 +6,12 @@ import android.widget.ListView;
 
 public class HeightExpandedListView extends ListView {
 
-    public HeightExpandedListView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
     public HeightExpandedListView(Context context) {
         super(context);
+    }
+
+    public HeightExpandedListView(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     public HeightExpandedListView(Context context, AttributeSet attrs, int defStyle) {
