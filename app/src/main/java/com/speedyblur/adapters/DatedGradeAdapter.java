@@ -38,11 +38,11 @@ public class DatedGradeAdapter extends ArrayAdapter<GradeGroup> {
         titleView.setText(groups.get(pos).getFormattedId(new GradeGroup.FormatHelper() {
             @Override
             public String doFormat(String in) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MMM", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy. MMMM", Locale.getDefault());
                 return sdf.format(new Date(Long.parseLong(in)*1000));
             }
         }));
-        rootList.setAdapter(new GradeListAdapter(getContext(), groups.get(pos).grades));
+        rootList.setAdapter(new DateGradeListAdapter(getContext(), groups.get(pos).grades));
 
         return convertView;
     }

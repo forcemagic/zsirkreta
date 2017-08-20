@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
@@ -233,15 +234,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 JSONArray graphDataCollection = resp.getJSONArray("data");
                 for (int i=0; i<graphDataCollection.length(); i++) {
                     JSONObject graphData = graphDataCollection.getJSONObject(i);
+                    if (graphData.getJSONArray("points").length() == 0) continue;
+                    Log.d("VARWRITER", "Writing average graph for subject "+graphData.getString("subject"));
                     List<Entry> graphDataEntries = new ArrayList<>();
                     for (int j=0; j<graphData.getJSONArray("points").length(); j++) {
                         JSONObject current = graphData.getJSONArray("points").getJSONObject(j);
-                        graphDataEntries.add(new Entry((float)current.getDouble("x"), (float)current.getDouble("y")));
+                        graphDataEntries.add(new Entry((float)current.getInt("x"), (float)current.getDouble("y")));
+                        Log.d("VARWRITER", "New entry: "+current.toString());
                         if (current.getBoolean("ishalftermgrade")) {
-                            Vars.halfTermTimes.put(graphData.getString("subject"), (int)current.getDouble("x"));
+                            Vars.halfTermTimes.put(graphData.getString("subject"), current.getInt("x"));
+                            Log.d("VARWRITER", "Reached half term grade: "+current.getInt("x"));
                         }
                     }
                     Vars.averageGraphData.put(graphData.getString("subject"), new LineDataSet(graphDataEntries, graphData.getString("subject")));
+                    Log.d("VARWRITER", "COMPLETE.");
                 }
                 loadTime += resp.getDouble("fetch_time");
                 runOnUiThread(new Runnable() {
@@ -330,6 +336,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             shouldShowMenu = true;
             invalidateOptionsMenu();
             vf.setDisplayedChild(0);
+            gVf.setDisplayedChild(0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
