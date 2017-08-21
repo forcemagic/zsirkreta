@@ -2,6 +2,7 @@
     <string name="app_name" translatable="false">Kreta Remastered</string>
     <string name="title_activity_grades">Grades</string>
     <string name="title_activity_avgs">Averages</string>
+    <string name="title_activity_absences">Absences</string>
 
     <string name="error_field_required">This field is required</string>
     <string name="login_btn">Login</string>
@@ -29,6 +30,7 @@
     <!-- Loading messages (proc. indicators) -->
     <string name="loading_grades">Loading grades…</string>
     <string name="loading_averages">Loading averages…</string>
+    <string name="loading_absence">Loading absence data…</string>
     <string name="main_load_complete">Load complete! Time spent with Kreta communication: %1$.2f seconds.</string>
 
     <!-- HTTP errors -->
@@ -70,6 +72,8 @@
     <string name="profile_delete_success">Successfully deleted profile.</string>
     <string name="logging_in">Logging in…</string>
     <string name="avggraph_termseparator">End of term</string>
+    <string name="select_date">Select Date</string>
+    <string name="class_number">#%1$d</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

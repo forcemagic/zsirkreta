@@ -35,6 +35,11 @@
             layout="@layout/content_avgs"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
+        <include
+            layout="@layout/content_absence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </ViewFlipper>
 
 </android.support.design.widget.CoordinatorLayout>
