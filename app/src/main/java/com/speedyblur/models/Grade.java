@@ -22,19 +22,23 @@ public class Grade implements Parcelable {
 
     public Grade(JSONObject obj) throws JSONException {
         this.subject = obj.getString("subject");
-        this.grade = obj.getString("grade");
+        this.grade = obj.getString("grade");    // String? Really? TODO: Convert this to int
         this.gotDate = obj.getInt("date");
         this.teacher = obj.getString("teacher");
         this.theme = obj.getString("theme");
         this.type = obj.getString("type");
 
         int intGrade = Integer.parseInt(this.grade);
-        if (intGrade > 3) {
+        if (intGrade == 5) {
+            this.colorId = R.color.excellentGrade;
+        } else if (intGrade == 4) {
             this.colorId = R.color.goodGrade;
         } else if (intGrade == 3) {
             this.colorId = R.color.avgGrade;
-        } else {
+        } else if (intGrade == 2) {
             this.colorId = R.color.badGrade;
+        } else {
+            this.colorId = R.color.veryBadGrade;
         }
     }
 

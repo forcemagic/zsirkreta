@@ -23,14 +23,17 @@ public class Average implements Parcelable {
         this.average = jsobj.getDouble("average");
         this.classAverage = jsobj.getDouble("classAverage");
 
-        if (this.average == 5) {
+        int roundedAvg = (int) Math.round(this.average);
+        if (roundedAvg == 5) {
             this.colorId = R.color.excellentGrade;
-        } else if (Math.round(this.average) > 3) {
+        } else if (roundedAvg == 4) {
             this.colorId = R.color.goodGrade;
-        } else if (Math.round(this.average) == 3) {
+        } else if (roundedAvg == 3) {
             this.colorId = R.color.avgGrade;
-        } else {
+        } else if (roundedAvg == 2) {
             this.colorId = R.color.badGrade;
+        } else {
+            this.colorId = R.color.veryBadGrade;
         }
     }
 
