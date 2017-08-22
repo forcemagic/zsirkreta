@@ -29,9 +29,12 @@
         android:textColor="@android:color/black"
         android:textSize="16sp" />
 
-    <com.speedyblur.models.CustomViewPager
-        android:id="@+id/absencePager"
+    <ListView
+        android:id="@+id/absenceList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageButton"
+        android:divider="@null" />
 
 </RelativeLayout>
