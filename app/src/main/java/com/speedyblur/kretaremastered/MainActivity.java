@@ -30,11 +30,13 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.speedyblur.adapters.AbsenceAdapter;
+import com.speedyblur.adapters.AbsencePagerAdapter;
 import com.speedyblur.adapters.AverageAdapter;
 import com.speedyblur.adapters.DatedGradeAdapter;
 import com.speedyblur.adapters.GroupedGradeAdapter;
 import com.speedyblur.models.Absence;
 import com.speedyblur.models.Average;
+import com.speedyblur.models.CustomViewPager;
 import com.speedyblur.models.Grade;
 import com.speedyblur.models.GradeGroup;
 import com.speedyblur.shared.HttpHandler;
@@ -65,10 +67,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private double loadTime;
     private boolean shouldShowMenu = true;
     private String lastMenuState;
+    private int lastAbsenceDate;
 
     // UI ref
     private ViewFlipper vf;
     private ViewFlipper gVf;
+    private CustomViewPager absenceViewPager;
     private Menu menu;
 
     @Override
@@ -95,9 +99,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         vf = (ViewFlipper) findViewById(R.id.main_viewflipper);
         gVf = (ViewFlipper) findViewById(R.id.gradeOrderFlipper);
+        absenceViewPager = (CustomViewPager) findViewById(R.id.absencePager);
 
         heads = new ArrayMap<>();
         heads.put("X-Auth-Token", Vars.AUTHTOKEN);
+
+        // Set up absence ListView
+        ListView lv = (ListView) findViewById(R.id.absenceList);
+        lv.setEmptyView(findViewById(R.id.noAbsenceContainer));
 
         if (savedInstanceState != null) {
             allGrades = savedInstanceState.getParcelableArrayList("allGrades");
@@ -289,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        absenceViewPager.setAdapter(new AbsencePagerAdapter(getSupportFragmentManager(), absences));
                         showAbsenceListForDate(CalendarDay.from(new Date((long) absences.get(absences.size()-1).date*1000)));
                         Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.main_load_complete, (float)loadTime), Snackbar.LENGTH_LONG).show();
                     }
@@ -312,22 +322,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // TODO: Implement that week row
         //int dow = c.get(Calendar.DAY_OF_WEEK);
-
-        ArrayList<Absence> listElements = new ArrayList<>();
-        for (int i=0; i<absences.size(); i++) {
-            Calendar toCompare = Calendar.getInstance();
-            toCompare.setTimeInMillis((long)absences.get(i).date*1000);
-            if (toCompare.get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR)) listElements.add(absences.get(i));
-        }
-        Collections.sort(listElements, new Comparator<Absence>() {
-            @Override
-            public int compare(Absence t1, Absence t2) {
-                return t1.classNum - t2.classNum;
-            }
-        });
-
-        ListView lv = (ListView)findViewById(R.id.absenceList);
-        lv.setAdapter(new AbsenceAdapter(this, listElements));
 
         TextView currentDate = (TextView) findViewById(R.id.currentAbsenceListDate);
         currentDate.setText(SimpleDateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault()).format(c.getTime()));
