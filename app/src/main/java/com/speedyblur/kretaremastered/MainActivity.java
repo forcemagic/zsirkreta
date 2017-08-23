@@ -37,7 +37,9 @@ import com.speedyblur.adapters.AverageAdapter;
 import com.speedyblur.adapters.DatedGradeAdapter;
 import com.speedyblur.adapters.GroupedGradeAdapter;
 import com.speedyblur.models.Absence;
+import com.speedyblur.models.AllDayEvent;
 import com.speedyblur.models.Average;
+import com.speedyblur.models.ClassEvent;
 import com.speedyblur.models.Grade;
 import com.speedyblur.models.GradeGroup;
 import com.speedyblur.shared.HttpHandler;
@@ -58,11 +60,14 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private Toolbar toolbar;
+    // In-memory "data stores"
     private ArrayMap<String, String> heads;
-    private ArrayList<Average> averages;
     private ArrayList<Grade> allGrades;
+    private ArrayList<Average> averages;
     private ArrayList<Absence> absences;
+    private ArrayList<AllDayEvent> allDayEvents;
+    private ArrayList<ClassEvent> classes;
+
     private final Context sharedCtxt = this;
     private double loadTime;
     private boolean shouldShowMenu = true;
@@ -70,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private CalendarDay lastAbsenceDate;
 
     // UI ref
+    private Toolbar toolbar;
     private ViewFlipper vf;
     private ViewFlipper gVf;
     private Menu menu;
@@ -110,6 +116,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             allGrades = savedInstanceState.getParcelableArrayList("allGrades");
             averages = savedInstanceState.getParcelableArrayList("averages");
             absences = savedInstanceState.getParcelableArrayList("absences");
+            allDayEvents = savedInstanceState.getParcelableArrayList("allDayEvents");
+            classes = savedInstanceState.getParcelableArrayList("classes");
 
             // Repopulate views
             ExpandableListView gradeList = (ExpandableListView) findViewById(R.id.mainGradeView);
@@ -296,14 +304,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
                 absences = Absence.fromJson(resp.getJSONArray("data"));
+                loadTime += resp.getDouble("fetch_time");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         showAbsenceListForDate(CalendarDay.from(new Date((long) absences.get(absences.size()-1).date*1000)));
+                        fetchTimetable();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(final int localizedError) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Snackbar.make(findViewById(R.id.main_coord_view), localizedError, Snackbar.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void fetchTimetable() {
+        HttpHandler.getJson(Vars.APIBASE + "/schedule", heads, new HttpHandler.JsonRequestCallback() {
+            @Override
+            public void onComplete(JSONObject resp) throws JSONException {
+                classes = ClassEvent.fromJson(resp.getJSONObject("data").getJSONArray("classes"));
+                allDayEvents = AllDayEvent.fromJson(resp.getJSONObject("data").getJSONArray("allday"));
+                loadTime += resp.getDouble("fetch_time");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.main_load_complete, (float)loadTime), Snackbar.LENGTH_LONG).show();
                     }
                 });
-                loadTime += resp.getDouble("fetch_time");
             }
 
             @Override
@@ -446,6 +481,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         b.putParcelableArrayList("allGrades", allGrades);
         b.putParcelableArrayList("averages", averages);
         b.putParcelableArrayList("absences", absences);
+        b.putParcelableArrayList("allDayEvents", allDayEvents);
+        b.putParcelableArrayList("classes", classes);
+
         b.putInt("viewFlipperState", vf.getDisplayedChild());
         b.putInt("gradeViewFlipperState", gVf.getDisplayedChild());
         b.putBoolean("shouldShowMenu", shouldShowMenu);
