@@ -22,6 +22,7 @@
     <string name="subject_hungarian_grammar_literature">Hungarian Grammar &amp; Literature</string>
     <string name="subject_maths">Maths</string>
     <string name="subject_german_lang">German</string>
+    <string name="subject_french_lang">French</string>
     <string name="subject_art">Art</string>
     <string name="subject_pe">Physical Education</string>
     <string name="subject_history">History</string>
@@ -50,6 +51,14 @@
     <string name="welcome_end_title">That\'s it!</string>
     <string name="welcome_end_subtitle">Just one more thing: You can not change your password after you hit the check mark. Also, if you lose it, you\'ll have to reinstall.</string>
 
+    <!-- Weekdays -->
+    <string name="monday_short">M</string>
+    <string name="tuesday_short">T</string>
+    <string name="wednesday_short">W</string>
+    <string name="thursday_short">T</string>
+    <string name="friday_short">F</string>
+    <string name="saturday_short">S</string>
+
     <!-- Misc string values -->
     <string name="unlockdb_title">Enter encryption password</string>
     <string name="welcome_title">Welcome!</string>
@@ -74,6 +83,7 @@
     <string name="avggraph_termseparator">End of term</string>
     <string name="select_date">Select Date</string>
     <string name="class_number">#%1$d</string>
+    <string name="no_absence_on_record">You haven\'t missed a single class on this day! (Hooray!)</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

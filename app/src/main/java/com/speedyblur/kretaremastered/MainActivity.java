@@ -2,6 +2,8 @@ package com.speedyblur.kretaremastered;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -14,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,7 +47,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private double loadTime;
     private boolean shouldShowMenu = true;
     private String lastMenuState;
+    private CalendarDay lastAbsenceDate;
 
     // UI ref
     private ViewFlipper vf;
@@ -95,6 +98,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         vf = (ViewFlipper) findViewById(R.id.main_viewflipper);
         gVf = (ViewFlipper) findViewById(R.id.gradeOrderFlipper);
+
+        // Absence list empty
+        ListView absList = (ListView)findViewById(R.id.absenceList);
+        absList.setEmptyView(findViewById(R.id.noAbsenceView));
 
         heads = new ArrayMap<>();
         heads.put("X-Auth-Token", Vars.AUTHTOKEN);
@@ -137,6 +144,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace();
             }
+
+            // Reset absence day
+            showAbsenceListForDate((CalendarDay) savedInstanceState.getParcelable("lastAbsenceDate"));
 
             // Viewflipper reset
             vf.setDisplayedChild(savedInstanceState.getInt("viewFlipperState"));
@@ -293,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         Snackbar.make(findViewById(R.id.main_coord_view), getResources().getString(R.string.main_load_complete, (float)loadTime), Snackbar.LENGTH_LONG).show();
                     }
                 });
+                loadTime += resp.getDouble("fetch_time");
             }
 
             @Override
@@ -308,11 +319,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void showAbsenceListForDate(CalendarDay day) {
+        lastAbsenceDate = day;
+
         Calendar c = day.getCalendar();
-
-        // TODO: Implement that week row
-        //int dow = c.get(Calendar.DAY_OF_WEEK);
-
         ArrayList<Absence> listElements = new ArrayList<>();
         for (int i=0; i<absences.size(); i++) {
             Calendar toCompare = Calendar.getInstance();
@@ -326,18 +335,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+        // "Select" dayofweek
+        // TODO: Optimize code! There are things like these in bulletSelectWeekday(...)
+        findViewById(R.id.absenceMondaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceTuesdaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceWednesdaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceThursdaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceFridaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceSaturdaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        Drawable selectedBullet = ContextCompat.getDrawable(this, R.drawable.weekday_selector).mutate();
+        selectedBullet.setColorFilter(ContextCompat.getColor(this, R.color.weekdayActive), PorterDuff.Mode.SRC_ATOP);
+        if (c.get(Calendar.DAY_OF_WEEK) == Calendar.MONDAY) {
+            findViewById(R.id.absenceMondaySelector).setBackground(selectedBullet);
+        } else if (c.get(Calendar.DAY_OF_WEEK) == Calendar.TUESDAY) {
+            findViewById(R.id.absenceTuesdaySelector).setBackground(selectedBullet);
+        } else if (c.get(Calendar.DAY_OF_WEEK) == Calendar.WEDNESDAY) {
+            findViewById(R.id.absenceWednesdaySelector).setBackground(selectedBullet);
+        } else if (c.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY) {
+            findViewById(R.id.absenceThursdaySelector).setBackground(selectedBullet);
+        } else if (c.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) {
+            findViewById(R.id.absenceFridaySelector).setBackground(selectedBullet);
+        } else if (c.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            findViewById(R.id.absenceSaturdaySelector).setBackground(selectedBullet);
+        }
+
         ListView lv = (ListView)findViewById(R.id.absenceList);
         lv.setAdapter(new AbsenceAdapter(this, listElements));
 
         TextView currentDate = (TextView) findViewById(R.id.currentAbsenceListDate);
-        currentDate.setText(SimpleDateFormat.getDateInstance(DateFormat.DEFAULT, Locale.getDefault()).format(c.getTime()));
+        currentDate.setText(new SimpleDateFormat("YYYY. MMMM dd.", Locale.getDefault()).format(c.getTime()));
     }
 
     public void openAbsenceCalendar(View v) {
         AlertDialog.Builder calDialog = new AlertDialog.Builder(sharedCtxt);
 
         // Calendar setup
-        final MaterialCalendarView cView = new MaterialCalendarView(sharedCtxt);
+        View inflView = LayoutInflater.from(this).inflate(R.layout.dialog_calendar, null);
+        final MaterialCalendarView cView = inflView.findViewById(R.id.absenceCalendar);
         final ArrayList<CalendarDay> provenDates = new ArrayList<>();
         final ArrayList<CalendarDay> unprovenDates = new ArrayList<>();
         for (int i=0; i<absences.size(); i++) {
@@ -352,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void decorate(DayViewFacade view) {
-                view.setBackgroundDrawable(ContextCompat.getDrawable(sharedCtxt, R.color.goodGrade));
+                view.setBackgroundDrawable(ContextCompat.getDrawable(sharedCtxt, R.drawable.calendar_goodbullet));
             }
         }, new DayViewDecorator() {
             @Override
@@ -362,20 +396,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void decorate(DayViewFacade view) {
-                view.setBackgroundDrawable(ContextCompat.getDrawable(sharedCtxt, R.color.badGrade));
+                view.setBackgroundDrawable(ContextCompat.getDrawable(sharedCtxt, R.drawable.calendar_badbullet));
             }
         });
 
-        calDialog.setView(cView);
+        calDialog.setView(inflView);
         calDialog.setTitle(R.string.select_date);
         calDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                showAbsenceListForDate(cView.getSelectedDate());
+                if (cView.getSelectedDate() != null) showAbsenceListForDate(cView.getSelectedDate());
                 dialogInterface.dismiss();
             }
         });
         calDialog.show();
+    }
+
+    public void bulletSelectWeekday(View v) {
+        // Setting "selected" background
+        findViewById(R.id.absenceMondaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceTuesdaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceWednesdaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceThursdaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceFridaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        findViewById(R.id.absenceSaturdaySelector).setBackground(ContextCompat.getDrawable(this, R.drawable.weekday_selector));
+        Drawable selectedBullet = ContextCompat.getDrawable(this, R.drawable.weekday_selector).mutate();
+        selectedBullet.setColorFilter(ContextCompat.getColor(this, R.color.weekdayActive), PorterDuff.Mode.SRC_ATOP);
+        v.setBackground(selectedBullet);
+
+        Calendar c = lastAbsenceDate.getCalendar();
+        if (v.getId() == R.id.absenceMondaySelector) {
+            c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        } else if (v.getId() == R.id.absenceTuesdaySelector) {
+            c.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
+        } else if (v.getId() == R.id.absenceWednesdaySelector) {
+            c.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+        } else if (v.getId() == R.id.absenceThursdaySelector) {
+            c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
+        } else if (v.getId() == R.id.absenceFridaySelector) {
+            c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+        } else if (v.getId() == R.id.absenceSaturdaySelector) {
+            c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
+        }
+        showAbsenceListForDate(CalendarDay.from(c));
     }
 
     @Override
@@ -388,6 +451,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         b.putBoolean("shouldShowMenu", shouldShowMenu);
         if (shouldShowMenu) b.putString("sortingTitle", menu.getItem(0).getTitle().toString());
         b.putString("toolbarTitle", toolbar.getTitle().toString());
+        b.putParcelable("lastAbsenceDate", lastAbsenceDate);
         super.onSaveInstanceState(b);
     }
 

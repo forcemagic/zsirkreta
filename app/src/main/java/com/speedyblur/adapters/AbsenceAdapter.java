@@ -3,6 +3,9 @@ package com.speedyblur.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +39,9 @@ public class AbsenceAdapter extends ArrayAdapter<Absence> {
         TextView absentTimes = convertView.findViewById(R.id.absentTimes);
 
         absenceProvenImage.setImageDrawable(ContextCompat.getDrawable(getContext(), item.proven ? R.drawable.check_circle_icon_green : R.drawable.dash_circle_icon_red));
-        absentClassNum.setText(getContext().getString(R.string.class_number, item.classNum));
+        SpannableString absClassNum = new SpannableString(getContext().getString(R.string.class_number, item.classNum));
+        if (Locale.getDefault() == Locale.ENGLISH) absClassNum.setSpan(new AbsoluteSizeSpan(80), 0, 1, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+        absentClassNum.setText(absClassNum);
         absentSubject.setText(Vars.getLocalizedSubjectName(getContext(), item.subject));
 
         // Absent times calc

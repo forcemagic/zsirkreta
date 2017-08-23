@@ -66,4 +66,12 @@
     <string name="select_date">Dátum Választás</string>
     <string name="title_activity_absences">Hiányzások</string>
     <string name="class_number">%1$d.</string>
+    <string name="friday_short">P</string>
+    <string name="monday_short">H</string>
+    <string name="no_absence_on_record">Nem hiányoztál egy óráról sem ezen a napon. (Hurrá!)</string>
+    <string name="thursday_short">Cs</string>
+    <string name="tuesday_short">K</string>
+    <string name="wednesday_short">Sz</string>
+    <string name="saturday_short">Sz</string>
+    <string name="subject_french_lang">Francia Nyelv</string>
 </resources>
