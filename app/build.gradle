@@ -31,5 +31,6 @@ dependencies {
     compile 'com.github.ajalt.reprint:core:3.1.0@aar'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+    compile 'com.prolificinteractive:material-calendarview:1.4.3'
     testCompile 'junit:junit:4.12'
 }

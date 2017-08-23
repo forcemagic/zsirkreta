@@ -10,6 +10,10 @@
             android:id="@+id/nav_avgs"
             android:icon="@drawable/avg_chart_icon_black"
             android:title="@string/title_activity_avgs" />
+        <item
+            android:id="@+id/nav_absences"
+            android:icon="@drawable/absence_offlinepin_icon_black"
+            android:title="@string/title_activity_absences" />
     </group>
 
 </menu>

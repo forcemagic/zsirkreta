@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.speedyblur.kretaremastered.MainActivity">
+
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="60dp"
+        android:layout_height="55dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:onClick="openAbsenceCalendar"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/calendar_icon_black" />
+
+    <TextView
+        android:id="@+id/currentAbsenceListDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageButton"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/imageButton"
+        android:gravity="center_vertical"
+        android:paddingEnd="2dp"
+        android:paddingStart="2dp"
+        android:text="@string/blablabla"
+        android:textColor="@android:color/black"
+        android:textSize="22sp" />
+
+    <RelativeLayout
+        android:id="@+id/noAbsenceView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/imageButton"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/no_absence_icon_black" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true"
+            android:text="@string/no_absence_on_record"
+            android:textAlignment="center" />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/absenceList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/absenceWeekdaySelector"
+        android:layout_below="@+id/imageButton" />
+
+    <LinearLayout
+        android:id="@+id/absenceWeekdaySelector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/absenceMondaySelector"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/normalgrade"
+            android:gravity="center"
+            android:onClick="bulletSelectWeekday"
+            android:text="@string/monday_short"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/absenceTuesdaySelector"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/normalgrade"
+            android:gravity="center"
+            android:onClick="bulletSelectWeekday"
+            android:text="@string/tuesday_short"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/absenceWednesdaySelector"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/normalgrade"
+            android:gravity="center"
+            android:onClick="bulletSelectWeekday"
+            android:text="@string/wednesday_short"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/absenceThursdaySelector"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/normalgrade"
+            android:gravity="center"
+            android:onClick="bulletSelectWeekday"
+            android:text="@string/thursday_short"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/absenceFridaySelector"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/normalgrade"
+            android:gravity="center"
+            android:onClick="bulletSelectWeekday"
+            android:text="@string/friday_short"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/absenceSaturdaySelector"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:background="@drawable/normalgrade"
+            android:gravity="center"
+            android:onClick="bulletSelectWeekday"
+            android:text="@string/saturday_short"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
