@@ -14,9 +14,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.speedyblur.kretaremastered.AverageGraphActivity;
+import com.speedyblur.kretaremastered.activities.AverageGraphActivity;
 import com.speedyblur.kretaremastered.R;
-import com.speedyblur.models.Average;
+import com.speedyblur.kretaremastered.models.Average;
 
 import java.util.ArrayList;
 

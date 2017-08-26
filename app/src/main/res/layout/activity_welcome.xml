@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.speedyblur.models.CustomViewPager
+<com.speedyblur.kretaremastered.views.CustomViewPager
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/welcomePager"
     android:layout_width="match_parent"

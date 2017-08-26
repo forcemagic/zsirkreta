@@ -19,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class DateGradeListAdapter extends ArrayAdapter<Grade> {
+public class DatedGradeSubListAdapter extends ArrayAdapter<Grade> {
     private ArrayList<Grade> grades;
 
-    public DateGradeListAdapter(Context context, ArrayList<Grade> grades) {
+    public DatedGradeSubListAdapter(Context context, ArrayList<Grade> grades) {
         super(context, 0, grades);
         this.grades = grades;
     }
@@ -40,16 +40,15 @@ public class DateGradeListAdapter extends ArrayAdapter<Grade> {
 
         gradeView.setText(gradeObj.grade);
         gradeBullet.setColorFilter(ContextCompat.getColor(getContext(), gradeObj.colorId), PorterDuff.Mode.SRC_ATOP);
-        int gotResxId = getContext().getResources().getIdentifier("subject_" + gradeObj.subject, "string", getContext().getPackageName());
-        titleView.setText(gotResxId == 0 ? gradeObj.subject : getContext().getResources().getString(gotResxId));
+        titleView.setText(capitalize(gradeObj.type));
 
         TextView descView1 = convertView.findViewById(R.id.gradeDesc);
         TextView descView2 = convertView.findViewById(R.id.gradeDesc2);
 
         if (gradeObj.theme.equals(" - ")) {
-            descView1.setText(capitalize(gradeObj.type));
+            descView1.setText(gradeObj.teacher);
         } else {
-            descView1.setText(capitalize(gradeObj.type) + " - " + capitalize(gradeObj.theme));
+            descView1.setText(capitalize(gradeObj.theme) + " - " + gradeObj.teacher);
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. M. d.", Locale.getDefault());
@@ -72,5 +71,4 @@ public class DateGradeListAdapter extends ArrayAdapter<Grade> {
     private String capitalize(final String line) {
         return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
-
 }

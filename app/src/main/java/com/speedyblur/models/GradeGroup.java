@@ -3,11 +3,11 @@ package com.speedyblur.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.speedyblur.kretaremastered.models.Grade;
+
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
