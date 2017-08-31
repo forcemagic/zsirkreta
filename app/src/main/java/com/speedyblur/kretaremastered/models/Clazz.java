@@ -5,14 +5,14 @@ import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 public class Clazz implements Parcelable {
-    private String subject;
-    private String group;
-    private String teacher;
-    private String room;
-    private int classnum;
-    private int beginTime;
-    private int endTime;
-    private String theme;
+    private final String subject;
+    private final String group;
+    private final String teacher;
+    private final String room;
+    private final int classnum;
+    private final int beginTime;
+    private final int endTime;
+    private final String theme;
     private boolean isAbsent;
     private AbsenceDetails absenceDetails;
 

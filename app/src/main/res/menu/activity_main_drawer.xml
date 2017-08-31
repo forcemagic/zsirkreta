@@ -11,9 +11,9 @@
             android:icon="@drawable/avg_chart_icon_black"
             android:title="@string/title_activity_avgs" />
         <item
-            android:id="@+id/nav_absences"
-            android:icon="@drawable/absence_offlinepin_icon_black"
-            android:title="@string/title_activity_absences" />
+            android:id="@+id/nav_schedule"
+            android:icon="@drawable/daterange_icon_black"
+            android:title="@string/title_activity_schedule" />
     </group>
 
 </menu>

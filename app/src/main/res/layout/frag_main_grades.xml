@@ -3,13 +3,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.speedyblur.kretaremastered.activities.MainActivity"
-    tools:showIn="@layout/activity_main_inner">
+    tools:context="com.speedyblur.kretaremastered.activities.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/noGradesView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/noGradesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/japansmile"
+            android:textColor="@android:color/black"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/noGradesDescView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/noGradesTextView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/nothingtoseehere" />
+    </RelativeLayout>
 
     <ViewFlipper
         android:id="@+id/gradeOrderFlipper"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+            android:id="@+id/datedGradeList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp" />
 
         <ExpandableListView
             android:id="@+id/mainGradeView"
@@ -18,10 +52,6 @@
 
         </ExpandableListView>
 
-        <ListView
-            android:id="@+id/datedGradeList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </ViewFlipper>
 
 </RelativeLayout>

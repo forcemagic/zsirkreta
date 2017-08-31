@@ -1,45 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/welcomeCoordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <ViewFlipper
+        android:id="@+id/unlockdbFlipper"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/unlockDbTitle"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/unlockdb_title"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/unlockDbPassword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:imeActionLabel="Unlock"
-            android:imeActionId="@+id/unlockDb"
-            android:imeOptions="actionUnspecified"
-            android:ems="10"
-            android:inputType="textPassword" />
+            <TextView
+                android:id="@+id/fingerprintUnlockDbTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/fingerprint_unlockdb_title"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
 
-        <ImageButton
-            android:id="@+id/unlockDbConfirm"
-            android:layout_width="48dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/sqlPass"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            android:onClick="tryDecryptSqlite"
-            android:theme="@style/AppTheme.CustomRoundButton"
-            app:srcCompat="@drawable/check_icon_white" />
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/fingerprintUnlockDbImage"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:padding="16dp"
+                app:srcCompat="@drawable/fingerprint_icon_black" />
 
-</ScrollView>
+            <Button
+                android:id="@+id/fingerprintUnlockDbPasswdBtn"
+                style="@style/AppTheme.CustomRoundButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fingerprint_unlockdb_usepassword" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/unlockDbTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/unlockdb_title"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="24sp" />
+
+            <EditText
+                android:id="@+id/unlockDbPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:ems="10"
+                android:imeActionId="@+id/unlockDb"
+                android:imeActionLabel="Unlock"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword" />
+
+            <ImageButton
+                android:id="@+id/unlockDbConfirm"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:onClick="tryDecryptSqlite"
+                android:theme="@style/AppTheme.CustomRoundButton"
+                app:srcCompat="@drawable/check_icon_white" />
+        </LinearLayout>
+    </ViewFlipper>
+</android.support.design.widget.CoordinatorLayout>

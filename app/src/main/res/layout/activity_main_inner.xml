@@ -31,17 +31,23 @@
             android:id="@+id/gradesFragment"
             android:name="com.speedyblur.kretaremastered.fragments.MainGradesFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            tools:layout="@layout/frag_main_averages" />
 
-        <include
-            layout="@layout/frag_main_averages"
+        <fragment
+            android:id="@+id/averagesFragment"
+            android:name="com.speedyblur.kretaremastered.fragments.MainAveragesFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            tools:layout="@layout/frag_main_averages" />
 
-        <include
-            layout="@layout/frag_main_absence"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+        <fragment
+            android:id="@+id/scheduleFragment"
+            android:name="com.speedyblur.kretaremastered.fragments.MainScheduleFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/frag_main_schedule" />
+
     </ViewFlipper>
 
 </android.support.design.widget.CoordinatorLayout>

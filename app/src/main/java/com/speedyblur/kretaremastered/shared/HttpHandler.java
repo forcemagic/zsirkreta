@@ -23,7 +23,7 @@ import okhttp3.Response;
 
 public class HttpHandler {
 
-    private static OkHttpClient httpClient = new OkHttpClient();
+    private static final OkHttpClient httpClient = new OkHttpClient();
 
     /**
      * Issues a GET request against url. Parses JSON for the callback.
@@ -112,7 +112,7 @@ public class HttpHandler {
 
     private static class MainCallbackHandler implements Callback {
 
-        private JsonRequestCallback jsCallback;
+        private final JsonRequestCallback jsCallback;
 
         private MainCallbackHandler(JsonRequestCallback callback) {
             this.jsCallback = callback;

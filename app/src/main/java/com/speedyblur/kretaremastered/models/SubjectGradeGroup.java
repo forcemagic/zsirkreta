@@ -6,8 +6,8 @@ import android.os.Parcelable;
 import java.util.ArrayList;
 
 public class SubjectGradeGroup implements Parcelable {
-    private String subject;
-    private ArrayList<Grade> grades;
+    private final String subject;
+    private final ArrayList<Grade> grades;
 
     public SubjectGradeGroup(String subject, ArrayList<Grade> grades) {
         this.subject = subject;
@@ -32,15 +32,19 @@ public class SubjectGradeGroup implements Parcelable {
     };
 
     @Override
+    public int describeContents() {
+        // Method stub
+        return 0;
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(subject);
         dest.writeTypedList(grades);
     }
 
-    @Override
-    public int describeContents() {
-        // Method stub
-        return 0;
+    public void addToGrades(Grade g) {
+        grades.add(g);
     }
 
     // Getter methods

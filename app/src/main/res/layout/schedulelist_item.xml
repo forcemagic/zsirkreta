@@ -5,14 +5,14 @@
     android:layout_height="match_parent">
 
     <View
-        android:id="@+id/absenceBarTop"
+        android:id="@+id/scheduleBarTop"
         android:layout_width="4dp"
         android:layout_height="18dp"
         android:layout_marginStart="27dp"
         android:background="@drawable/gradebar_top" />
 
     <ImageView
-        android:id="@+id/absenceProven"
+        android:id="@+id/scheduleStatus"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentStart="true"
@@ -26,11 +26,11 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/absenceProven"
-        android:layout_alignBottom="@+id/absenceBarBottom">
+        android:layout_toEndOf="@+id/scheduleStatus"
+        android:layout_alignBottom="@+id/scheduleBarBottom">
 
         <TextView
-            android:id="@+id/absentClassNum"
+            android:id="@+id/scheduleClassNum"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
@@ -49,16 +49,16 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/absentSubject"
-                android:layout_width="match_parent"
+                android:id="@+id/scheduleSubject"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/blablabla"
                 android:textColor="@android:color/black"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/absentTimes"
-                android:layout_width="match_parent"
+                android:id="@+id/scheduleTimes"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
                 android:text="@string/blablabla" />
@@ -66,12 +66,11 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/absenceBarBottom"
+        android:id="@+id/scheduleBarBottom"
         android:layout_width="4dp"
         android:layout_height="18dp"
         android:layout_marginStart="27dp"
         android:layout_marginTop="59.5dp"
-        android:layout_weight="1"
         android:background="@drawable/gradebar_bottom" />
 
 </RelativeLayout>

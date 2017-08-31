@@ -1,41 +1,55 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Kreta Remastered</string>
     <string name="title_activity_grades">Grades</string>
     <string name="title_activity_avgs">Averages</string>
-    <string name="title_activity_absences">Absences</string>
+    <string name="title_activity_schedule">Schedule</string>
 
+    <!-- Login-related stuff -->
     <string name="error_field_required">This field is required</string>
     <string name="login_btn">Login</string>
     <string name="login_studentcard_hint">Student card ID</string>
     <string name="login_passwd_hint">Password</string>
     <string name="login_friendlyname_hint">Friendly Name (Optional)</string>
-    <string name="login_myserver_unresponsive">I\'m sorry. For some reason, my servers are not working. Check back later.</string>
-    <string name="login_copyright">API is Copyleft 2017 Matthew Coal.\nKRETA is Copyright © 2017 eKreta Informatikai Zrt.</string>
+    <string name="login_copyright">By hitting the arrow below you accept that this application is not affiliated with, nor endorsed by eKreta Informatika Zrt. The KRETA original web application is Copyright © 2017 eKreta Informatikai Zrt.</string>
 
-    <string name="subject_english_lang">English</string>
-    <string name="subject_biology">Biology</string>
-    <string name="subject_music">Music</string>
-    <string name="subject_physics">Physics</string>
-    <string name="subject_geography">Geography</string>
-    <string name="subject_it">Information Technology</string>
-    <string name="subject_chemistry">Chemistry</string>
-    <string name="subject_hungarian_grammar_literature">Hungarian Grammar &amp; Literature</string>
-    <string name="subject_maths">Maths</string>
-    <string name="subject_german_lang">German</string>
-    <string name="subject_french_lang">French</string>
-    <string name="subject_art">Art</string>
-    <string name="subject_pe">Physical Education</string>
-    <string name="subject_history">History</string>
-    <string name="subject_head_teacher_class">Class \\w head teacher</string>
+    <!-- Profile selection-related stuff -->
+    <string name="welcome_title">Welcome!</string>
+    <string name="welcome_subtitle">Choose a profile!</string>
+    <string name="empty_profilelist">Looks like nothing\'s here. Go ahead, add some profiles!</string>
+    <string name="profile_exists">Profile already exists.</string>
+    <string name="profile_add">Add Profile</string>
+    <string name="dialog_delete_profile_title">Delete Profile</string>
+    <string name="dialog_delete_profile">Are you sure about that?</string>
+    <string name="dialog_show_cached_title">Network Problems</string>
+    <string name="dialog_show_cached">Something bad happened. Show cached version?</string>
+
+    <!-- Subjects -->
+    <string name="subject_english_lang" tools:ignore="UnusedResources">English</string>
+    <string name="subject_biology" tools:ignore="UnusedResources">Biology</string>
+    <string name="subject_music" tools:ignore="UnusedResources">Music</string>
+    <string name="subject_physics" tools:ignore="UnusedResources">Physics</string>
+    <string name="subject_geography" tools:ignore="UnusedResources">Geography</string>
+    <string name="subject_it" tools:ignore="UnusedResources">Information Technology</string>
+    <string name="subject_chemistry" tools:ignore="UnusedResources">Chemistry</string>
+    <string name="subject_hungarian_grammar_literature" tools:ignore="UnusedResources">Hungarian Grammar &amp; Literature</string>
+    <string name="subject_maths" tools:ignore="UnusedResources">Maths</string>
+    <string name="subject_german_lang" tools:ignore="UnusedResources">German</string>
+    <string name="subject_french_lang" tools:ignore="UnusedResources">French</string>
+    <string name="subject_art" tools:ignore="UnusedResources">Art</string>
+    <string name="subject_pe" tools:ignore="UnusedResources">Physical Education</string>
+    <string name="subject_history" tools:ignore="UnusedResources">History</string>
+    <string name="subject_head_teacher_class" tools:ignore="UnusedResources">Class \\w head teacher</string>
 
     <!-- Loading messages (proc. indicators) -->
+    <string name="loading_logging_in">Logging in…</string>
     <string name="loading_grades">Loading grades…</string>
     <string name="loading_averages">Loading averages…</string>
-    <string name="loading_absence">Loading absence data…</string>
+    <string name="loading_avggraph">Loading average graphs…</string>
+    <string name="loading_schedule">Loading schedule…</string>
     <string name="main_load_complete">Load complete! Time spent with Kreta communication: %1$.2f seconds.</string>
 
     <!-- HTTP errors -->
-    <string name="http_unauthorized">You did not supply the correct credentials.</string>
+    <string name="http_unauthorized">Invalid card ID or password.</string>
     <string name="http_server_error">Something\'s wrong with my server. I\'m sorry :(</string>
     <string name="http_timeout">The Kreta servers are not responding.</string>
     <string name="http_connect_timeout">Connection timed out. Either your network is too slow or my servers are having some issues.</string>
@@ -47,7 +61,20 @@
     <string name="welcome_first_title">Welcome to Kreta Remastered!</string>
     <string name="welcome_first_subtitle">Let\'s get you set up.</string>
     <string name="welcome_sqlpass_title">Set encryption password</string>
-    <string name="welcome_sqlpass_subtitle">This password will be used to encrypt all your profiles in this app. While providing a password is STRONGLY ADVISED, it is not mandatory. But if you don\'t provide one, your credentials will be available to almost anyone with a little knowledge of Android.</string>
+    <string name="welcome_sqlpass_subtitle">This password will be used to encrypt all your profiles in this app. While providing a password is STRONGLY ADVISED, it is not mandatory. But if you don\'t provide one, your credentials will be available to almost anyone with a little knowledge of Android™.</string>
+    <string name="welcome_useempty_title">Question</string>
+    <string name="welcome_useempty_desc">You are about to use an empty password. Do you really want that?</string>
+    <string name="welcome_fingerprint_title">Fingerprint? Yeah!</string>
+    <string name="welcome_fingerprint_subtitle">It seems like you have a fingerprint scanner. You can use it (along with your password) to authenticate yourself.\nScan your finger to enable this feature.</string>
+    <string name="welcome_fingerprint_complete_title">Fingerprint is a go</string>
+    <string name="welcome_fingerprint_complete_subtitle">You\'ve successfully authenticated using your fingerprint.</string>
+    <string name="welcome_fingerprint_notavailable_title">Fingerprint? Not today.</string>
+    <string name="welcome_fingerprint_notavailable_subtitle">It seems like your phone doesn\'t have a fingerprint sensor. (Or you have no prints added in Settings) You can not use this authentication method.</string>
+    <string name="welcome_fingerprint_continue">Continue</string>
+    <string name="welcome_fingerprint_fatal_title">Fingerprint failure</string>
+    <string name="welcome_fingerprint_fatal_continue">Don\'t use fingerprint</string>
+    <string name="welcome_unknown_fingerprint">Uh-oh. It seems like that\'s not the right finger.</string>
+    <string name="welcome_fingerprint_cancel">My password is enough</string>
     <string name="welcome_end_title">That\'s it!</string>
     <string name="welcome_end_subtitle">Just one more thing: You can not change your password after you hit the check mark. Also, if you lose it, you\'ll have to reinstall.</string>
 
@@ -60,30 +87,28 @@
     <string name="saturday_short">S</string>
 
     <!-- Misc string values -->
+    <string name="blablabla">Something</string><!-- TODO: Remove this placeholder -->
     <string name="unlockdb_title">Enter encryption password</string>
-    <string name="welcome_title">Welcome!</string>
-    <string name="welcome_subtitle">Choose a profile!</string>
-    <string name="empty_profilelist">Looks like nothing\'s here. Go ahead, add some profiles!</string>
-    <string name="profile_exists">Profile already exists.</string>
-    <string name="profile_add">Add Profile</string>
-    <string name="subjview_average">AVG: %1$.2f</string>
+    <string name="fingerprint_unlockdb_title">Awaiting fingerprint…</string>
+    <string name="fingerprint_unlockdb_usepassword">Use password</string>
     <string name="grade_unknown_topic">Unknown Topic</string>
     <string name="grade_end_of_halfterm">Half-year grade</string>
     <string name="grade_end_of_year">End of year grade</string>
     <string name="avglabel_desc">Class average: %1$.2f - Delta: %2$.2f</string>
     <string name="action_sortbysubject">Sort by subject</string>
     <string name="action_sortbydate">Sort by date</string>
-    <string name="blablabla">Something</string><!-- TODO: Remove this placeholder -->
     <string name="http_req_error">Some kind of error occurred. :(</string>
-    <string name="progress_dialog_loading">Login succeeded. Loading…</string>
     <string name="auth_passcode_error">This is not the right code!</string>
     <string name="decrypt_database_fail">Unable to decrypt profile store database.</string>
     <string name="profile_delete_success">Successfully deleted profile.</string>
-    <string name="logging_in">Logging in…</string>
     <string name="avggraph_termseparator">End of term</string>
     <string name="select_date">Select Date</string>
     <string name="class_number">#%1$d</string>
     <string name="no_events">No school on this day! (Hooray!)</string>
+    <string name="dialog_yes">Yes</string>
+    <string name="dialog_no">No</string>
+    <string name="nothingtoseehere">There\'s nothing to see here. (Yet)</string>
+    <string name="japansmile" translatable="false">¯\\_(ツ)_/¯</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

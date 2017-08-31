@@ -11,7 +11,6 @@ import com.speedyblur.kretaremastered.R;
 public class WelcomeSlideSetsqlpassFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater infl, ViewGroup cont, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) infl.inflate(R.layout.frag_welcome_setsqlpass, cont, false);
-        return rootView;
+        return infl.inflate(R.layout.frag_welcome_setsqlpass, cont, false);
     }
 }

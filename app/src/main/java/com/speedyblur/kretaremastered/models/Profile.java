@@ -4,9 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Profile implements Parcelable {
-    private String cardid;
-    private String passwd;
-    private String friendlyName;
+    private final String cardid;
+    private final String passwd;
+    private final String friendlyName;
 
     public Profile(String cardid, String passwd, String friendlyName) {
         this.cardid = cardid;

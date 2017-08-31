@@ -6,18 +6,18 @@ import android.os.Parcelable;
 import com.speedyblur.kretaremastered.R;
 
 public class Grade implements Parcelable {
-    private String subject;
-    private int grade;
-    private int gotDate;
-    private String type;
-    private String theme;
-    private String teacher;
-    private int colorId;
+    private final String subject;
+    private final int grade;
+    private final int date;
+    private final String type;
+    private final String theme;
+    private final String teacher;
+    private final int colorId;
 
     public Grade(String subject, int grade, int date, String type, String theme, String teacher) {
         this.subject = subject;
         this.grade = grade;
-        this.gotDate = date;
+        this.date = date;
         this.type = type;
         this.theme = theme;
         this.teacher = teacher;
@@ -38,7 +38,7 @@ public class Grade implements Parcelable {
     protected Grade(Parcel in) {
         subject = in.readString();
         grade = in.readInt();
-        gotDate = in.readInt();
+        date = in.readInt();
         teacher = in.readString();
         type = in.readString();
         theme = in.readString();
@@ -67,7 +67,7 @@ public class Grade implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(subject);
         parcel.writeInt(grade);
-        parcel.writeInt(gotDate);
+        parcel.writeInt(date);
         parcel.writeString(teacher);
         parcel.writeString(type);
         parcel.writeString(theme);
@@ -81,8 +81,8 @@ public class Grade implements Parcelable {
     public int getGrade() {
         return grade;
     }
-    public int getGotDate() {
-        return gotDate;
+    public int getDate() {
+        return date;
     }
     public String getType() {
         return type;

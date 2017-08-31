@@ -51,8 +51,6 @@
                 android:id="@+id/avglabel_subject"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/avglabel_average"
-                android:layout_toEndOf="@+id/avglabel_average"
                 android:text="@string/blablabla"
                 android:textColor="?android:attr/textColorPrimary"
                 android:textSize="16sp" />
@@ -61,8 +59,6 @@
                 android:id="@+id/avglabel_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/avglabel_subject"
-                android:layout_below="@+id/avglabel_subject"
                 android:layout_marginStart="2dp"
                 android:text="@string/blablabla" />
         </LinearLayout>
@@ -75,7 +71,6 @@
         android:layout_height="18dp"
         android:layout_marginStart="27dp"
         android:layout_marginTop="59.5dp"
-        android:layout_weight="1"
         android:background="@drawable/gradebar_bottom" />
 
 </RelativeLayout>

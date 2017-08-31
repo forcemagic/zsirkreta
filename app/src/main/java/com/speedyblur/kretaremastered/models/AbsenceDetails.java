@@ -1,9 +1,9 @@
 package com.speedyblur.kretaremastered.models;
 
 public class AbsenceDetails {
-    private String type;
-    private String provementType;
-    private boolean isProven;
+    private final String type;
+    private final String provementType;
+    private final boolean isProven;
 
     public AbsenceDetails(String absencetype, String absenceprovementtype, boolean proven) {
         this.type = absencetype;

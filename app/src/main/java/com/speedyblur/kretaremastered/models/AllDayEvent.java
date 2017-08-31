@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class AllDayEvent implements Parcelable {
-    private String name;
-    private int date;
+    private final String name;
+    private final int date;
 
     public AllDayEvent(String name, int date) {
         this.name = name;

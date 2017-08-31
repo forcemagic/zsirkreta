@@ -21,7 +21,7 @@ import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.shared.AccountStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
 import com.speedyblur.kretaremastered.shared.HttpHandler;
-import com.speedyblur.kretaremastered.shared.Vars;
+import com.speedyblur.kretaremastered.shared.Common;
 
 import net.sqlcipher.database.SQLiteConstraintException;
 
@@ -48,7 +48,8 @@ public class NewProfileActivity extends AppCompatActivity {
         // Set up the login form.
         mIdView = (EditText) findViewById(R.id.studentid);
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        mFriendlyNameView = (EditText) findViewById(R.id.friendlyname);
+        mFriendlyNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
@@ -58,7 +59,6 @@ public class NewProfileActivity extends AppCompatActivity {
                 return false;
             }
         });
-        mFriendlyNameView = (EditText) findViewById(R.id.friendlyname);
 
         Button mEmailSignInButton = (Button) findViewById(R.id.login_btn);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -118,13 +118,13 @@ public class NewProfileActivity extends AppCompatActivity {
         } catch (JSONException e) { e.printStackTrace(); }
 
         // Enqueue request
-        HttpHandler.postJson(Vars.APIBASE + "/auth", payload, new HttpHandler.JsonRequestCallback() {
+        HttpHandler.postJson(Common.APIBASE + "/auth", payload, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
                 try {
                     Profile p = new Profile(studentId, passwd, friendlyName);
 
-                    AccountStore ash = new AccountStore(getApplicationContext(), Vars.SQLCRYPT_PWD);
+                    AccountStore ash = new AccountStore(getApplicationContext(), Common.SQLCRYPT_PWD);
                     ash.addAccount(p);
                     ash.close();
 
@@ -133,14 +133,32 @@ public class NewProfileActivity extends AppCompatActivity {
                     setResult(RESULT_OK, i);
                     finish();
                 } catch (DecryptionException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showProgress(false);
+                        }
+                    });
                     showOnSnackbar(R.string.decrypt_database_fail, Snackbar.LENGTH_LONG);
                 } catch (SQLiteConstraintException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showProgress(false);
+                        }
+                    });
                     showOnSnackbar(R.string.profile_exists, Snackbar.LENGTH_LONG);
                 }
             }
 
             @Override
             public void onFailure(final int localizedError) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showProgress(false);
+                    }
+                });
                 showOnSnackbar(localizedError, Snackbar.LENGTH_LONG);
             }
         });

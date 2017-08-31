@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.Grade;
 import com.speedyblur.kretaremastered.models.SubjectGradeGroup;
+import com.speedyblur.kretaremastered.shared.Common;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,9 +22,9 @@ import java.util.Date;
 import java.util.Locale;
 
 public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
-    private Context context;
-    private LayoutInflater inflater;
-    private ArrayList<SubjectGradeGroup> subjectGradeGroups;
+    private final Context context;
+    private final LayoutInflater inflater;
+    private final ArrayList<SubjectGradeGroup> subjectGradeGroups;
 
     public SubjectExpandableGradeAdapter(Context context, ArrayList<SubjectGradeGroup> subjectGradeGroups) {
         this.context = context;
@@ -71,9 +72,9 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int i, boolean b, View convertView, ViewGroup viewGroup) {
         convertView = inflater.inflate(R.layout.gradegroup_item, null);
 
-        SubjectGradeGroup datedGrade = getGroup(i);
+        SubjectGradeGroup subjectGradeGroup = getGroup(i);
         TextView subjNameView = convertView.findViewById(R.id.gradeGroupTitle);
-        subjNameView.setText(datedGrade.getSubject());
+        subjNameView.setText(Common.getLocalizedSubjectName(context, subjectGradeGroup.getSubject()));
 
         return convertView;
     }
@@ -94,7 +95,7 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
         TextView gradeView = convertView.findViewById(R.id.grade);
         TextView titleView = convertView.findViewById(R.id.gradeTitle);
 
-        gradeView.setText(gradeObj.getGrade());
+        gradeView.setText(String.valueOf(gradeObj.getGrade()));
         gradeBullet.setColorFilter(ContextCompat.getColor(context, gradeObj.getColorId()), PorterDuff.Mode.SRC_ATOP);
 
         // Not common things
@@ -115,7 +116,7 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
             }
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. M. d.", Locale.getDefault());
-            descView2.setText(dateFormat.format(new Date((long)gradeObj.getGotDate()*1000)));
+            descView2.setText(dateFormat.format(new Date((long)gradeObj.getDate()*1000)));
         }
 
         if (i1 == 0) {

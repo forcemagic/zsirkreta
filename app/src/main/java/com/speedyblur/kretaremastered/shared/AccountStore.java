@@ -15,9 +15,13 @@ import java.util.ArrayList;
 
 public class AccountStore {
     private final static String LOGTAG = "AccountStore";
+
     private SQLiteDatabase db;
+    private final Context ctxt;
 
     public AccountStore(Context ctxt, String dbpasswd) throws DecryptionException {
+        this.ctxt = ctxt;
+
         SQLiteDatabase.loadLibs(ctxt);
         File dbFile = ctxt.getDatabasePath("accounts.db");
         if (!dbFile.mkdirs() || !dbFile.delete()) Log.w(LOGTAG, "Call mkdirs() or delete() failed. [NON-FATAL]");
@@ -59,8 +63,15 @@ public class AccountStore {
     }
 
     public void dropAccount(String cardid) {
-        Log.d(LOGTAG, "Preparing to drop an account...");
+        Log.d(LOGTAG, "Preparing to drop account "+cardid);
         db.execSQL("DELETE FROM accounts WHERE cardid='"+cardid+"'");
+
+        try {
+            DataStore ds = new DataStore(ctxt, cardid, Common.SQLCRYPT_PWD);
+            ds.purgeEverything();
+        } catch (DecryptionException e) {e.printStackTrace();}
+
+        Log.d(LOGTAG, "Account dropped successfully.");
     }
 
     public void close() {

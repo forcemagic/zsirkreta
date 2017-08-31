@@ -6,10 +6,10 @@ import android.os.Parcelable;
 import com.speedyblur.kretaremastered.R;
 
 public class Average implements Parcelable {
-    private String subject;
-    private double average;
-    private double classAverage;
-    private int colorId;
+    private final String subject;
+    private final double average;
+    private final double classAverage;
+    private final int colorId;
 
     public Average(String subject, double average, double classAverage) {
         this.subject = subject;
