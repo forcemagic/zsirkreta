@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/scheduleBarTop"
+        android:layout_width="4dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="27dp"
+        android:background="@drawable/gradebar_top" />
+
+    <ImageView
+        android:id="@+id/scheduleStatus"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="23dp"
+        app:srcCompat="@drawable/check_circle_icon_green" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/scheduleStatus"
+        android:layout_alignBottom="@+id/scheduleBarBottom">
+
+        <TextView
+            android:id="@+id/scheduleClassNum"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="12dp"
+            android:gravity="center_vertical"
+            android:text="#1"
+            android:textColor="@android:color/black"
+            android:textSize="36sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/scheduleSubject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blablabla"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/scheduleTimes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:text="@string/blablabla" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/scheduleBarBottom"
+        android:layout_width="4dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="59.5dp"
+        android:background="@drawable/gradebar_bottom" />
+
+</RelativeLayout>

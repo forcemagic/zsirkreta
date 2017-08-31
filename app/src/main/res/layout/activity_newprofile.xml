@@ -3,7 +3,7 @@
     android:id="@+id/login_coord_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.speedyblur.kretaremastered.NewProfileActivity">
+    tools:context="com.speedyblur.kretaremastered.activities.NewProfileActivity">
 
     <!-- Login progress -->
     <ProgressBar
@@ -61,8 +61,7 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/friendlyname"
