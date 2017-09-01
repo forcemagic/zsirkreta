@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -46,7 +45,7 @@ public class MainScheduleFragment extends Fragment {
     private ArrayList<AllDayEvent> allDayEvents;
     private ArrayList<Clazz> clazzes;
     private CalendarDay selectedScheduleDate;
-    private Timer timer = new Timer();
+    private Timer timer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -88,9 +87,19 @@ public class MainScheduleFragment extends Fragment {
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
 
         selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
+    }
 
-        final Handler handler = new Handler();
+    @Override
+    public void onPause() {
+        super.onPause();
+        timer.cancel();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        timer = new Timer();
         TimerTask doRefreshSchedule = new TimerTask() {
             @Override
             public void run() {
