@@ -149,7 +149,7 @@ public class MainScheduleFragment extends Fragment {
         lv.setAdapter(new ClazzAdapter(getContext(), listElements));
 
         TextView currentDate = getActivity().findViewById(R.id.currentScheduleDate);
-        currentDate.setText(new SimpleDateFormat("YYYY. MMMM dd.", Locale.getDefault()).format(c.getTime()));
+        currentDate.setText(new SimpleDateFormat("yyyy. MMMM dd.", Locale.getDefault()).format(c.getTime()));
     }
 
     private class SwipeDetector implements View.OnTouchListener {
