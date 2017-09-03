@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -115,6 +116,7 @@ public class MainScheduleFragment extends Fragment {
     }
 
     private void resetSelectBullet(int day) {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         getActivity().findViewById(R.id.scheduleMondaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
         getActivity().findViewById(R.id.scheduleTuesdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
         getActivity().findViewById(R.id.scheduleWednesdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
