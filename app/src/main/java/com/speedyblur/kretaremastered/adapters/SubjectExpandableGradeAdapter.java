@@ -119,14 +119,6 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
             descView2.setText(dateFormat.format(new Date((long)gradeObj.getDate()*1000)));
         }
 
-        if (i1 == 0) {
-            convertView.findViewById(R.id.gradeBarTop).setVisibility(View.INVISIBLE);
-        }
-
-        if (isLastChild) {
-            convertView.findViewById(R.id.gradeBarBottom).setVisibility(View.INVISIBLE);
-        }
-
         return convertView;
     }
 

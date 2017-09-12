@@ -37,8 +37,6 @@ public class AverageAdapter extends ArrayAdapter<Average> {
             holder.avgView = convertView.findViewById(R.id.avglabel_average);
             holder.subjView = convertView.findViewById(R.id.avglabel_subject);
             holder.descView = convertView.findViewById(R.id.avglabel_desc);
-            holder.avgBarTop = convertView.findViewById(R.id.avgBarTop);
-            holder.avgBarBottom = convertView.findViewById(R.id.avgBarBottom);
 
             convertView.setTag(holder);
         } else {
@@ -55,9 +53,6 @@ public class AverageAdapter extends ArrayAdapter<Average> {
 
         holder.subjView.setText(Common.getLocalizedSubjectName(getContext(), item.getSubject()));
         holder.descView.setText(getContext().getString(R.string.avglabel_desc, item.getClassAverage(), item.getAverage() - item.getClassAverage()));
-
-        if (pos == 0) holder.avgBarTop.setVisibility(View.INVISIBLE);
-        if (pos == getCount() - 1) holder.avgBarBottom.setVisibility(View.INVISIBLE);
 
         return convertView;
     }

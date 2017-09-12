@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/avgProgress"
+        android:layout_alignBottom="@+id/gradeBullet"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="44dp"
@@ -14,60 +15,43 @@
         android:background="@android:color/white"
         android:elevation="2dp">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <TextView
+            android:id="@+id/gradeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="38dp"
-            android:layout_toEndOf="@+id/avglabel_average"
             android:gravity="center_vertical"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/avglabel_subject"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/blablabla"
-                android:textColor="?android:attr/textColorPrimary"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/avglabel_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:text="@string/blablabla" />
-
-        </LinearLayout>
-
+            android:text="@string/blablabla"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
     </RelativeLayout>
 
-    <ProgressBar
-        android:id="@+id/avgProgress"
-        style="@style/Widget.ProgressBar.Vertical"
+    <ImageView
+        android:id="@+id/gradeBullet"
         android:layout_width="82dp"
         android:layout_height="82dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_weight="1"
         android:elevation="3dp"
-        android:max="50"
-        android:padding="6dp" />
+        app:srcCompat="@drawable/normalgrade" />
 
     <TextView
-        android:id="@+id/avglabel_average"
+        android:id="@+id/grade"
         android:layout_width="82dp"
         android:layout_height="82dp"
-        android:layout_alignEnd="@+id/avgProgress"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:elevation="3dp"
         android:gravity="fill_vertical"
-        android:text="5.00"
+        android:text="5"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="24sp"
-        android:elevation="3dp" />
+        android:textColor="@android:color/white"
+        android:textSize="48sp" />
 
 </RelativeLayout>
