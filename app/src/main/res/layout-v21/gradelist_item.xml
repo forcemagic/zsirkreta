@@ -13,7 +13,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/gradeBullet"
         android:background="@android:color/white"
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/blablabla"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/gradeDesc"

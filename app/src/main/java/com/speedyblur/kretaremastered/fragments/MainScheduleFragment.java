@@ -79,7 +79,6 @@ public class MainScheduleFragment extends Fragment {
         parent.findViewById(R.id.scheduleWednesdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.scheduleThursdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.scheduleFridaySelector).setOnClickListener(new BulletClick());
-        parent.findViewById(R.id.scheduleSaturdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.calendarImageButton).setOnClickListener(new CalendarClick());
 
         ListView schedList = (ListView) parent.findViewById(R.id.scheduleList);
@@ -122,7 +121,6 @@ public class MainScheduleFragment extends Fragment {
         getActivity().findViewById(R.id.scheduleWednesdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
         getActivity().findViewById(R.id.scheduleThursdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
         getActivity().findViewById(R.id.scheduleFridaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
-        getActivity().findViewById(R.id.scheduleSaturdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
 
         Drawable selectedBullet = ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector).mutate();
         selectedBullet.setColorFilter(ContextCompat.getColor(getContext(), R.color.weekdayActive), PorterDuff.Mode.SRC_ATOP);
@@ -136,10 +134,7 @@ public class MainScheduleFragment extends Fragment {
             getActivity().findViewById(R.id.scheduleThursdaySelector).setBackground(selectedBullet);
         } else if (day == Calendar.FRIDAY) {
             getActivity().findViewById(R.id.scheduleFridaySelector).setBackground(selectedBullet);
-        } else if (day == Calendar.SATURDAY) {
-            getActivity().findViewById(R.id.scheduleSaturdaySelector).setBackground(selectedBullet);
         }
-
     }
 
     private void showAbsenceListForDate(CalendarDay day) {
@@ -246,8 +241,6 @@ public class MainScheduleFragment extends Fragment {
                 c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
             } else if (v.getId() == R.id.scheduleFridaySelector) {
                 c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-            } else if (v.getId() == R.id.scheduleSaturdaySelector) {
-                c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
             }
 
             resetSelectBullet(c.get(Calendar.DAY_OF_WEEK));

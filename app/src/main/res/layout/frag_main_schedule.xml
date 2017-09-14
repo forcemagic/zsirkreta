@@ -130,17 +130,6 @@
             android:textColor="@android:color/white"
             android:textSize="24sp" />
 
-        <TextView
-            android:id="@+id/scheduleSaturdaySelector"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:text="@string/saturday_short"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="24sp" />
-
     </LinearLayout>
 
 </RelativeLayout>

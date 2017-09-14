@@ -41,8 +41,6 @@ public class ClazzAdapter extends ArrayAdapter<Clazz> {
             holder.scheduleClassNum = convertView.findViewById(R.id.scheduleClassNum);
             holder.scheduleSubject = convertView.findViewById(R.id.scheduleSubject);
             holder.scheduleTimes = convertView.findViewById(R.id.scheduleTimes);
-            holder.scheduleBarTop = convertView.findViewById(R.id.scheduleBarTop);
-            holder.scheduleBarBottom = convertView.findViewById(R.id.scheduleBarBottom);
 
             convertView.setTag(holder);
         } else {
@@ -74,9 +72,6 @@ public class ClazzAdapter extends ArrayAdapter<Clazz> {
         SimpleDateFormat sdf = new SimpleDateFormat("h:mm", Locale.getDefault());
         holder.scheduleTimes.setText(sdf.format(new Date((long) c.getBeginTime()*1000))+" - "+sdf.format(new Date((long) c.getEndTime()*1000)));
 
-        if (position == 0) holder.scheduleBarTop.setVisibility(View.INVISIBLE);
-        if (position == getCount() - 1) holder.scheduleBarBottom.setVisibility(View.INVISIBLE);
-
         return convertView;
     }
 
@@ -85,7 +80,5 @@ public class ClazzAdapter extends ArrayAdapter<Clazz> {
         TextView scheduleClassNum;
         TextView scheduleSubject;
         TextView scheduleTimes;
-        View scheduleBarTop;
-        View scheduleBarBottom;
     }
 }

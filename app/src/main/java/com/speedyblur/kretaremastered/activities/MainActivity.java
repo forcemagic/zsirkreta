@@ -16,11 +16,6 @@ import android.widget.ViewFlipper;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.Profile;
 
-// TODO FOREST!!!
-/*
- * #2 Portrait mode lock telefonon, de nem tableten(!!!)
- */
-// TODO FOREST END!
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean shouldShowMenu = true;
     private String lastMenuState;
