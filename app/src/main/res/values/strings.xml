@@ -38,6 +38,7 @@
     <string name="subject_art" tools:ignore="UnusedResources">Art</string>
     <string name="subject_pe" tools:ignore="UnusedResources">Physical Education</string>
     <string name="subject_history" tools:ignore="UnusedResources">History</string>
+    <string name="subject_dance_and_drama" tools:ignore="UnusedResources">Dance and Drama</string>
     <string name="subject_head_teacher_class" tools:ignore="UnusedResources">Class \\w head teacher</string>
 
     <!-- Loading messages (proc. indicators) -->
@@ -109,6 +110,7 @@
     <string name="dialog_no">No</string>
     <string name="nothingtoseehere">There\'s nothing to see here. (Yet)</string>
     <string name="japansmile" translatable="false">¯\\_(ツ)_/¯</string>
+    <string name="substitute_class">Substitutes %1$s</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

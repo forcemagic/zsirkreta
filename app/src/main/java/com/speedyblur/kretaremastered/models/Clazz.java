@@ -13,10 +13,11 @@ public class Clazz implements Parcelable {
     private final int beginTime;
     private final int endTime;
     private final String theme;
+    private final boolean isHeld;
     private boolean isAbsent;
     private AbsenceDetails absenceDetails;
 
-    public Clazz(String subject, String group, String teacher, String room, int classnum, int begin, int end, String theme, boolean isabsent,
+    public Clazz(String subject, String group, String teacher, String room, int classnum, int begin, int end, String theme, boolean isheld, boolean isabsent,
                  @Nullable AbsenceDetails absenceDetails) {
         this.subject = subject;
         this.group = group;
@@ -26,6 +27,7 @@ public class Clazz implements Parcelable {
         this.beginTime = begin;
         this.endTime = end;
         this.theme = theme;
+        this.isHeld = isheld;
         this.isAbsent = isabsent;
         this.absenceDetails = absenceDetails;
     }
@@ -39,6 +41,7 @@ public class Clazz implements Parcelable {
         beginTime = in.readInt();
         endTime = in.readInt();
         theme = in.readString();
+        isHeld = in.readByte() == 1;
     }
 
     public static final Creator<Clazz> CREATOR = new Creator<Clazz>() {
@@ -68,6 +71,7 @@ public class Clazz implements Parcelable {
         parcel.writeInt(beginTime);
         parcel.writeInt(endTime);
         parcel.writeString(theme);
+        parcel.writeByte((byte) (isHeld ? 1 : 0));
     }
 
     // Getter methods
@@ -94,6 +98,9 @@ public class Clazz implements Parcelable {
     }
     public String getTheme() {
         return theme;
+    }
+    public boolean isHeld() {
+        return isHeld;
     }
     public boolean isAbsent() {
         return isAbsent;

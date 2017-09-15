@@ -94,4 +94,6 @@
     <string name="welcome_fingerprint_fatal_title">Ujjlenyomat hiba</string>
     <string name="welcome_fingerprint_notavailable_subtitle">Úgy tünik, hogy a telefonodnak nincsen ujjlenyomat-leolvasója. (Vagy csak nincs beállítva nyomat) Így nem tudod használni ezt a funkciót.</string>
     <string name="welcome_fingerprint_notavailable_title">Ujjlenyomat? Hát nem.</string>
+    <string name="subject_dance_and_drama">Tánc és Dráma</string>
+    <string name="substitute_class">Helyettesített óra: %1$s</string>
 </resources>

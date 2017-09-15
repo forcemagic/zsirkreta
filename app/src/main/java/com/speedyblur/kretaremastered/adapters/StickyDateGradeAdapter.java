@@ -82,17 +82,6 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. M. d.", Locale.getDefault());
         holder.descView2.setText(dateFormat.format(new Date((long) gradeObj.getDate() * 1000)));
 
-        /*if (pos == 0 || getHeaderId(pos) != getHeaderId(pos - 1)) {
-            holder.gradeBarTop.setVisibility(View.INVISIBLE);
-            holder.gradeBarBottom.setVisibility(View.VISIBLE);
-        } else if (pos == getCount() - 1 || getHeaderId(pos) != getHeaderId(pos + 1)) {
-            holder.gradeBarTop.setVisibility(View.VISIBLE);
-            holder.gradeBarBottom.setVisibility(View.INVISIBLE);
-        } else {
-            holder.gradeBarTop.setVisibility(View.VISIBLE);
-            holder.gradeBarBottom.setVisibility(View.VISIBLE);
-        }*/
-
         return convertView;
     }
 
@@ -133,8 +122,6 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
         TextView titleView;
         TextView descView1;
         TextView descView2;
-        View gradeBarTop;
-        View gradeBarBottom;
     }
 
     private static class HeaderViewHolder {

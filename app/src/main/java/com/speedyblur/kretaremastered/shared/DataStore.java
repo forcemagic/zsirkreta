@@ -125,7 +125,7 @@ public class DataStore {
         truncateTableIfExists("clazzes_"+profileName);
 
         db.execSQL("CREATE TABLE IF NOT EXISTS clazzes_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, grp TEXT, teacher TEXT," +
-                " room TEXT, classnum INTEGER, begin INTEGER, end INTEGER, theme TEXT, isabsent INTEGER, absencetype TEXT, absenceprovementtype TEXT," +
+                " room TEXT, classnum INTEGER, begin INTEGER, end INTEGER, theme TEXT, isheld INTEGER, isabsent INTEGER, absencetype TEXT, absenceprovementtype TEXT," +
                 " proven INTEGER);");
         Log.d(LOGTAG, "Created clazzes table (IF NOT EXISTS) for profile "+profileName);
 
@@ -133,17 +133,17 @@ public class DataStore {
         for (int i=0; i<clazzes.size(); i++) {
             Clazz c = clazzes.get(i);
             if (c.isAbsent()) {
-                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme," +
-                        "isabsent, absencetype, absenceprovementtype, proven) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
+                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, " +
+                        "isabsent, absencetype, absenceprovementtype, proven) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
                         c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
-                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), "1", c.getAbsenceDetails().getType(),
+                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "1", c.getAbsenceDetails().getType(),
                         c.getAbsenceDetails().getProvementType(), c.getAbsenceDetails().isProven() ? "1" : "0"
                 });
             } else {
-                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isabsent) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
+                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, isabsent) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
                         c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
-                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), "0"
+                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "0"
                 });
             }
         }
@@ -250,6 +250,7 @@ public class DataStore {
                             c.getInt(c.getColumnIndex("begin")),
                             c.getInt(c.getColumnIndex("end")),
                             c.getString(c.getColumnIndex("theme")),
+                            c.getInt(c.getColumnIndex("isheld")) == 1,
                             false, null
                     );
                 } else {
@@ -262,6 +263,7 @@ public class DataStore {
                             c.getInt(c.getColumnIndex("begin")),
                             c.getInt(c.getColumnIndex("end")),
                             c.getString(c.getColumnIndex("theme")),
+                            c.getInt(c.getColumnIndex("isheld")) == 1,
                             true, new AbsenceDetails(c.getString(c.getColumnIndex("absencetype")),
                                             c.getString(c.getColumnIndex("absenceprovementtype")), c.getInt(c.getColumnIndex("proven")) == 1)
                     );

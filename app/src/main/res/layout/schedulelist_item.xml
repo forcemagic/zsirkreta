@@ -6,8 +6,9 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="66dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="8dp"
@@ -16,7 +17,7 @@
         android:layout_toEndOf="@+id/scheduleStatus"
         android:background="@android:color/white"
         android:elevation="3dp"
-        android:paddingStart="20dp">
+        android:paddingStart="24dp">
 
         <TextView
             android:id="@+id/scheduleClassNum"
@@ -49,22 +50,48 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/scheduleTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/blablabla" />
+
+            <TextView
                 android:id="@+id/scheduleTimes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:text="@string/blablabla" />
+                android:text="@string/blablabla"
+                android:textSize="12sp" />
         </LinearLayout>
     </RelativeLayout>
 
     <ImageView
         android:id="@+id/scheduleStatus"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="25dp"
         android:elevation="3dp"
         app:srcCompat="@drawable/check_circle_icon_green" />
+
+    <TextView
+        android:id="@+id/scheduleReplacement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_marginTop="-8dp"
+        android:layout_toEndOf="@+id/scheduleStatus"
+        android:background="?attr/colorControlHighlight"
+        android:paddingBottom="2dp"
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp"
+        android:paddingTop="2dp"
+        android:text="@string/blablabla" />
 
 </RelativeLayout>
