@@ -37,11 +37,12 @@
         android:id="@+id/scheduleCurrentWeek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/noSchoolView"
+        android:layout_alignBottom="@id/calendarImageButton"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:gravity="center_vertical"
-        android:padding="12dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
         android:text="@string/blablabla"
         android:textSize="18sp" />
 
@@ -50,7 +51,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/calendarImageButton"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_above="@+id/scheduleWeekdaySelector">
 
         <ImageView
             android:id="@+id/smileView"
@@ -74,10 +76,10 @@
         android:id="@+id/scheduleList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/scheduleWeekdaySelector"
-        android:layout_alignParentStart="true"
+        android:divider="@null"
         android:layout_below="@+id/calendarImageButton"
-        android:divider="@null" />
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/scheduleWeekdaySelector" />
 
     <LinearLayout
         android:id="@+id/scheduleWeekdaySelector"

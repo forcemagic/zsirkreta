@@ -152,7 +152,32 @@ public class DataStore {
         Log.d(LOGTAG, "INSERT INTO statements finished.");
     }
 
+    public void upsertClassData(ArrayList<Clazz> clazzes) {
+        if (!tableExists("clazzes_"+profileName)) throw new RuntimeException("This is impossible!");
+        Log.d(LOGTAG, "About to 'upsert' "+clazzes.size()+" classes.");
+        for (int i=0; i<clazzes.size(); i++) {
+            Clazz c = clazzes.get(i);
+            db.execSQL("DELETE FROM clazzes_"+profileName+" WHERE begin=? AND end=? AND subject=?", new String[] {
+                    String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getSubject()});
+            if (c.isAbsent()) {
+                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, " +
+                        "isabsent, absencetype, absenceprovementtype, proven) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
+                        c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
+                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "1", c.getAbsenceDetails().getType(),
+                        c.getAbsenceDetails().getProvementType(), c.getAbsenceDetails().isProven() ? "1" : "0"
+                });
+            } else {
+                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, isabsent) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
+                        c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
+                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "0"
+                });
+            }
+        }
+    }
+
     public ArrayList<Grade> getGradesData() {
+        if (!tableExists("grades_"+profileName)) return new ArrayList<>();
         Cursor c = db.rawQuery("SELECT * FROM grades_"+profileName, null);
         c.moveToFirst();
         if (c.getCount() != 0) {
@@ -177,6 +202,7 @@ public class DataStore {
     }
 
     public ArrayList<Average> getAveragesData() {
+        if (!tableExists("averages_"+profileName)) return new ArrayList<>();
         Cursor c = db.rawQuery("SELECT * FROM averages_"+profileName, null);
         c.moveToFirst();
         if (c.getCount() != 0) {
@@ -198,6 +224,7 @@ public class DataStore {
     }
 
     public AvgGraphData getAverageGraphData(String subject) {
+        if (!tableExists("avggraph_"+profileName)) return null;
         Cursor c = db.rawQuery("SELECT x,y,isspecial FROM avggraph_"+profileName+" WHERE subject=?", new String[] {subject});
         c.moveToFirst();
         if (c.getCount() != 0) {
@@ -214,6 +241,7 @@ public class DataStore {
     }
 
     public ArrayList<AllDayEvent> getAllDayEventsData() {
+        if (!tableExists("alldayevents_"+profileName)) return new ArrayList<>();
         Cursor c = db.rawQuery("SELECT * FROM alldayevents_"+profileName, null);
         c.moveToFirst();
         if (c.getCount() != 0) {
