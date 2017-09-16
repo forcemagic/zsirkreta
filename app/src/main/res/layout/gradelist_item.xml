@@ -24,7 +24,7 @@
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="38dp"
+            android:layout_marginStart="22dp"
             android:orientation="vertical">
 
             <TextView
@@ -33,13 +33,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/blablabla"
                 android:textColor="?android:attr/textColorPrimary"
-                android:textSize="15sp" />
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/gradeDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@string/blablabla"
                 android:textSize="12sp" />
 
@@ -56,16 +59,16 @@
 
     <ImageView
         android:id="@+id/gradeBullet"
-        android:layout_width="82dp"
-        android:layout_height="82dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         app:srcCompat="@drawable/normalgrade" />
 
     <TextView
         android:id="@+id/grade"
-        android:layout_width="82dp"
-        android:layout_height="82dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
@@ -73,6 +76,6 @@
         android:text="5"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="48sp" />
+        android:textSize="36sp" />
 
 </RelativeLayout>

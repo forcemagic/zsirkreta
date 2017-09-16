@@ -33,7 +33,7 @@ public class ClazzAdapter extends ArrayAdapter<Clazz> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.schedulelist_item, parent, false);
 
             holder = new ViewHolder();
@@ -55,19 +55,22 @@ public class ClazzAdapter extends ArrayAdapter<Clazz> {
         // Setting drawable
         Drawable toSet;
         if (!c.isHeld()) {
-            toSet = ContextCompat.getDrawable(getContext(), R.drawable.class_not_held_icon_gray);
+            toSet = ContextCompat.getDrawable(getContext(), R.drawable.class_not_held_icon_gray).mutate();
+            if ((long) c.getBeginTime()*1000 < Calendar.getInstance().getTimeInMillis()) {
+                toSet.setColorFilter(ContextCompat.getColor(getContext(), R.color.pastNotHeldClass), PorterDuff.Mode.SRC_ATOP);
+            }
         } else if (c.isAbsent() && c.getAbsenceDetails().isProven()) {
             toSet = ContextCompat.getDrawable(getContext(), R.drawable.check_circle_icon_green);
         } else if (c.isAbsent() && !c.getAbsenceDetails().isProven()) {
             toSet = ContextCompat.getDrawable(getContext(), R.drawable.dash_circle_icon_red);
-        } else if ((long) c.getBeginTime()*1000 > Calendar.getInstance().getTimeInMillis()) {
-            toSet = ContextCompat.getDrawable(getContext(), R.drawable.normalgrade).mutate();
-            toSet.setColorFilter(ContextCompat.getColor(getContext(), android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
-        } else if ((long) c.getBeginTime()*1000 < Calendar.getInstance().getTimeInMillis() && Calendar.getInstance().getTimeInMillis() < (long) c.getEndTime()*1000) {
+        } else if ((long) c.getBeginTime()*1000 <= Calendar.getInstance().getTimeInMillis() && Calendar.getInstance().getTimeInMillis() <= (long) c.getEndTime()*1000) {
             toSet = ContextCompat.getDrawable(getContext(), R.drawable.current_class_icon_green);
-        } else {
+        } else if ((long) c.getBeginTime()*1000 < Calendar.getInstance().getTimeInMillis()) {
             toSet = ContextCompat.getDrawable(getContext(), R.drawable.normalgrade).mutate();
             toSet.setColorFilter(ContextCompat.getColor(getContext(), R.color.goodGrade), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            toSet = ContextCompat.getDrawable(getContext(), R.drawable.normalgrade).mutate();
+            toSet.setColorFilter(ContextCompat.getColor(getContext(), android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
         }
 
         // Get replacement and replacer (if exists)

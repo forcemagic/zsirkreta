@@ -107,16 +107,15 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
             titleView.setText(capitalize(gradeObj.getType()));
 
             TextView descView1 = convertView.findViewById(R.id.gradeDesc);
-            TextView descView2 = convertView.findViewById(R.id.gradeDesc2);
+            // TODO: Remove this from the layout
+            convertView.findViewById(R.id.gradeDesc2).setVisibility(View.GONE);
 
             if (gradeObj.getTheme().equals(" - ")) {
                 descView1.setText(gradeObj.getTeacher());
             } else {
-                descView1.setText(capitalize(gradeObj.getTheme()) + " - " + gradeObj.getTeacher());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. M. d.", Locale.getDefault());
+                descView1.setText(capitalize(gradeObj.getTheme()) + " - " + dateFormat.format(new Date((long)gradeObj.getDate()*1000)));
             }
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. M. d.", Locale.getDefault());
-            descView2.setText(dateFormat.format(new Date((long)gradeObj.getDate()*1000)));
         }
 
         return convertView;

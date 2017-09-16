@@ -155,7 +155,14 @@ public class MainScheduleFragment extends Fragment {
         lv.setAdapter(new ClazzAdapter(getContext(), listElements));
 
         TextView currentDate = getActivity().findViewById(R.id.currentScheduleDate);
-        currentDate.setText(new SimpleDateFormat("yyyy. MMMM dd.", Locale.getDefault()).format(c.getTime()));
+        currentDate.setText(new SimpleDateFormat("MMMM dd.", Locale.getDefault()).format(c.getTime()));
+
+        Calendar postCal = (Calendar) day.getCalendar().clone();
+        TextView currentWeek = getActivity().findViewById(R.id.scheduleCurrentWeek);
+        SimpleDateFormat weekFmt = new SimpleDateFormat("MMM dd.", Locale.getDefault());
+        postCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); String dateMonday = weekFmt.format(postCal.getTime());
+        postCal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY); String dateSunday = weekFmt.format(postCal.getTime());
+        currentWeek.setText(dateMonday+"\n"+dateSunday);
     }
 
     private class SwipeDetector implements View.OnTouchListener {
@@ -266,6 +273,8 @@ public class MainScheduleFragment extends Fragment {
                         unprovenDates.add(CalendarDay.from(new Date((long) clazzes.get(i).getBeginTime() * 1000)));
                 }
             }
+
+            // TODO: This is kind of ugly, but it's the only way I know to do this.
             cView.addDecorators(new DayViewDecorator() {
                 @Override
                 public boolean shouldDecorate(CalendarDay day) {
@@ -285,6 +294,42 @@ public class MainScheduleFragment extends Fragment {
                 @Override
                 public void decorate(DayViewFacade view) {
                     view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.calendar_badbullet));
+                }
+            }, new DayViewDecorator() {
+                @Override
+                public boolean shouldDecorate(CalendarDay day) {
+                    return day.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                            && day.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+                            && !provenDates.contains(day) && !unprovenDates.contains(day);
+                }
+
+                @Override
+                public void decorate(DayViewFacade view) {
+                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.current_day_calendar_icon_black));
+                }
+            }, new DayViewDecorator() {
+                @Override
+                public boolean shouldDecorate(CalendarDay day) {
+                    return day.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                            && day.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+                            && provenDates.contains(day);
+                }
+
+                @Override
+                public void decorate(DayViewFacade view) {
+                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.cal_current_day_goodbullet));
+                }
+            }, new DayViewDecorator() {
+                @Override
+                public boolean shouldDecorate(CalendarDay day) {
+                    return day.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                            && day.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+                            && unprovenDates.contains(day);
+                }
+
+                @Override
+                public void decorate(DayViewFacade view) {
+                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.cal_current_day_badbullet));
                 }
             });
 

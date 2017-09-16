@@ -12,7 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -76,7 +75,7 @@ public class AverageAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int pos, boolean isExp, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             convertView = LayoutInflater.from(ctxt).inflate(R.layout.avglist_item, parent, false);
 
             holder = new ViewHolder();
@@ -107,7 +106,7 @@ public class AverageAdapter extends BaseExpandableListAdapter {
     @Override
     public View getChildView(int pos, int i1, boolean b, View convertView, ViewGroup parent) {
         final ChildHolder holder;
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             convertView = LayoutInflater.from(ctxt).inflate(R.layout.dropdown_average_graph, parent, false);
 
             holder = new ChildHolder();
@@ -159,21 +158,6 @@ public class AverageAdapter extends BaseExpandableListAdapter {
 
         // Reset chart
         holder.chart.getXAxis().removeAllLimitLines();
-
-        // Getting half-term line
-        int halftermtime = 0;
-        for (int i = 0; i < lds.getEntryCount(); i++) {
-            Entry e = lds.getEntryForIndex(i);
-            if ((boolean) e.getData()) {
-                halftermtime = (int) e.getX();
-                break;
-            }
-        }
-        LimitLine limit = new LimitLine(halftermtime);
-        limit.setLineWidth(2f);
-        limit.enableDashedLine(24f, 6f, 0f);
-        limit.setLabel(ctxt.getString(R.string.avggraph_termseparator));
-        holder.chart.getXAxis().addLimitLine(limit);
 
         // Final data setting
         holder.chart.setData(new LineData(lds));

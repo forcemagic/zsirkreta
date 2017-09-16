@@ -17,6 +17,7 @@
         android:layout_marginTop="4dp"
         android:layout_toEndOf="@+id/scheduleStatus"
         android:background="@android:color/white"
+        android:elevation="3dp"
         android:paddingStart="24dp"
         tools:ignore="RtlSymmetry">
 
@@ -77,6 +78,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="8dp"
         android:layout_marginTop="21dp"
+        android:elevation="3dp"
         app:srcCompat="@drawable/check_circle_icon_green" />
 
     <TextView

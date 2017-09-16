@@ -58,7 +58,9 @@ public class MainGradesFragment extends Fragment {
                     found = true;
                 }
             }
-            if (!found) subjectGradeGroups.add(new SubjectGradeGroup(cGrade.getSubject(), new ArrayList<Grade>()));
+            ArrayList<Grade> gList = new ArrayList<>();
+            gList.add(cGrade);
+            if (!found) subjectGradeGroups.add(new SubjectGradeGroup(cGrade.getSubject(), gList));
         }
         expListView.setChildDivider(null);
         expListView.setDividerHeight(0);
