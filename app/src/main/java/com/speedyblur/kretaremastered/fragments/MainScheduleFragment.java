@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,10 +12,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -84,6 +90,42 @@ public class MainScheduleFragment extends Fragment {
         ListView schedList = (ListView) parent.findViewById(R.id.scheduleList);
         schedList.setEmptyView(parent.findViewById(R.id.noSchoolView));
         schedList.setOnTouchListener(new SwipeDetector());
+        schedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                Clazz c = (Clazz) adapterView.getItemAtPosition(pos);
+                View dialView = LayoutInflater.from(getContext()).inflate(R.layout.class_information_dialog, null);
+
+                ImageView mClassIcon = dialView.findViewById(R.id.classInfoIcon);
+                TextView mSubject = dialView.findViewById(R.id.classInfoSubject);
+                TextView mTheme = dialView.findViewById(R.id.classInfoTheme);
+                TextView mTeacher = dialView.findViewById(R.id.classInfoTeacher);
+                TextView mTime = dialView.findViewById(R.id.classInfoTime);
+                TextView mRoom = dialView.findViewById(R.id.classInfoRoom);
+
+                mClassIcon.setImageDrawable(c.getIcon(getContext()));
+
+                mSubject.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf"));
+                String classNum = getString(R.string.class_number, c.getClassnum());
+                SpannableStringBuilder ssb = new SpannableStringBuilder(classNum+" "+Common.getLocalizedSubjectName(getContext(), c.getSubject()));
+                ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, classNum.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                mSubject.setText(ssb);
+
+                mTheme.setText(c.getTheme());
+                mTeacher.setText(c.getTeacher());
+                SimpleDateFormat fmt = new SimpleDateFormat("h:mm a", Locale.getDefault());
+                mTime.setText(fmt.format(new Date((long) c.getBeginTime()*1000))+" - "+fmt.format(new Date((long) c.getEndTime()*1000)));
+                mRoom.setText(c.getRoom().replace("(", "").replace(")", ""));
+
+                new AlertDialog.Builder(getContext()).setView(dialView)
+                        .setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).show();
+            }
+        });
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
 
         selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
@@ -159,10 +201,11 @@ public class MainScheduleFragment extends Fragment {
 
         Calendar postCal = (Calendar) day.getCalendar().clone();
         TextView currentWeek = getActivity().findViewById(R.id.scheduleCurrentWeek);
-        SimpleDateFormat weekFmt = new SimpleDateFormat("MMM dd.", Locale.getDefault());
+        SimpleDateFormat weekFmt = new SimpleDateFormat("MMM. dd.", Locale.getDefault());
         postCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); String dateMonday = weekFmt.format(postCal.getTime());
-        postCal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY); String dateSunday = weekFmt.format(postCal.getTime());
-        currentWeek.setText(dateMonday+"\n"+dateSunday);
+        postCal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY); String dateFriday = weekFmt.format(postCal.getTime());
+        currentWeek.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf"));
+        currentWeek.setText(getString(R.string.current_week, dateMonday, dateFriday));
     }
 
     private class SwipeDetector implements View.OnTouchListener {

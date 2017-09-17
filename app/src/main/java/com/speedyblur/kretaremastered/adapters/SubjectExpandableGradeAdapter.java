@@ -2,7 +2,9 @@ package com.speedyblur.kretaremastered.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,7 +75,10 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
         convertView = inflater.inflate(R.layout.gradegroup_item, null);
 
         SubjectGradeGroup subjectGradeGroup = getGroup(i);
+        View gradeGroupBar = convertView.findViewById(R.id.gradeGroupBar);
         TextView subjNameView = convertView.findViewById(R.id.gradeGroupTitle);
+        gradeGroupBar.getLayoutParams().width = (int) Math.round(Resources.getSystem().getDisplayMetrics().widthPixels * 0.8);
+        subjNameView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Light.ttf"));
         subjNameView.setText(Common.getLocalizedSubjectName(context, subjectGradeGroup.getSubject()));
 
         return convertView;

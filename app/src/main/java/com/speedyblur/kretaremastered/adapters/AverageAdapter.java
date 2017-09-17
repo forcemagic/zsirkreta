@@ -2,6 +2,7 @@ package com.speedyblur.kretaremastered.adapters;
 
 import android.content.Context;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -97,6 +99,7 @@ public class AverageAdapter extends BaseExpandableListAdapter {
         holder.avgProgress.setProgress((int) Math.round(item.getAverage()*10));
         holder.avgView.setText(String.valueOf(item.getAverage()));
 
+        holder.subjView.setTypeface(Typeface.createFromAsset(ctxt.getAssets(), "fonts/OpenSans-Light.ttf"));
         holder.subjView.setText(Common.getLocalizedSubjectName(ctxt, item.getSubject()));
         holder.descView.setText(ctxt.getString(R.string.avglabel_desc, item.getClassAverage(), item.getAverage() - item.getClassAverage()));
 
@@ -158,6 +161,23 @@ public class AverageAdapter extends BaseExpandableListAdapter {
 
         // Reset chart
         holder.chart.getXAxis().removeAllLimitLines();
+
+        // Getting half-term line
+        int halftermtime = -1;
+        for (int i = 0; i < lds.getEntryCount(); i++) {
+            Entry e = lds.getEntryForIndex(i);
+            if ((boolean) e.getData()) {
+                halftermtime = (int) e.getX();
+                break;
+            }
+        }
+        if (halftermtime != -1) {
+            LimitLine limit = new LimitLine(halftermtime);
+            limit.setLineWidth(2f);
+            limit.enableDashedLine(24f, 6f, 0f);
+            holder.chart.getXAxis().addLimitLine(limit);
+        }
+
 
         // Final data setting
         holder.chart.setData(new LineData(lds));

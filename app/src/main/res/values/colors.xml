@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#222</color>
     <color name="colorPrimaryDark">#000</color>
-    <color name="colorAccent">#3030DF</color>
+    <color name="colorAccent">#3030df</color>
 
     <color name="excellentGrade">#FF22EE22</color>
     <color name="goodGrade">#FF44CC44</color>

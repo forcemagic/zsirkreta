@@ -1,8 +1,16 @@
 package com.speedyblur.kretaremastered.models;
 
+import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+
+import com.speedyblur.kretaremastered.R;
+
+import java.util.Calendar;
 
 public class Clazz implements Parcelable {
     private final String subject;
@@ -72,6 +80,29 @@ public class Clazz implements Parcelable {
         parcel.writeInt(endTime);
         parcel.writeString(theme);
         parcel.writeByte((byte) (isHeld ? 1 : 0));
+    }
+
+    public Drawable getIcon(Context ctxt) {
+        Drawable toSet;
+        if (!isHeld) {
+            toSet = ContextCompat.getDrawable(ctxt, R.drawable.class_not_held_icon_gray).mutate();
+            if ((long) beginTime*1000 < Calendar.getInstance().getTimeInMillis()) {
+                toSet.setColorFilter(ContextCompat.getColor(ctxt, R.color.pastNotHeldClass), PorterDuff.Mode.SRC_ATOP);
+            }
+        } else if (isAbsent && absenceDetails.isProven()) {
+            toSet = ContextCompat.getDrawable(ctxt, R.drawable.check_circle_icon_green);
+        } else if (isAbsent && !absenceDetails.isProven()) {
+            toSet = ContextCompat.getDrawable(ctxt, R.drawable.dash_circle_icon_red);
+        } else if ((long) beginTime*1000 <= Calendar.getInstance().getTimeInMillis() && Calendar.getInstance().getTimeInMillis() <= (long) endTime*1000) {
+            toSet = ContextCompat.getDrawable(ctxt, R.drawable.current_class_icon_green);
+        } else if ((long) beginTime*1000 < Calendar.getInstance().getTimeInMillis()) {
+            toSet = ContextCompat.getDrawable(ctxt, R.drawable.normalgrade).mutate();
+            toSet.setColorFilter(ContextCompat.getColor(ctxt, R.color.goodGrade), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            toSet = ContextCompat.getDrawable(ctxt, R.drawable.normalgrade).mutate();
+            toSet.setColorFilter(ContextCompat.getColor(ctxt, android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
+        }
+        return toSet;
     }
 
     // Getter methods

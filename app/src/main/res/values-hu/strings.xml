@@ -53,7 +53,6 @@
     <string name="http_cant_resolve">Nem vagy csatlakozva az Internethez. Kapcsold be a mobilnetet vagy a wifit.</string>
     <string name="http_connect_timeout">Idötúllépés a kapcsolatban. Vagy a neted lassú, vagy a szerveremmel vannak gondok.</string>
     <string name="main_load_complete">Betöltés kész! Krétával való kommunikálással töltött idö: %1$.2f másodperc.</string>
-    <string name="avggraph_termseparator">Félév vége</string>
     <string name="grade_end_of_halfterm">Félévi jegy</string>
     <string name="grade_end_of_year">Év végi jegy</string>
     <string name="action_sortbydate">Rendezés dátum szerint</string>
@@ -96,4 +95,10 @@
     <string name="welcome_fingerprint_notavailable_title">Ujjlenyomat? Hát nem.</string>
     <string name="subject_dance_and_drama">Tánc és Dráma</string>
     <string name="substitute_class">Helyettesített óra: %1$s</string>
+    <string name="current_week">H: %1$s\nP: %2$s</string>
+    <string name="dialog_close">Bezár</string>
+    <string name="classinfo_theme">Téma:</string>
+    <string name="classinfo_teacher">Tanár:</string>
+    <string name="classinfo_room">Terem:</string>
+    <string name="classinfo_time">Idö:</string>
 </resources>

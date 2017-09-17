@@ -41,6 +41,12 @@
     <string name="subject_dance_and_drama" tools:ignore="UnusedResources">Dance and Drama</string>
     <string name="subject_head_teacher_class" tools:ignore="UnusedResources">Class \\w head teacher</string>
 
+    <!-- Class details dialog -->
+    <string name="classinfo_theme">Theme:</string>
+    <string name="classinfo_teacher">Teacher:</string>
+    <string name="classinfo_time">Time:</string>
+    <string name="classinfo_room">Room:</string>
+
     <!-- Loading messages (proc. indicators) -->
     <string name="loading_logging_in">Logging in…</string>
     <string name="loading_grades">Loading grades…</string>
@@ -102,7 +108,6 @@
     <string name="auth_passcode_error">This is not the right code!</string>
     <string name="decrypt_database_fail">Unable to decrypt profile store database.</string>
     <string name="profile_delete_success">Successfully deleted profile.</string>
-    <string name="avggraph_termseparator">End of term</string>
     <string name="select_date">Select Date</string>
     <string name="class_number">#%1$d</string>
     <string name="no_events">No school on this day! (Hooray!)</string>
@@ -111,6 +116,8 @@
     <string name="nothingtoseehere">There\'s nothing to see here. (Yet)</string>
     <string name="japansmile" translatable="false">¯\\_(ツ)_/¯</string>
     <string name="substitute_class">Substitutes %1$s</string>
+    <string name="current_week">M: %1$s\nF: %2$s</string>
+    <string name="dialog_close">Close</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

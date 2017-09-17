@@ -1,7 +1,9 @@
 package com.speedyblur.kretaremastered.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -53,7 +55,7 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             convertView = inflater.inflate(R.layout.gradelist_item, parent, false);
 
             holder = new ViewHolder();
@@ -88,11 +90,12 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
     @Override
     public View getHeaderView(int position, View convertView, ViewGroup parent) {
         HeaderViewHolder headerholder;
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             convertView = inflater.inflate(R.layout.datedgrade_header, parent, false);
 
             headerholder = new HeaderViewHolder();
             headerholder.textView = convertView.findViewById(R.id.datedGradeHeader);
+            headerholder.datedGradeGroupBar = convertView.findViewById(R.id.datedGradeGroupBar);
 
             convertView.setTag(headerholder);
         } else {
@@ -100,7 +103,9 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MMMM", Locale.getDefault());
+        headerholder.textView.setTypeface(Typeface.createFromAsset(ctxt.getAssets(), "fonts/OpenSans-Light.ttf"));
         headerholder.textView.setText(dateFormat.format(new Date((long) grades.get(position).getDate() * 1000)));
+        headerholder.datedGradeGroupBar.getLayoutParams().width = (int) Math.round(Resources.getSystem().getDisplayMetrics().widthPixels * 0.8);
 
         return convertView;
     }
@@ -126,5 +131,6 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
 
     private static class HeaderViewHolder {
         TextView textView;
+        View datedGradeGroupBar;
     }
 }
