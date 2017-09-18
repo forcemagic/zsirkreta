@@ -84,23 +84,22 @@ public class Clazz implements Parcelable {
 
     public Drawable getIcon(Context ctxt) {
         Drawable toSet;
-        if (!isHeld) {
-            toSet = ContextCompat.getDrawable(ctxt, R.drawable.class_not_held_icon_gray).mutate();
-            if ((long) beginTime*1000 < Calendar.getInstance().getTimeInMillis()) {
-                toSet.setColorFilter(ContextCompat.getColor(ctxt, R.color.pastNotHeldClass), PorterDuff.Mode.SRC_ATOP);
-            }
+        if (!isHeld && (long) beginTime*1000 < Calendar.getInstance().getTimeInMillis()) {
+            toSet = ContextCompat.getDrawable(ctxt, R.drawable.class_not_held_icon_orange);
+        } else if (!isHeld) {
+            toSet = ContextCompat.getDrawable(ctxt, R.drawable.class_not_held_icon_gray);
         } else if (isAbsent && absenceDetails.isProven()) {
             toSet = ContextCompat.getDrawable(ctxt, R.drawable.check_circle_icon_green);
         } else if (isAbsent && !absenceDetails.isProven()) {
             toSet = ContextCompat.getDrawable(ctxt, R.drawable.dash_circle_icon_red);
         } else if ((long) beginTime*1000 <= Calendar.getInstance().getTimeInMillis() && Calendar.getInstance().getTimeInMillis() <= (long) endTime*1000) {
             toSet = ContextCompat.getDrawable(ctxt, R.drawable.current_class_icon_green);
-        } else if ((long) beginTime*1000 < Calendar.getInstance().getTimeInMillis()) {
-            toSet = ContextCompat.getDrawable(ctxt, R.drawable.normalgrade).mutate();
-            toSet.setColorFilter(ContextCompat.getColor(ctxt, R.color.goodGrade), PorterDuff.Mode.SRC_ATOP);
         } else {
             toSet = ContextCompat.getDrawable(ctxt, R.drawable.normalgrade).mutate();
-            toSet.setColorFilter(ContextCompat.getColor(ctxt, android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
+            if ((long) beginTime * 1000 < Calendar.getInstance().getTimeInMillis())
+                toSet.setColorFilter(ContextCompat.getColor(ctxt, R.color.goodGrade), PorterDuff.Mode.SRC_ATOP);
+            else
+                toSet.setColorFilter(ContextCompat.getColor(ctxt, android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
         }
         return toSet;
     }

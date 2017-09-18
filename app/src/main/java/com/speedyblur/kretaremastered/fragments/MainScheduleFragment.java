@@ -197,6 +197,8 @@ public class MainScheduleFragment extends Fragment {
         lv.setAdapter(new ClazzAdapter(getContext(), listElements));
 
         TextView currentDate = getActivity().findViewById(R.id.currentScheduleDate);
+        Typeface tFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf");
+        currentDate.setTypeface(Typeface.create(tFace, Typeface.BOLD));
         currentDate.setText(new SimpleDateFormat("MMMM dd.", Locale.getDefault()).format(c.getTime()));
 
         Calendar postCal = (Calendar) day.getCalendar().clone();
