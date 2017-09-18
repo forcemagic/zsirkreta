@@ -141,6 +141,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             shouldShowMenu = false;
             invalidateOptionsMenu();
             vf.setDisplayedChild(2);
+        } else if (id == R.id.nav_announcements) {
+            toolbar.setTitle(R.string.title_activity_announcements);
+            shouldShowMenu = false;
+            invalidateOptionsMenu();
+            vf.setDisplayedChild(3);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

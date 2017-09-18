@@ -6,6 +6,7 @@ import android.util.Log;
 import com.github.mikephil.charting.data.Entry;
 import com.speedyblur.kretaremastered.models.AbsenceDetails;
 import com.speedyblur.kretaremastered.models.AllDayEvent;
+import com.speedyblur.kretaremastered.models.Announcement;
 import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.models.AvgGraphData;
 import com.speedyblur.kretaremastered.models.Clazz;
@@ -176,6 +177,23 @@ public class DataStore {
         }
     }
 
+    public void putAnnouncementsData(ArrayList<Announcement> announcements) {
+        // Truncate table
+        truncateTableIfExists("announcements_"+profileName);
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS announcements_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, teacher TEXT, content TEXT, date INTEGER)");
+        Log.d(LOGTAG, "Created announcements table (IF NOT EXISTS) for profile "+profileName);
+
+        Log.d(LOGTAG, "About to put "+announcements.size()+" announcements into DB");
+        for (int i=0; i<announcements.size(); i++) {
+            Announcement a = announcements.get(i);
+            db.execSQL("INSERT INTO announcements_"+profileName+" (teacher, content, date) VALUES (?, ?, ?)", new String[] {a.getTeacher(), a.getContent(), String.valueOf(a.getDate())});
+        }
+
+        updateLastSave();
+        Log.d(LOGTAG, "INSERT INTO statements finished.");
+    }
+
     public ArrayList<Grade> getGradesData() {
         if (!tableExists("grades_"+profileName)) return new ArrayList<>();
         Cursor c = db.rawQuery("SELECT * FROM grades_"+profileName, null);
@@ -300,6 +318,28 @@ public class DataStore {
             } while (c.moveToNext());
             c.close();
             return clazzes;
+        } else {
+            c.close();
+            return new ArrayList<>();
+        }
+    }
+
+    public ArrayList<Announcement> getAnnouncementsData() {
+        if (!tableExists("announcements_"+profileName)) return new ArrayList<>();
+        Cursor c = db.rawQuery("SELECT * FROM announcements_"+profileName, null);
+        c.moveToFirst();
+        if (c.getCount() != 0) {
+            ArrayList<Announcement> announcements = new ArrayList<>();
+            do {
+                Announcement a = new Announcement(
+                        c.getString(c.getColumnIndex("teacher")),
+                        c.getString(c.getColumnIndex("content")),
+                        c.getInt(c.getColumnIndex("date"))
+                );
+                announcements.add(a);
+            } while (c.moveToNext());
+            c.close();
+            return announcements;
         } else {
             c.close();
             return new ArrayList<>();

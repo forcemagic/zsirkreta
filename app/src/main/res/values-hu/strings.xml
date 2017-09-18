@@ -101,4 +101,7 @@
     <string name="classinfo_teacher">Tanár:</string>
     <string name="classinfo_room">Terem:</string>
     <string name="classinfo_time">Idö:</string>
+    <string name="loading_announcements">Faliújság betöltése…</string>
+    <string name="no_announcements">Itt nincs semmi!</string>
+    <string name="title_activity_announcements">Faliújság</string>
 </resources>
