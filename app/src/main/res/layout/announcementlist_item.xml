@@ -1,25 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="12dp">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/announcementTeacher"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/white"
+        android:elevation="3dp"
+        android:padding="6dp">
+
+        <TextView
+            android:id="@+id/announcementContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/announcementTeacher"
+            android:layout_marginTop="4dp"
+            android:text="@string/blablabla" />
+
+        <TextView
+            android:id="@+id/announcementTeacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/blablabla"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="@string/blablabla"
-        android:textColor="@android:color/black"
-        android:textSize="18sp" />
+        android:layout_margin="2dp"
+        android:elevation="4dp"
+        app:srcCompat="@drawable/calendar_goodbullet" />
 
-    <TextView
-        android:id="@+id/announcementContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/announcementTeacher"
-        android:layout_marginTop="4dp"
-        android:text="@string/blablabla" />
 </RelativeLayout>

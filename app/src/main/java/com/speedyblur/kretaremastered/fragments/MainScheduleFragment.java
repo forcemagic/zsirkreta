@@ -206,7 +206,6 @@ public class MainScheduleFragment extends Fragment {
         SimpleDateFormat weekFmt = new SimpleDateFormat("MMM. dd.", Locale.getDefault());
         postCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); String dateMonday = weekFmt.format(postCal.getTime());
         postCal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY); String dateFriday = weekFmt.format(postCal.getTime());
-        currentWeek.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf"));
         currentWeek.setText(getString(R.string.current_week, dateMonday, dateFriday));
     }
 

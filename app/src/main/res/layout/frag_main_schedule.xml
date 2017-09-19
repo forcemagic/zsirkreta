@@ -40,6 +40,7 @@
         android:layout_alignBottom="@id/calendarImageButton"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
+        android:fontFamily="monospace"
         android:gravity="center_vertical"
         android:paddingEnd="12dp"
         android:paddingStart="12dp"

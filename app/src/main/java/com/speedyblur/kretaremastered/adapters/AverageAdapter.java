@@ -17,7 +17,11 @@ import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
+import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.speedyblur.kretaremastered.EpochToDateFormatter;
 import com.speedyblur.kretaremastered.R;
@@ -124,6 +128,7 @@ public class AverageAdapter extends BaseExpandableListAdapter {
             holder.chart.getAxisRight().setDrawLabels(false);
             holder.chart.getDescription().setEnabled(false);
             holder.chart.getLegend().setEnabled(false);
+            holder.chart.setScaleEnabled(false);
 
             convertView.setTag(holder);
         } else {
@@ -142,12 +147,10 @@ public class AverageAdapter extends BaseExpandableListAdapter {
         // DataSet settings
         final LineDataSet lds = new LineDataSet(ds.getAverageGraphData(items.get(pos).getSubject()).getEntries(), "Averages");
         ds.close();
-        lds.setColor(R.color.colorPrimaryDark);
         lds.setValueTextColor(R.color.colorPrimaryDark);
         lds.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         lds.setDrawFilled(true);
-        lds.setFillColor(android.R.color.black);
-        lds.setLineWidth(4f);
+        lds.setLineWidth(2f);
         lds.setValueTextSize(12f);
         lds.setValueFormatter(new IValueFormatter() {
             @Override
@@ -158,6 +161,11 @@ public class AverageAdapter extends BaseExpandableListAdapter {
                 return String.valueOf((double) Math.round(value * 100) / 100);
             }
         });
+        lds.setCircleRadius(2f);
+        lds.setCircleHoleRadius(1f);
+        lds.setCircleColor(ContextCompat.getColor(ctxt, android.R.color.black));
+        lds.setFillColor(ContextCompat.getColor(ctxt, R.color.colorAccent));
+        lds.setColor(ContextCompat.getColor(ctxt, R.color.colorAccent));
 
         // Reset chart
         holder.chart.getXAxis().removeAllLimitLines();
@@ -175,6 +183,7 @@ public class AverageAdapter extends BaseExpandableListAdapter {
             LimitLine limit = new LimitLine(halftermtime);
             limit.setLineWidth(2f);
             limit.enableDashedLine(24f, 6f, 0f);
+            limit.setLineColor(ContextCompat.getColor(ctxt, R.color.veryBadGrade));
             holder.chart.getXAxis().addLimitLine(limit);
         }
 
