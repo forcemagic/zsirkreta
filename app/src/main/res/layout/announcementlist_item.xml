@@ -12,7 +12,8 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
         android:elevation="3dp"
-        android:padding="6dp">
+        android:padding="6dp"
+        android:id="@+id/relativeLayout3">
 
         <TextView
             android:id="@+id/announcementContent"
@@ -32,6 +33,16 @@
             android:text="@string/blablabla"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/announcementDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/announcementContent"
+            android:layout_marginTop="4dp"
+            android:text="@string/blablabla"
+            android:textSize="12sp" />
     </RelativeLayout>
 
     <ImageView

@@ -12,7 +12,9 @@ import android.widget.TextView;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.Announcement;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
     public AnnouncementAdapter(@NonNull Context ctxt, ArrayList<Announcement> announcements) {
@@ -29,6 +31,7 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
             holder = new ViewHolder();
             holder.mTeacher = convertView.findViewById(R.id.announcementTeacher);
             holder.mContent = convertView.findViewById(R.id.announcementContent);
+            holder.mDate = convertView.findViewById(R.id.announcementDate);
 
             convertView.setTag(holder);
         } else {
@@ -40,6 +43,7 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
 
         holder.mTeacher.setText(a.getTeacher());
         holder.mContent.setText(a.getContent());
+        holder.mDate.setText(SimpleDateFormat.getDateInstance().format(new Date((long) a.getDate()*1000)));
 
         return convertView;
     }
@@ -47,5 +51,6 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
     private static class ViewHolder {
         TextView mTeacher;
         TextView mContent;
+        TextView mDate;
     }
 }

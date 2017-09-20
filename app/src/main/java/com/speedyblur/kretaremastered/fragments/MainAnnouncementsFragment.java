@@ -42,7 +42,6 @@ public class MainAnnouncementsFragment extends Fragment {
 
         ListView aList = (ListView) parent.findViewById(R.id.announcementsList);
         aList.setEmptyView(parent.findViewById(R.id.announcementsEmptyView));
-        Log.d("SOMETHING", String.valueOf( announcements.size()));
         aList.setAdapter(new AnnouncementAdapter(getContext(), announcements));
     }
 }
