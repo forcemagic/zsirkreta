@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -120,12 +121,14 @@ public class AverageAdapter extends BaseExpandableListAdapter {
 
             // Chart
             holder.chart = convertView.findViewById(R.id.averageChart);
+            holder.chart.getContentRect().right = 8f;
             holder.chart.getXAxis().setTextSize(10f);
             holder.chart.getXAxis().setLabelCount(4);
             holder.chart.getXAxis().setValueFormatter(new EpochToDateFormatter());
             holder.chart.getXAxis().setAvoidFirstLastClipping(true);
-            holder.chart.getAxisLeft().setTextSize(16f);
-            holder.chart.getAxisRight().setDrawLabels(false);
+            holder.chart.getAxisLeft().setTextSize(12f);
+            holder.chart.getAxisLeft().setAxisMaximum(5f);
+            holder.chart.getAxisRight().setEnabled(false);
             holder.chart.getDescription().setEnabled(false);
             holder.chart.getLegend().setEnabled(false);
             holder.chart.setScaleEnabled(false);

@@ -94,7 +94,7 @@ public class MainScheduleFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 Clazz c = (Clazz) adapterView.getItemAtPosition(pos);
-                View dialView = LayoutInflater.from(getContext()).inflate(R.layout.class_information_dialog, null);
+                View dialView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_class_details, null);
 
                 ImageView mClassIcon = dialView.findViewById(R.id.classInfoIcon);
                 TextView mSubject = dialView.findViewById(R.id.classInfoSubject);

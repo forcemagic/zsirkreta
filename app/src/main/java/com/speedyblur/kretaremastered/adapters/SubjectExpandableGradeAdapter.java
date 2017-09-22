@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,15 +70,23 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
         return false;
     }
 
+    // TODO: ViewHolder pattern
     @Override
     @SuppressLint("inflateparams")
-    public View getGroupView(int i, boolean b, View convertView, ViewGroup viewGroup) {
+    public View getGroupView(int i, boolean isExp, View convertView, ViewGroup viewGroup) {
         convertView = inflater.inflate(R.layout.gradegroup_item, null);
 
         SubjectGradeGroup subjectGradeGroup = getGroup(i);
         View gradeGroupBar = convertView.findViewById(R.id.gradeGroupBar);
         TextView subjNameView = convertView.findViewById(R.id.gradeGroupTitle);
+
         gradeGroupBar.getLayoutParams().width = (int) Math.round(Resources.getSystem().getDisplayMetrics().widthPixels * 0.8);
+        if (isExp) {
+            Drawable ggbBg = ContextCompat.getDrawable(context, R.drawable.grade_group_bar);
+            ggbBg.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+            gradeGroupBar.setBackground(ggbBg);
+        }
+
         subjNameView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Light.ttf"));
         subjNameView.setText(Common.getLocalizedSubjectName(context, subjectGradeGroup.getSubject()));
 
