@@ -39,10 +39,17 @@ public class WelcomeActivity extends AppCompatActivity {
     private SharedPreferences shPrefs;
 
     @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         shPrefs = getSharedPreferences("main", MODE_PRIVATE);
         if (shPrefs.getBoolean("isFirstStart", true)) {
+            // Deleting leftover DB
+            getDatabasePath("accounts.db").mkdirs();
+            getDatabasePath("accounts.db").delete();
+            getDatabasePath("userdata.db").mkdirs();
+            getDatabasePath("userdata.db").delete();
+
             setContentView(R.layout.activity_welcome);
 
             getSupportFragmentManager().beginTransaction().add(R.id.welcomeFragment, new WelcomeSlideFirstFragment()).commit();

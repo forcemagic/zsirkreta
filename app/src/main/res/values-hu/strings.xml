@@ -104,4 +104,7 @@
     <string name="loading_announcements">Faliújság betöltése…</string>
     <string name="no_announcements">Itt nincs semmi!</string>
     <string name="title_activity_announcements">Faliújság</string>
+    <string name="announcementinfo_author">Írta:</string>
+    <string name="announcementinfo_date">Dátum:</string>
+    <string name="announcementinfo_title">Üzenet</string>
 </resources>

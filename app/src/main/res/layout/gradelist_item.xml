@@ -10,11 +10,11 @@
         android:layout_alignBottom="@+id/gradeBullet"
         android:layout_alignStart="@+id/gradeBullet"
         android:layout_alignTop="@+id/gradeBullet"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="3dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/gradeBullet"
         android:background="@android:color/white">
 
@@ -59,19 +59,24 @@
 
     <ImageView
         android:id="@+id/gradeBullet"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="67dp"
+        android:layout_height="67dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
         app:srcCompat="@drawable/normalgrade" />
 
     <TextView
         android:id="@+id/grade"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="67dp"
+        android:layout_height="67dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="fill_vertical"
         android:text="5"
         android:textAlignment="center"

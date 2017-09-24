@@ -238,7 +238,7 @@ public class ProfileListActivity extends AppCompatActivity {
 
                     // Commit
                     DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
-                    ds.putAnnouncementsData(announcements);
+                    ds.upsertAnnouncementsData(announcements);
                     ds.close();
                     runOnUiThread(new Runnable() {
                         @Override

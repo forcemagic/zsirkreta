@@ -95,7 +95,7 @@ public class Clazz implements Parcelable {
         } else if ((long) beginTime*1000 <= Calendar.getInstance().getTimeInMillis() && Calendar.getInstance().getTimeInMillis() <= (long) endTime*1000) {
             toSet = ContextCompat.getDrawable(ctxt, R.drawable.current_class_icon_green);
         } else {
-            toSet = ContextCompat.getDrawable(ctxt, R.drawable.normalgrade).mutate();
+            toSet = ContextCompat.getDrawable(ctxt, R.drawable.schedule_circle).mutate();
             if ((long) beginTime * 1000 < Calendar.getInstance().getTimeInMillis())
                 toSet.setColorFilter(ContextCompat.getColor(ctxt, R.color.goodGrade), PorterDuff.Mode.SRC_ATOP);
             else

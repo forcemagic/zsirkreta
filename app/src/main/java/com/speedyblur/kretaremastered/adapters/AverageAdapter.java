@@ -1,6 +1,7 @@
 package com.speedyblur.kretaremastered.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
@@ -126,8 +127,10 @@ public class AverageAdapter extends BaseExpandableListAdapter {
             holder.chart.getXAxis().setLabelCount(4);
             holder.chart.getXAxis().setValueFormatter(new EpochToDateFormatter());
             holder.chart.getXAxis().setAvoidFirstLastClipping(true);
-            holder.chart.getAxisLeft().setTextSize(12f);
-            holder.chart.getAxisLeft().setAxisMaximum(5f);
+            holder.chart.getAxisLeft().setTextSize(18f);
+            holder.chart.getAxisLeft().setAxisMaximum(5.2f);
+            holder.chart.getAxisLeft().setDrawTopYLabelEntry(true);
+            holder.chart.getAxisLeft().setGranularity(0.5f);
             holder.chart.getAxisRight().setEnabled(false);
             holder.chart.getDescription().setEnabled(false);
             holder.chart.getLegend().setEnabled(false);
@@ -166,7 +169,7 @@ public class AverageAdapter extends BaseExpandableListAdapter {
         });
         lds.setCircleRadius(2f);
         lds.setCircleHoleRadius(1f);
-        lds.setCircleColor(ContextCompat.getColor(ctxt, android.R.color.black));
+        lds.setCircleColor(Color.BLACK);
         lds.setFillColor(ContextCompat.getColor(ctxt, R.color.colorAccent));
         lds.setColor(ContextCompat.getColor(ctxt, R.color.colorAccent));
 

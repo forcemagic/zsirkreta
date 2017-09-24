@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 // TODO: Make this whole thing ASYNCHRONOUS
+// TODO: Refactoring. This DS needs optimizations. A LOT.
 public class DataStore {
     private final static String LOGTAG = "DataStore";
     private SQLiteDatabase db;
@@ -36,14 +37,12 @@ public class DataStore {
 
         SQLiteDatabase.loadLibs(ctxt);
         File dbFile = ctxt.getDatabasePath("userdata.db");
-        if (!dbFile.mkdirs() || !dbFile.delete()) Log.w(LOGTAG, "Call mkdirs() or delete() failed. [NON-FATAL]");
         try {
             db = SQLiteDatabase.openOrCreateDatabase(dbFile, passwd, null);
         } catch (SQLException e) {
-            Log.e(LOGTAG, "Unable to decrypt DB. (Assuming incorrect password)");
+            Log.e(LOGTAG, "Unable to decrypt DB. (Assuming incorrect password) Got error: "+e.getMessage());
             throw new DecryptionException("Unable to open database. (Is encrypted or is not a DB)");
         }
-        Log.d(LOGTAG, "Successfully opened userdata DB.");
     }
 
     public void putGradesData(ArrayList<Grade> grades) {
@@ -62,7 +61,6 @@ public class DataStore {
         }
 
         updateLastSave();
-        Log.d(LOGTAG, "INSERT INTO statements finished.");
     }
 
     public void putAveragesData(ArrayList<Average> averages) {
@@ -80,7 +78,6 @@ public class DataStore {
         }
 
         updateLastSave();
-        Log.d(LOGTAG, "INSERT INTO statements finished.");
     }
 
     public void putAverageGraphData(ArrayList<AvgGraphData> graphData) {
@@ -90,7 +87,7 @@ public class DataStore {
         db.execSQL("CREATE TABLE IF NOT EXISTS avggraph_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, x REAL, y INTEGER, isspecial INTEGER)");
         Log.d(LOGTAG, "Created avggraph table (IF NOT EXISTS) for profile "+profileName);
 
-        Log.d(LOGTAG, "About to put "+graphData.size()+" averages into DB");
+        Log.d(LOGTAG, "About to put "+graphData.size()+" avggraph subjects into DB");
         for (int i=0; i<graphData.size(); i++) {
             AvgGraphData avgData = graphData.get(i);
             for (int j=0; j<avgData.getEntries().size(); j++) {
@@ -101,7 +98,6 @@ public class DataStore {
         }
 
         updateLastSave();
-        Log.d(LOGTAG, "INSERT INTO statements finished.");
     }
 
     public void putAllDayEventsData(ArrayList<AllDayEvent> allDayEvents) {
@@ -118,7 +114,6 @@ public class DataStore {
         }
 
         updateLastSave();
-        Log.d(LOGTAG, "INSERT INTO statements finished.");
     }
 
     public void putClassesData(ArrayList<Clazz> clazzes) {
@@ -127,7 +122,7 @@ public class DataStore {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS clazzes_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, grp TEXT, teacher TEXT," +
                 " room TEXT, classnum INTEGER, begin INTEGER, end INTEGER, theme TEXT, isheld INTEGER, isabsent INTEGER, absencetype TEXT, absenceprovementtype TEXT," +
-                " proven INTEGER);");
+                " proven INTEGER, UNIQUE (subject, begin, end) ON CONFLICT IGNORE);");
         Log.d(LOGTAG, "Created clazzes table (IF NOT EXISTS) for profile "+profileName);
 
         Log.d(LOGTAG, "About to put "+clazzes.size()+" clazzes into DB");
@@ -150,48 +145,65 @@ public class DataStore {
         }
 
         updateLastSave();
-        Log.d(LOGTAG, "INSERT INTO statements finished.");
     }
 
     public void upsertClassData(ArrayList<Clazz> clazzes) {
-        if (!tableExists("clazzes_"+profileName)) throw new RuntimeException("This is impossible!");
-        Log.d(LOGTAG, "About to 'upsert' "+clazzes.size()+" classes.");
+        if (!tableExists("clazzes_"+profileName)) {
+            // Note the UNIQUE constraint!
+            db.execSQL("CREATE TABLE clazzes_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, grp TEXT, teacher TEXT," +
+                    " room TEXT, classnum INTEGER, begin INTEGER, end INTEGER, theme TEXT, isheld INTEGER, isabsent INTEGER, absencetype TEXT, absenceprovementtype TEXT," +
+                    " proven INTEGER, UNIQUE (subject, begin, end) ON CONFLICT IGNORE);");
+            Log.d(LOGTAG, "Created clazzes table for profile "+profileName);
+        }
+
+        Log.d(LOGTAG, "About to upsert "+clazzes.size()+" classes into DB");
         for (int i=0; i<clazzes.size(); i++) {
             Clazz c = clazzes.get(i);
-            db.execSQL("DELETE FROM clazzes_"+profileName+" WHERE begin=? AND end=? AND subject=?", new String[] {
-                    String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getSubject()});
             if (c.isAbsent()) {
+                db.execSQL("UPDATE clazzes_"+profileName+" SET grp=?, teacher=?, room=?, classnum=?, theme=?, isheld=?, isabsent=?, absencetype=?, absenceprovementtype=?, proven=? " +
+                        "WHERE subject=? AND begin=? AND end=?", new String[] {c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()), c.getTheme(),
+                            c.isHeld() ? "1" : "0", "1", c.getAbsenceDetails().getType(), c.getAbsenceDetails().getProvementType(), c.getAbsenceDetails().isProven() ? "1" : "0",
+                            c.getSubject(), String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime())});
                 db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, " +
                         "isabsent, absencetype, absenceprovementtype, proven) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
-                        c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
-                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "1", c.getAbsenceDetails().getType(),
-                        c.getAbsenceDetails().getProvementType(), c.getAbsenceDetails().isProven() ? "1" : "0"
-                });
+                            c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
+                            String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "1", c.getAbsenceDetails().getType(),
+                            c.getAbsenceDetails().getProvementType(), c.getAbsenceDetails().isProven() ? "1" : "0"});
             } else {
+                db.execSQL("UPDATE clazzes_"+profileName+" SET grp=?, teacher=?, room=?, classnum=?, theme=?, isheld=?, isabsent=? WHERE subject=? AND begin=? AND end=?",
+                        new String[] {c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()), c.getTheme(), c.isHeld() ? "1" : "0", "0",
+                        c.getSubject(), String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime())});
                 db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, isabsent) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
                         c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
-                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "0"
-                });
+                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "0"});
             }
         }
+        updateLastSave();
     }
 
-    public void putAnnouncementsData(ArrayList<Announcement> announcements) {
-        // Truncate table
-        truncateTableIfExists("announcements_"+profileName);
+    public void upsertAnnouncementsData(ArrayList<Announcement> announcements) {
+        upsertAnnouncementsData(announcements, false);
+    }
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS announcements_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, teacher TEXT, content TEXT, date INTEGER)");
-        Log.d(LOGTAG, "Created announcements table (IF NOT EXISTS) for profile "+profileName);
-
-        Log.d(LOGTAG, "About to put "+announcements.size()+" announcements into DB");
-        for (int i=0; i<announcements.size(); i++) {
-            Announcement a = announcements.get(i);
-            db.execSQL("INSERT INTO announcements_"+profileName+" (teacher, content, date) VALUES (?, ?, ?)", new String[] {a.getTeacher(), a.getContent(), String.valueOf(a.getDate())});
+    public void upsertAnnouncementsData(ArrayList<Announcement> announcements, boolean doUpdate) {
+        if (!tableExists("announcements_"+profileName)) {
+            // Note the UNIQUE constraint!
+            db.execSQL("CREATE TABLE announcements_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, teacher TEXT, content TEXT, date INTEGER, isseen INTEGER,"+
+                    "UNIQUE (teacher, content, date) ON CONFLICT IGNORE)");
+            Log.d(LOGTAG, "Created announcements table for profile "+profileName);
         }
 
+        Log.d(LOGTAG, "About to upsert "+announcements.size()+" announcements into DB");
+        for (int i=0; i<announcements.size(); i++) {
+            Announcement a = announcements.get(i);
+            if (doUpdate)
+                db.execSQL("UPDATE announcements_"+profileName+" SET isseen=? WHERE teacher=? AND content=? AND date=?",
+                        new String[] {a.isSeen() ? "1" : "0", a.getTeacher(), a.getContent(), String.valueOf(a.getDate())});
+            db.execSQL("INSERT INTO announcements_"+profileName+" (teacher, content, date, isseen) VALUES (?, ?, ?, ?)",
+                    new String[] {a.getTeacher(), a.getContent(), String.valueOf(a.getDate()), a.isSeen() ? "1" : "0"});
+        }
         updateLastSave();
-        Log.d(LOGTAG, "INSERT INTO statements finished.");
     }
 
     public ArrayList<Grade> getGradesData() {
@@ -280,6 +292,7 @@ public class DataStore {
     }
 
     public ArrayList<Clazz> getClassesData() {
+        if (!tableExists("clazzes_"+profileName)) return new ArrayList<>();
         Cursor c = db.rawQuery("SELECT * FROM clazzes_"+profileName, null);
         c.moveToFirst();
         if (c.getCount() != 0) {
@@ -334,7 +347,8 @@ public class DataStore {
                 Announcement a = new Announcement(
                         c.getString(c.getColumnIndex("teacher")),
                         c.getString(c.getColumnIndex("content")),
-                        c.getInt(c.getColumnIndex("date"))
+                        c.getInt(c.getColumnIndex("date")),
+                        c.getInt(c.getColumnIndex("isseen")) == 1
                 );
                 announcements.add(a);
             } while (c.moveToNext());
@@ -373,12 +387,14 @@ public class DataStore {
         if (tableExists("averages_"+profileName)) db.execSQL("DROP TABLE averages_"+profileName);
         if (tableExists("alldayevents_"+profileName)) db.execSQL("DROP TABLE alldayevents_"+profileName);
         if (tableExists("clazzes_"+profileName)) db.execSQL("DROP TABLE clazzes_"+profileName);
+        if (tableExists("announcements_"+profileName)) db.execSQL("DROP TABLE announcements_"+profileName);
         if (tableExists("lastsave")) db.execSQL("DELETE FROM lastsave WHERE userid=?", new String[] {profileName});
         close();
         Log.d(LOGTAG, "Done.");
     }
 
-    private void updateLastSave() {
+    // TODO: Call this on every SUCCESSFUL save. Not on every update.
+    public void updateLastSave() {
         db.execSQL("CREATE TABLE IF NOT EXISTS lastsave(userid TEXT, stamp INTEGER);");
         db.execSQL("INSERT INTO lastsave (userid, stamp) VALUES (?, ?);", new String[] {profileName, String.valueOf(System.currentTimeMillis())});
     }
@@ -404,6 +420,5 @@ public class DataStore {
 
     public void close() {
         db.close();
-        Log.d(LOGTAG, "DB closed.");
     }
 }

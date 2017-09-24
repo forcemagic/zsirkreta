@@ -11,17 +11,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:background="@android:color/white"
-        android:padding="6dp"
-        android:id="@+id/relativeLayout3">
-
-        <TextView
-            android:id="@+id/announcementContent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/announcementTeacher"
-            android:layout_marginTop="4dp"
-            android:text="@string/blablabla" />
+        android:padding="6dp">
 
         <TextView
             android:id="@+id/announcementTeacher"
@@ -32,6 +22,17 @@
             android:text="@string/blablabla"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/announcementContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/announcementTeacher"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/blablabla" />
 
         <TextView
             android:id="@+id/announcementDate"
@@ -45,12 +46,12 @@
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/announcementSeenBullet"
         android:layout_width="15dp"
         android:layout_height="15dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_margin="2dp"
+        android:layout_margin="5dp"
         app:srcCompat="@drawable/calendar_goodbullet" />
 
 </RelativeLayout>

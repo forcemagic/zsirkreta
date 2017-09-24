@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/relativeLayout2"
+        android:id="@+id/classInfoHeaderLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
@@ -37,15 +37,15 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/classInfoContentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout2"
+        android:layout_below="@+id/classInfoHeaderLayout"
         android:layout_centerHorizontal="true"
         android:layout_margin="12dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
-        android:orientation="vertical"
-        android:id="@+id/linearLayout2">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"

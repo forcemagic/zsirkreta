@@ -48,6 +48,11 @@
     <string name="classinfo_time">Time:</string>
     <string name="classinfo_room">Room:</string>
 
+    <!-- Announcements dialog -->
+    <string name="announcementinfo_title">Message</string>
+    <string name="announcementinfo_author">Author:</string>
+    <string name="announcementinfo_date">Date:</string>
+
     <!-- Loading messages (proc. indicators) -->
     <string name="loading_logging_in">Logging in…</string>
     <string name="loading_grades">Loading grades…</string>

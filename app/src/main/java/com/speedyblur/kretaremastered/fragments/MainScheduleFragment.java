@@ -75,7 +75,8 @@ public class MainScheduleFragment extends Fragment {
         Collections.sort(clazzes, new Comparator<Clazz>() {
             @Override
             public int compare(Clazz c1, Clazz c2) {
-                return c1.getBeginTime() - c2.getEndTime();
+                if (c1.getBeginTime() == c2.getBeginTime() && c1.getEndTime() == c2.getEndTime()) return 0;
+                return new Date((long) c1.getBeginTime()*1000).compareTo(new Date((long) c2.getEndTime()*1000));
             }
         });
 
