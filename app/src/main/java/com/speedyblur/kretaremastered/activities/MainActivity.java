@@ -16,11 +16,6 @@ import android.widget.ViewFlipper;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.Profile;
 
-// TODO FOREST!!!
-/*
- * #2 Portrait mode lock telefonon, de nem tableten(!!!)
- */
-// TODO FOREST END!
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean shouldShowMenu = true;
     private String lastMenuState;
@@ -146,6 +141,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             shouldShowMenu = false;
             invalidateOptionsMenu();
             vf.setDisplayedChild(2);
+        } else if (id == R.id.nav_announcements) {
+            toolbar.setTitle(R.string.title_activity_announcements);
+            shouldShowMenu = false;
+            invalidateOptionsMenu();
+            vf.setDisplayedChild(3);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

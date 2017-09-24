@@ -19,11 +19,11 @@ A Google Play és a Google Play logo a Google Inc. bejegyzett védjegyei.
 * Average list + GRAPHS! :tada:
 * Schedule view with absence indicator
 
-# Features to be implemented
+# Features & Suggestions
 
-Right now, nothing is planned. Suggestions are more than welcome: just send a mail to [`k.ideas@speedyblur.com`](mailto:k.ideas@speedyblur.com)
+Just look at the issue tracker (see below).
 
-Okay, there are things planned. Just look at the issue tracker (see below).
+Suggestions are more than welcome: just send a mail to [`k.ideas@speedyblur.com`](mailto:k.ideas@speedyblur.com)
 
 # Issues (aka. bugs)
 
@@ -49,12 +49,12 @@ Check the [`app/build.gradle`](https://github.com/forcemagic/kreta-remastered/bl
 * Átlag lista + GRAFIKON! :tada:
 * Napirend nézet hiányzások jelölésével
 
-# Tervezett funkciók
+# Tervezett funkciók & Javaslatok
 
-Most semmi terv nincs, de szívesen fogadom az ötleteket az erre fenntartott emailen:
+Ránézhetsz a hibakövetöre (lásd lentebb).
+
+Szívesen fogadom a javaslatokat az erre fenntartott emailen:
 [`k.ideas@speedyblur.com`](mailto:k.ideas@speedyblur.com) (Magyar nyelven is)
-
-Oké, vannak tervek. Ránézhetsz a hibakövetöre (lásd lentebb).
 
 # Hibák bejelentése
 

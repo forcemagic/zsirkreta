@@ -24,15 +24,14 @@ public class AccountStore {
 
         SQLiteDatabase.loadLibs(ctxt);
         File dbFile = ctxt.getDatabasePath("accounts.db");
-        if (!dbFile.mkdirs() || !dbFile.delete()) Log.w(LOGTAG, "Call mkdirs() or delete() failed. [NON-FATAL]");
         try {
             db = SQLiteDatabase.openOrCreateDatabase(dbFile, dbpasswd, null);
         } catch (SQLiteException e) {
-            Log.e(LOGTAG, "DB INIT: Unable to open DB. (Assuming incorrect password)");
+            Log.e(LOGTAG, "Unable to open DB. (Assuming incorrect password) Got error: "+e.getMessage());
+            e.printStackTrace();
             throw new DecryptionException("Unable to open database. (Is encrypted or is not a DB)");
         }
         db.execSQL("CREATE TABLE IF NOT EXISTS accounts(cardid VARCHAR(12) PRIMARY KEY NOT NULL, friendlyname VARCHAR(16), passwd VARCHAR(30) NOT NULL);");
-        Log.d(LOGTAG, "DB INIT: OK.");
     }
 
     public void addAccount(Profile p) throws SQLiteConstraintException {

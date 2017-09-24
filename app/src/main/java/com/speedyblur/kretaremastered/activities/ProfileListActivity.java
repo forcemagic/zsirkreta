@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.adapters.ProfileAdapter;
-import com.speedyblur.kretaremastered.models.AllDayEvent;
+import com.speedyblur.kretaremastered.models.Announcement;
 import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.models.AvgGraphData;
 import com.speedyblur.kretaremastered.models.AvgGraphDataDeserializer;
@@ -190,17 +190,10 @@ public class ProfileListActivity extends AppCompatActivity {
 
     private void loadSchedule(final Profile profile) {
         changeProgressStatus(R.string.loading_schedule);
-        HttpHandler.getJson(Common.APIBASE + "/schedule", headers, new HttpHandler.JsonRequestCallback() {
+        HttpHandler.getJson(Common.APIBASE + "/schedule?small", headers, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
                 try {
-                    ArrayList<AllDayEvent> allDayEvents = new ArrayList<>();
-                    for (int i=0; i<resp.getJSONObject("data").getJSONArray("allday").length(); i++) {
-                        JSONObject currentObj = resp.getJSONObject("data").getJSONArray("allday").getJSONObject(i);
-                        AllDayEvent ade = new Gson().fromJson(currentObj.toString(), AllDayEvent.class);
-                        allDayEvents.add(ade);
-                    }
-
                     ArrayList<Clazz> clazzes = new ArrayList<>();
                     for (int i=0; i<resp.getJSONObject("data").getJSONArray("classes").length(); i++) {
                         JSONObject currentObj = resp.getJSONObject("data").getJSONArray("classes").getJSONObject(i);
@@ -212,8 +205,40 @@ public class ProfileListActivity extends AppCompatActivity {
 
                     // Commit
                     DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
-                    ds.putAllDayEventsData(allDayEvents);
-                    ds.putClassesData(clazzes);
+                    ds.upsertClassData(clazzes);
+                    ds.close();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadAnnouncements(profile);
+                        }
+                    });
+                } catch (DecryptionException e) {e.printStackTrace();}
+            }
+
+            @Override
+            public void onFailure(int localizedError)  {
+                askCachedVersion(profile, localizedError);
+            }
+        });
+    }
+
+    private void loadAnnouncements(final Profile profile) {
+        changeProgressStatus(R.string.loading_announcements);
+        HttpHandler.getJson(Common.APIBASE + "/announcements", headers, new HttpHandler.JsonRequestCallback() {
+            @Override
+            public void onComplete(JSONObject resp) throws JSONException {
+                try {
+                    ArrayList<Announcement> announcements = new ArrayList<>();
+                    for (int i=0; i<resp.getJSONArray("data").length(); i++) {
+                        JSONObject currentObj = resp.getJSONArray("data").getJSONObject(i);
+                        Announcement a = new Gson().fromJson(currentObj.toString(), Announcement.class);
+                        announcements.add(a);
+                    }
+
+                    // Commit
+                    DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
+                    ds.upsertAnnouncementsData(announcements);
                     ds.close();
                     runOnUiThread(new Runnable() {
                         @Override
@@ -225,7 +250,7 @@ public class ProfileListActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int localizedError)  {
+            public void onFailure(int localizedError) {
                 askCachedVersion(profile, localizedError);
             }
         });

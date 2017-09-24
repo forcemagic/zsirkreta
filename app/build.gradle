@@ -36,4 +36,5 @@ dependencies {
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
     testCompile 'junit:junit:4.12'
     compile 'com.google.code.gson:gson:2.8.1'
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
 }

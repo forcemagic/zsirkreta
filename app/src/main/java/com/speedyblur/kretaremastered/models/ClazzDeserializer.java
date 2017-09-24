@@ -15,7 +15,8 @@ public class ClazzDeserializer implements JsonDeserializer<Clazz> {
         JsonObject jsObj = json.getAsJsonObject();
         return new Clazz(jsObj.get("subject").getAsString(), jsObj.get("group").getAsString(), jsObj.get("teacher").getAsString(),
                 jsObj.get("room").getAsString(), jsObj.get("classnum").getAsInt(), jsObj.get("begin").getAsInt(), jsObj.get("end").getAsInt(),
-                jsObj.get("theme").getAsString(), jsObj.get("isabsent").getAsBoolean(), jsObj.get("isabsent").getAsBoolean() ? new AbsenceDetails(
+                jsObj.get("theme").getAsString(), jsObj.get("isheld").getAsBoolean(), jsObj.get("isabsent").getAsBoolean(),
+                jsObj.get("isabsent").getAsBoolean() ? new AbsenceDetails(
                         jsObj.get("absencetype").getAsString(), jsObj.get("absenceprovementtype").getAsString(), jsObj.get("proven").getAsBoolean()
         ) : null);
     }

@@ -2,18 +2,18 @@
 <resources>
     <color name="colorPrimary">#222</color>
     <color name="colorPrimaryDark">#000</color>
-    <color name="colorAccent">#3030DF</color>
+    <color name="colorAccent">#3030df</color>
 
-    <color name="excellentGrade">#FF22EE22</color>
+    <color name="excellentGrade">#FF30d130</color>
     <color name="goodGrade">#FF44CC44</color>
     <color name="avgGrade">#FFCCCC44</color>
     <color name="badGrade">#FFCC4444</color>
     <color name="veryBadGrade">#FF960D0D</color>
 
-    <color name="gradebar">#FF3D556B</color>
-
     <color name="weekdaySelector">#FF425363</color>
     <color name="weekdayActive">#FFCC4444</color>
+
+    <color name="bgcolorActivity">#FFF0F0F0</color>
 
     <color name="transparent">#00000000</color>
 </resources>

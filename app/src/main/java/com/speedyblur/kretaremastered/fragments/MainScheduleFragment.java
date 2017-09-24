@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,10 +12,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDelegate;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -69,7 +75,8 @@ public class MainScheduleFragment extends Fragment {
         Collections.sort(clazzes, new Comparator<Clazz>() {
             @Override
             public int compare(Clazz c1, Clazz c2) {
-                return c1.getBeginTime() - c2.getEndTime();
+                if (c1.getBeginTime() == c2.getBeginTime() && c1.getEndTime() == c2.getEndTime()) return 0;
+                return new Date((long) c1.getBeginTime()*1000).compareTo(new Date((long) c2.getEndTime()*1000));
             }
         });
 
@@ -79,12 +86,47 @@ public class MainScheduleFragment extends Fragment {
         parent.findViewById(R.id.scheduleWednesdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.scheduleThursdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.scheduleFridaySelector).setOnClickListener(new BulletClick());
-        parent.findViewById(R.id.scheduleSaturdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.calendarImageButton).setOnClickListener(new CalendarClick());
 
         ListView schedList = (ListView) parent.findViewById(R.id.scheduleList);
         schedList.setEmptyView(parent.findViewById(R.id.noSchoolView));
         schedList.setOnTouchListener(new SwipeDetector());
+        schedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                Clazz c = (Clazz) adapterView.getItemAtPosition(pos);
+                View dialView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_class_details, null);
+
+                ImageView mClassIcon = dialView.findViewById(R.id.classInfoIcon);
+                TextView mSubject = dialView.findViewById(R.id.classInfoSubject);
+                TextView mTheme = dialView.findViewById(R.id.classInfoTheme);
+                TextView mTeacher = dialView.findViewById(R.id.classInfoTeacher);
+                TextView mTime = dialView.findViewById(R.id.classInfoTime);
+                TextView mRoom = dialView.findViewById(R.id.classInfoRoom);
+
+                mClassIcon.setImageDrawable(c.getIcon(getContext()));
+
+                mSubject.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf"));
+                String classNum = getString(R.string.class_number, c.getClassnum());
+                SpannableStringBuilder ssb = new SpannableStringBuilder(classNum+" "+Common.getLocalizedSubjectName(getContext(), c.getSubject()));
+                ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, classNum.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                mSubject.setText(ssb);
+
+                mTheme.setText(c.getTheme());
+                mTeacher.setText(c.getTeacher());
+                SimpleDateFormat fmt = new SimpleDateFormat("h:mm a", Locale.getDefault());
+                mTime.setText(fmt.format(new Date((long) c.getBeginTime()*1000))+" - "+fmt.format(new Date((long) c.getEndTime()*1000)));
+                mRoom.setText(c.getRoom().replace("(", "").replace(")", ""));
+
+                new AlertDialog.Builder(getContext()).setView(dialView)
+                        .setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).show();
+            }
+        });
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
 
         selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
@@ -122,7 +164,6 @@ public class MainScheduleFragment extends Fragment {
         getActivity().findViewById(R.id.scheduleWednesdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
         getActivity().findViewById(R.id.scheduleThursdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
         getActivity().findViewById(R.id.scheduleFridaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
-        getActivity().findViewById(R.id.scheduleSaturdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
 
         Drawable selectedBullet = ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector).mutate();
         selectedBullet.setColorFilter(ContextCompat.getColor(getContext(), R.color.weekdayActive), PorterDuff.Mode.SRC_ATOP);
@@ -136,10 +177,7 @@ public class MainScheduleFragment extends Fragment {
             getActivity().findViewById(R.id.scheduleThursdaySelector).setBackground(selectedBullet);
         } else if (day == Calendar.FRIDAY) {
             getActivity().findViewById(R.id.scheduleFridaySelector).setBackground(selectedBullet);
-        } else if (day == Calendar.SATURDAY) {
-            getActivity().findViewById(R.id.scheduleSaturdaySelector).setBackground(selectedBullet);
         }
-
     }
 
     private void showAbsenceListForDate(CalendarDay day) {
@@ -160,7 +198,16 @@ public class MainScheduleFragment extends Fragment {
         lv.setAdapter(new ClazzAdapter(getContext(), listElements));
 
         TextView currentDate = getActivity().findViewById(R.id.currentScheduleDate);
-        currentDate.setText(new SimpleDateFormat("yyyy. MMMM dd.", Locale.getDefault()).format(c.getTime()));
+        Typeface tFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf");
+        currentDate.setTypeface(Typeface.create(tFace, Typeface.BOLD));
+        currentDate.setText(new SimpleDateFormat("MMMM dd.", Locale.getDefault()).format(c.getTime()));
+
+        Calendar postCal = (Calendar) day.getCalendar().clone();
+        TextView currentWeek = getActivity().findViewById(R.id.scheduleCurrentWeek);
+        SimpleDateFormat weekFmt = new SimpleDateFormat("MMM. dd.", Locale.getDefault());
+        postCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); String dateMonday = weekFmt.format(postCal.getTime());
+        postCal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY); String dateFriday = weekFmt.format(postCal.getTime());
+        currentWeek.setText(getString(R.string.current_week, dateMonday, dateFriday));
     }
 
     private class SwipeDetector implements View.OnTouchListener {
@@ -246,8 +293,6 @@ public class MainScheduleFragment extends Fragment {
                 c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
             } else if (v.getId() == R.id.scheduleFridaySelector) {
                 c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-            } else if (v.getId() == R.id.scheduleSaturdaySelector) {
-                c.set(Calendar.DAY_OF_WEEK, Calendar.SATURDAY);
             }
 
             resetSelectBullet(c.get(Calendar.DAY_OF_WEEK));
@@ -273,6 +318,8 @@ public class MainScheduleFragment extends Fragment {
                         unprovenDates.add(CalendarDay.from(new Date((long) clazzes.get(i).getBeginTime() * 1000)));
                 }
             }
+
+            // TODO: This is kind of ugly, but it's the only way I know to do this.
             cView.addDecorators(new DayViewDecorator() {
                 @Override
                 public boolean shouldDecorate(CalendarDay day) {
@@ -292,6 +339,42 @@ public class MainScheduleFragment extends Fragment {
                 @Override
                 public void decorate(DayViewFacade view) {
                     view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.calendar_badbullet));
+                }
+            }, new DayViewDecorator() {
+                @Override
+                public boolean shouldDecorate(CalendarDay day) {
+                    return day.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                            && day.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+                            && !provenDates.contains(day) && !unprovenDates.contains(day);
+                }
+
+                @Override
+                public void decorate(DayViewFacade view) {
+                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.current_day_calendar_icon_black));
+                }
+            }, new DayViewDecorator() {
+                @Override
+                public boolean shouldDecorate(CalendarDay day) {
+                    return day.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                            && day.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+                            && provenDates.contains(day);
+                }
+
+                @Override
+                public void decorate(DayViewFacade view) {
+                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.cal_current_day_goodbullet));
+                }
+            }, new DayViewDecorator() {
+                @Override
+                public boolean shouldDecorate(CalendarDay day) {
+                    return day.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                            && day.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
+                            && unprovenDates.contains(day);
+                }
+
+                @Override
+                public void decorate(DayViewFacade view) {
+                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.cal_current_day_badbullet));
                 }
             });
 

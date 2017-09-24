@@ -1,7 +1,10 @@
 package com.speedyblur.kretaremastered.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -53,7 +56,7 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
     @Override
     public View getView(int pos, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             convertView = inflater.inflate(R.layout.gradelist_item, parent, false);
 
             holder = new ViewHolder();
@@ -62,8 +65,6 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
             holder.titleView = convertView.findViewById(R.id.gradeTitle);
             holder.descView1 = convertView.findViewById(R.id.gradeDesc);
             holder.descView2 = convertView.findViewById(R.id.gradeDesc2);
-            holder.gradeBarTop = convertView.findViewById(R.id.gradeBarTop);
-            holder.gradeBarBottom = convertView.findViewById(R.id.gradeBarBottom);
 
             convertView.setTag(holder);
         } else {
@@ -84,24 +85,13 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. M. d.", Locale.getDefault());
         holder.descView2.setText(dateFormat.format(new Date((long) gradeObj.getDate() * 1000)));
 
-        if (pos == 0 || getHeaderId(pos) != getHeaderId(pos - 1)) {
-            holder.gradeBarTop.setVisibility(View.INVISIBLE);
-            holder.gradeBarBottom.setVisibility(View.VISIBLE);
-        } else if (pos == getCount() - 1 || getHeaderId(pos) != getHeaderId(pos + 1)) {
-            holder.gradeBarTop.setVisibility(View.VISIBLE);
-            holder.gradeBarBottom.setVisibility(View.INVISIBLE);
-        } else {
-            holder.gradeBarTop.setVisibility(View.VISIBLE);
-            holder.gradeBarBottom.setVisibility(View.VISIBLE);
-        }
-
         return convertView;
     }
 
     @Override
     public View getHeaderView(int position, View convertView, ViewGroup parent) {
         HeaderViewHolder headerholder;
-        if (convertView == null) {
+        if (convertView == null || convertView.getTag() == null) {
             convertView = inflater.inflate(R.layout.datedgrade_header, parent, false);
 
             headerholder = new HeaderViewHolder();
@@ -113,6 +103,7 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
         }
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy MMMM", Locale.getDefault());
+        headerholder.textView.setTypeface(Typeface.createFromAsset(ctxt.getAssets(), "fonts/OpenSans-Light.ttf"));
         headerholder.textView.setText(dateFormat.format(new Date((long) grades.get(position).getDate() * 1000)));
 
         return convertView;
@@ -135,8 +126,6 @@ public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHea
         TextView titleView;
         TextView descView1;
         TextView descView2;
-        View gradeBarTop;
-        View gradeBarBottom;
     }
 
     private static class HeaderViewHolder {

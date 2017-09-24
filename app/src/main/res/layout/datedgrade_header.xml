@@ -18,9 +18,12 @@
         android:textSize="22sp" />
 
     <View
+        android:id="@+id/datedGradeGroupBar"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="2dp"
         android:layout_below="@id/datedGradeHeader"
-        android:background="@android:color/darker_gray"/>
+        android:layout_marginEnd="67dp"
+        android:layout_marginStart="67dp"
+        android:background="@drawable/grade_group_bar" />
 
 </RelativeLayout>

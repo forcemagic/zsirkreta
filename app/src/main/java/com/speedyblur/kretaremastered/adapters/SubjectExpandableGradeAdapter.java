@@ -2,7 +2,11 @@ package com.speedyblur.kretaremastered.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,12 +72,28 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
+    public boolean isChildSelectable(int i, int i1) {
+        return false;
+    }
+
+    // TODO: ViewHolder pattern
+    @Override
     @SuppressLint("inflateparams")
-    public View getGroupView(int i, boolean b, View convertView, ViewGroup viewGroup) {
+    public View getGroupView(int i, boolean isExp, View convertView, ViewGroup viewGroup) {
         convertView = inflater.inflate(R.layout.gradegroup_item, null);
 
         SubjectGradeGroup subjectGradeGroup = getGroup(i);
+        View gradeGroupBar = convertView.findViewById(R.id.gradeGroupBar);
         TextView subjNameView = convertView.findViewById(R.id.gradeGroupTitle);
+
+        gradeGroupBar.getLayoutParams().width = (int) Math.round(Resources.getSystem().getDisplayMetrics().widthPixels * 0.8);
+        if (isExp) {
+            Drawable ggbBg = ContextCompat.getDrawable(context, R.drawable.grade_group_bar);
+            ggbBg.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+            gradeGroupBar.setBackground(ggbBg);
+        }
+
+        subjNameView.setTypeface(Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Light.ttf"));
         subjNameView.setText(Common.getLocalizedSubjectName(context, subjectGradeGroup.getSubject()));
 
         return convertView;
@@ -91,19 +111,26 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
         }
 
         // Common things
-        ImageView gradeBullet = convertView.findViewById(R.id.gradeBullet);
         TextView gradeView = convertView.findViewById(R.id.grade);
         TextView titleView = convertView.findViewById(R.id.gradeTitle);
 
         gradeView.setText(String.valueOf(gradeObj.getGrade()));
-        gradeBullet.setColorFilter(ContextCompat.getColor(context, gradeObj.getColorId()), PorterDuff.Mode.SRC_ATOP);
 
         // Not common things
+        if (gradeObj.getType().contains("Félévi") || gradeObj.getType().contains("végi")) {
+            GradientDrawable gd = new GradientDrawable();
+            gd.setColor(ContextCompat.getColor(context, gradeObj.getColorId()));
+            gd.setCornerRadii(new float[] {200f, 200f, 0f, 0f, 0f, 0f, 200f, 200f});
+            convertView.findViewById(R.id.importantGradeInnerLayout).setBackground(gd);
+        }
         if (gradeObj.getType().contains("Félévi")) {
             titleView.setText(R.string.grade_end_of_halfterm);
         } else if (gradeObj.getType().contains("végi")) {
             titleView.setText(R.string.grade_end_of_year);
         } else {
+            ImageView gradeBullet = convertView.findViewById(R.id.gradeBullet);
+            gradeBullet.setColorFilter(ContextCompat.getColor(context, gradeObj.getColorId()), PorterDuff.Mode.SRC_ATOP);
+
             titleView.setText(capitalize(gradeObj.getType()));
 
             TextView descView1 = convertView.findViewById(R.id.gradeDesc);
@@ -114,17 +141,8 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
             } else {
                 descView1.setText(capitalize(gradeObj.getTheme()) + " - " + gradeObj.getTeacher());
             }
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy. M. d.", Locale.getDefault());
-            descView2.setText(dateFormat.format(new Date((long)gradeObj.getDate()*1000)));
-        }
-
-        if (i1 == 0) {
-            convertView.findViewById(R.id.gradeBarTop).setVisibility(View.INVISIBLE);
-        }
-
-        if (isLastChild) {
-            convertView.findViewById(R.id.gradeBarBottom).setVisibility(View.INVISIBLE);
+            descView2.setText(dateFormat.format(new Date((long) gradeObj.getDate()*1000)));
         }
 
         return convertView;
@@ -135,10 +153,5 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
      */
     private String capitalize(final String line) {
         return Character.toUpperCase(line.charAt(0)) + line.substring(1);
-    }
-
-    @Override
-    public boolean isChildSelectable(int i, int i1) {
-        return false;
     }
 }

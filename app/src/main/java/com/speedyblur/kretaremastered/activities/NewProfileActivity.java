@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -16,17 +17,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.speedyblur.kretaremastered.R;
+import com.speedyblur.kretaremastered.models.AllDayEvent;
+import com.speedyblur.kretaremastered.models.Clazz;
+import com.speedyblur.kretaremastered.models.ClazzDeserializer;
 import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.shared.AccountStore;
+import com.speedyblur.kretaremastered.shared.Common;
+import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
 import com.speedyblur.kretaremastered.shared.HttpHandler;
-import com.speedyblur.kretaremastered.shared.Common;
 
 import net.sqlcipher.database.SQLiteConstraintException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class NewProfileActivity extends AppCompatActivity {
 
@@ -122,24 +132,65 @@ public class NewProfileActivity extends AppCompatActivity {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
                 try {
-                    Profile p = new Profile(studentId, passwd, friendlyName);
+                    final Profile p = new Profile(studentId, passwd, friendlyName);
 
-                    AccountStore ash = new AccountStore(getApplicationContext(), Common.SQLCRYPT_PWD);
-                    ash.addAccount(p);
-                    ash.close();
-
-                    Intent i = getIntent();
-                    i.putExtra("profile", p);
-                    setResult(RESULT_OK, i);
-                    finish();
-                } catch (DecryptionException e) {
-                    runOnUiThread(new Runnable() {
+                    ArrayMap<String, String> headers = new ArrayMap<>();
+                    headers.put("X-Auth-Token", resp.getString("token"));
+                    HttpHandler.getJson(Common.APIBASE + "/schedule", headers, new HttpHandler.JsonRequestCallback() {
                         @Override
-                        public void run() {
-                            showProgress(false);
+                        public void onComplete(JSONObject resp) throws JSONException {
+                            try {
+                                ArrayList<AllDayEvent> allDayEvents = new ArrayList<>();
+                                for (int i=0; i<resp.getJSONObject("data").getJSONArray("allday").length(); i++) {
+                                    JSONObject currentObj = resp.getJSONObject("data").getJSONArray("allday").getJSONObject(i);
+                                    AllDayEvent ade = new Gson().fromJson(currentObj.toString(), AllDayEvent.class);
+                                    allDayEvents.add(ade);
+                                }
+
+                                ArrayList<Clazz> clazzes = new ArrayList<>();
+                                for (int i=0; i<resp.getJSONObject("data").getJSONArray("classes").length(); i++) {
+                                    JSONObject currentObj = resp.getJSONObject("data").getJSONArray("classes").getJSONObject(i);
+                                    GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
+                                    gsonBuilder.registerTypeAdapter(Clazz.class, new ClazzDeserializer());
+                                    Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
+                                    clazzes.add(c);
+                                }
+
+                                // Commit
+                                DataStore ds = new DataStore(getApplicationContext(), p.getCardid(), Common.SQLCRYPT_PWD);
+                                ds.putAllDayEventsData(allDayEvents);
+                                ds.putClassesData(clazzes);
+                                ds.close();
+
+                                AccountStore ash = new AccountStore(getApplicationContext(), Common.SQLCRYPT_PWD);
+                                ash.addAccount(p);
+                                ash.close();
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent i = getIntent();
+                                        i.putExtra("profile", p);
+                                        setResult(RESULT_OK, i);
+                                        finish();
+                                    }
+                                });
+                            } catch (DecryptionException e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        showProgress(false);
+                                    }
+                                });
+                                showOnSnackbar(R.string.decrypt_database_fail, Snackbar.LENGTH_LONG);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int localizedError)  {
+                            showOnSnackbar(localizedError, Snackbar.LENGTH_LONG);
                         }
                     });
-                    showOnSnackbar(R.string.decrypt_database_fail, Snackbar.LENGTH_LONG);
                 } catch (SQLiteConstraintException e) {
                     runOnUiThread(new Runnable() {
                         @Override

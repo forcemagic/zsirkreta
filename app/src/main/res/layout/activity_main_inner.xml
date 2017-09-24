@@ -48,6 +48,13 @@
             android:layout_height="match_parent"
             tools:layout="@layout/frag_main_schedule" />
 
+        <fragment
+            android:id="@+id/announcementsFragment"
+            android:name="com.speedyblur.kretaremastered.fragments.MainAnnouncementsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/frag_main_announcements" />
+
     </ViewFlipper>
 
 </android.support.design.widget.CoordinatorLayout>
