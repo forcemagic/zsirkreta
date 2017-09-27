@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -28,6 +29,7 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.DayViewDecorator;
 import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
+import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.activities.MainActivity;
 import com.speedyblur.kretaremastered.adapters.ClazzAdapter;
@@ -319,7 +321,7 @@ public class MainScheduleFragment extends Fragment {
                 }
             }
 
-            // TODO: This is kind of ugly, but it's the only way I know to do this.
+            cView.setSelectedDate(selectedScheduleDate);
             cView.addDecorators(new DayViewDecorator() {
                 @Override
                 public boolean shouldDecorate(CalendarDay day) {
@@ -343,51 +345,26 @@ public class MainScheduleFragment extends Fragment {
             }, new DayViewDecorator() {
                 @Override
                 public boolean shouldDecorate(CalendarDay day) {
-                    return day.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-                            && day.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
-                            && !provenDates.contains(day) && !unprovenDates.contains(day);
+                    Calendar c = day.getCalendar();
+                    return c.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR) &&
+                            c.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
                 }
 
                 @Override
                 public void decorate(DayViewFacade view) {
-                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.current_day_calendar_icon_black));
-                }
-            }, new DayViewDecorator() {
-                @Override
-                public boolean shouldDecorate(CalendarDay day) {
-                    return day.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-                            && day.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
-                            && provenDates.contains(day);
-                }
-
-                @Override
-                public void decorate(DayViewFacade view) {
-                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.cal_current_day_goodbullet));
-                }
-            }, new DayViewDecorator() {
-                @Override
-                public boolean shouldDecorate(CalendarDay day) {
-                    return day.getCalendar().get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-                            && day.getCalendar().get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR)
-                            && unprovenDates.contains(day);
-                }
-
-                @Override
-                public void decorate(DayViewFacade view) {
-                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.cal_current_day_badbullet));
+                    // TODO: Decorate
                 }
             });
 
-            calDialog.setView(inflView);
-            calDialog.setTitle(R.string.select_date);
-            calDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            final AlertDialog dif = calDialog.setView(inflView).setTitle(R.string.select_date).show();
+
+            cView.setOnDateChangedListener(new OnDateSelectedListener() {
                 @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    if (cView.getSelectedDate() != null) showAbsenceListForDate(cView.getSelectedDate());
-                    dialogInterface.dismiss();
+                public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+                    showAbsenceListForDate(date);
+                    dif.dismiss();
                 }
             });
-            calDialog.show();
         }
     }
 }

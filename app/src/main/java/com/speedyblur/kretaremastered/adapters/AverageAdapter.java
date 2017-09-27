@@ -128,9 +128,11 @@ public class AverageAdapter extends BaseExpandableListAdapter {
             holder.chart.getXAxis().setValueFormatter(new EpochToDateFormatter());
             holder.chart.getXAxis().setAvoidFirstLastClipping(true);
             holder.chart.getAxisLeft().setTextSize(18f);
-            holder.chart.getAxisLeft().setAxisMaximum(5.2f);
+            holder.chart.getAxisLeft().setAxisMaximum(5.5f);
+            holder.chart.getAxisLeft().setAxisMinimum(0.5f);
             holder.chart.getAxisLeft().setDrawTopYLabelEntry(true);
-            holder.chart.getAxisLeft().setGranularity(0.5f);
+            holder.chart.getAxisLeft().setGranularity(1f);
+            holder.chart.getAxisLeft().setLabelCount(5);
             holder.chart.getAxisRight().setEnabled(false);
             holder.chart.getDescription().setEnabled(false);
             holder.chart.getLegend().setEnabled(false);
