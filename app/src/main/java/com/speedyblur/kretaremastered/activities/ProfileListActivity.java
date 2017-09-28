@@ -35,6 +35,7 @@ import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
 import com.speedyblur.kretaremastered.shared.HttpHandler;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -80,11 +81,69 @@ public class ProfileListActivity extends AppCompatActivity {
 
     // LOADERS START HERE
     // TODO: Migrate loaders to a single class
-    public void doLoadResourceLogin(String authToken, Profile profile) {
+    public void doLoadResourceLogin(String authToken, final Profile profile) {
         Log.d(LOGTAG, "Logged in. Loading 'things'...");
 
         headers.put("X-Auth-Token", authToken);
-        loadGrades(profile);
+
+        HttpHandler.getJson(Common.APIBASE + "/bundle", headers, new HttpHandler.JsonRequestCallback() {
+            @Override
+            public void onComplete(JSONObject resp) throws JSONException {
+                ArrayList<Grade> grades = new ArrayList<>();
+                ArrayList<Average> averages = new ArrayList<>();
+                ArrayList<AvgGraphData> avgGraphDatas = new ArrayList<>();
+                ArrayList<Clazz> clazzes = new ArrayList<>();
+
+                JSONArray rawGrades = resp.getJSONObject("grades").getJSONArray("data");
+                JSONArray rawAvg = resp.getJSONObject("avg").getJSONArray("data");
+                JSONArray rawGraphData = resp.getJSONObject("avggraph").getJSONArray("data");
+                JSONArray rawClazzes = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("classes");
+                //JSONArray rawAllDayEvents = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("allday");
+                for (int i=0; i<rawGrades.length(); i++) {
+                    JSONObject currentObj = rawGrades.getJSONObject(i);
+                    Grade g = new Gson().fromJson(currentObj.toString(), Grade.class);
+                    grades.add(g);
+                }
+                for (int i=0; i<rawAvg.length(); i++) {
+                    JSONObject currentObj = rawAvg.getJSONObject(i);
+                    Average avg = new Gson().fromJson(currentObj.toString(), Average.class);
+                    averages.add(avg);
+                }
+                for (int i = 0; i<rawGraphData.length(); i++) {
+                    JSONObject currentObj = rawGraphData.getJSONObject(i);
+                    GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
+                    gsonBuilder.registerTypeAdapter(AvgGraphData.class, new AvgGraphDataDeserializer());
+                    AvgGraphData agd = gsonBuilder.create().fromJson(currentObj.toString(), AvgGraphData.class);
+                    avgGraphDatas.add(agd);
+                }
+                for (int i=0; i<rawClazzes.length(); i++) {
+                    JSONObject currentObj = rawClazzes.getJSONObject(i);
+                    GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
+                    gsonBuilder.registerTypeAdapter(Clazz.class, new ClazzDeserializer());
+                    Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
+                    clazzes.add(c);
+                }
+                try {
+                    DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
+                    ds.putGradesData(grades);
+                    ds.putAveragesData(averages);
+                    ds.putAverageGraphData(avgGraphDatas);
+                    ds.upsertClassData(clazzes);
+                    ds.close();
+                } catch (DecryptionException e) {e.printStackTrace();}
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadAnnouncements(profile);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(int localizedError)   {
+                askCachedVersion(profile, localizedError);
+            }
+        });
     }
 
     private void loadGrades(final Profile profile) {

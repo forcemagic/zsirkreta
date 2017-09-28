@@ -3,7 +3,7 @@ package com.speedyblur.kretaremastered.shared;
 import android.content.Context;
 
 public class Common {
-    public static final String APIBASE = "https://www.speedyblur.com/kretaapi/v5.0";
+    public static final String APIBASE = "https://www.speedyblur.com/kretaapi";
     public static String SQLCRYPT_PWD = "weeee";
 
     public static String getLocalizedSubjectName(Context context, String subject) {
