@@ -3,6 +3,7 @@ package com.speedyblur.kretaremastered.activities;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -51,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set profile name to drawer header
         TextView profNameHead = navigationView.getHeaderView(0).findViewById(R.id.profileNameHead);
         profNameHead.setText(p.getFriendlyName().equals("") ? p.getCardid() : p.getFriendlyName());
+
+        // Popup stats
+        int timeTaken = getIntent().getIntExtra("loadtime", -1);
+        if (timeTaken != -1)
+            Snackbar.make(findViewById(R.id.main_coord_view), getString(R.string.main_load_complete, (float) timeTaken/1000), Snackbar.LENGTH_SHORT).show();
 
         vf = (ViewFlipper) findViewById(R.id.main_viewflipper);
 

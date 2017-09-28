@@ -80,25 +80,27 @@ public class ProfileListActivity extends AppCompatActivity {
     }
 
     // LOADERS START HERE
-    // TODO: Migrate loaders to a single class
     public void doLoadResourceLogin(String authToken, final Profile profile) {
-        Log.d(LOGTAG, "Logged in. Loading 'things'...");
-
         headers.put("X-Auth-Token", authToken);
 
+        final long loadBeginTime = System.currentTimeMillis();
         HttpHandler.getJson(Common.APIBASE + "/bundle", headers, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
+                changeProgressStatus(R.string.loading_saving);
+
                 ArrayList<Grade> grades = new ArrayList<>();
                 ArrayList<Average> averages = new ArrayList<>();
                 ArrayList<AvgGraphData> avgGraphDatas = new ArrayList<>();
                 ArrayList<Clazz> clazzes = new ArrayList<>();
+                ArrayList<Announcement> announcements = new ArrayList<>();
 
                 JSONArray rawGrades = resp.getJSONObject("grades").getJSONArray("data");
                 JSONArray rawAvg = resp.getJSONObject("avg").getJSONArray("data");
                 JSONArray rawGraphData = resp.getJSONObject("avggraph").getJSONArray("data");
                 JSONArray rawClazzes = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("classes");
                 //JSONArray rawAllDayEvents = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("allday");
+                JSONArray rawAnnouncements = resp.getJSONObject("announcements").getJSONArray("data");
                 for (int i=0; i<rawGrades.length(); i++) {
                     JSONObject currentObj = rawGrades.getJSONObject(i);
                     Grade g = new Gson().fromJson(currentObj.toString(), Grade.class);
@@ -123,18 +125,29 @@ public class ProfileListActivity extends AppCompatActivity {
                     Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
                     clazzes.add(c);
                 }
+                for (int i=0; i<rawAnnouncements.length(); i++) {
+                    JSONObject currentObj = rawAnnouncements.getJSONObject(i);
+                    Announcement a = new Gson().fromJson(currentObj.toString(), Announcement.class);
+                    announcements.add(a);
+                }
+
                 try {
                     DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
                     ds.putGradesData(grades);
                     ds.putAveragesData(averages);
                     ds.putAverageGraphData(avgGraphDatas);
                     ds.upsertClassData(clazzes);
+                    ds.upsertAnnouncementsData(announcements);
                     ds.close();
                 } catch (DecryptionException e) {e.printStackTrace();}
+
+                final long loadEndTime = System.currentTimeMillis();
+                Log.v("KretaApi", "Fetch completed in "+String.valueOf(loadEndTime-loadBeginTime)+"ms");
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        loadAnnouncements(profile);
+                        loadFinish(profile, (int) (loadEndTime-loadBeginTime));
                     }
                 });
             }
@@ -146,178 +159,10 @@ public class ProfileListActivity extends AppCompatActivity {
         });
     }
 
-    private void loadGrades(final Profile profile) {
-        changeProgressStatus(R.string.loading_grades);
-        HttpHandler.getJson(Common.APIBASE + "/grades", headers, new HttpHandler.JsonRequestCallback() {
-            @Override
-            public void onComplete(JSONObject resp) throws JSONException {
-                try {
-                    ArrayList<Grade> grades = new ArrayList<>();
-                    for (int i=0; i<resp.getJSONArray("data").length(); i++) {
-                        JSONObject currentObj = resp.getJSONArray("data").getJSONObject(i);
-                        Grade g = new Gson().fromJson(currentObj.toString(), Grade.class);
-                        grades.add(g);
-                    }
-
-                    // Commit
-                    DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
-                    ds.putGradesData(grades);
-                    ds.close();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadAverages(profile);
-                        }
-                    });
-                } catch (DecryptionException e) {e.printStackTrace();}
-            }
-
-            @Override
-            public void onFailure(int localizedError) {
-                askCachedVersion(profile, localizedError);
-            }
-        });
-    }
-
-    private void loadAverages(final Profile profile) {
-        changeProgressStatus(R.string.loading_averages);
-        HttpHandler.getJson(Common.APIBASE + "/avg", headers, new HttpHandler.JsonRequestCallback() {
-            @Override
-            public void onComplete(JSONObject resp) throws JSONException {
-                try {
-                    ArrayList<Average> averages = new ArrayList<>();
-                    for (int i=0; i<resp.getJSONArray("data").length(); i++) {
-                        JSONObject currentObj = resp.getJSONArray("data").getJSONObject(i);
-                        Average avg = new Gson().fromJson(currentObj.toString(), Average.class);
-                        averages.add(avg);
-                    }
-
-                    // Commit
-                    DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
-                    ds.putAveragesData(averages);
-                    ds.close();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadAverageGraph(profile);
-                        }
-                    });
-                } catch (DecryptionException e) {e.printStackTrace();}
-            }
-
-            @Override
-            public void onFailure(int localizedError) {
-                askCachedVersion(profile, localizedError);
-            }
-        });
-    }
-
-    private void loadAverageGraph(final Profile profile) {
-        changeProgressStatus(R.string.loading_avggraph);
-        HttpHandler.getJson(Common.APIBASE + "/avggraph", headers, new HttpHandler.JsonRequestCallback() {
-            @Override
-            public void onComplete(JSONObject resp) throws JSONException {
-                try {
-                    ArrayList<AvgGraphData> avgGraphDatas = new ArrayList<>();
-                    for (int i = 0; i < resp.getJSONArray("data").length(); i++) {
-                        JSONObject currentObj = resp.getJSONArray("data").getJSONObject(i);
-                        GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
-                        gsonBuilder.registerTypeAdapter(AvgGraphData.class, new AvgGraphDataDeserializer());
-                        AvgGraphData agd = gsonBuilder.create().fromJson(currentObj.toString(), AvgGraphData.class);
-                        avgGraphDatas.add(agd);
-                    }
-
-                    // Commit
-                    DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
-                    ds.putAverageGraphData(avgGraphDatas);
-                    ds.close();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadSchedule(profile);
-                        }
-                    });
-                } catch (DecryptionException e) {e.printStackTrace();}
-            }
-
-            @Override
-            public void onFailure(int localizedError) {
-                askCachedVersion(profile, localizedError);
-            }
-        });
-    }
-
-    private void loadSchedule(final Profile profile) {
-        changeProgressStatus(R.string.loading_schedule);
-        HttpHandler.getJson(Common.APIBASE + "/schedule?small", headers, new HttpHandler.JsonRequestCallback() {
-            @Override
-            public void onComplete(JSONObject resp) throws JSONException {
-                try {
-                    ArrayList<Clazz> clazzes = new ArrayList<>();
-                    for (int i=0; i<resp.getJSONObject("data").getJSONArray("classes").length(); i++) {
-                        JSONObject currentObj = resp.getJSONObject("data").getJSONArray("classes").getJSONObject(i);
-                        GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
-                        gsonBuilder.registerTypeAdapter(Clazz.class, new ClazzDeserializer());
-                        Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
-                        clazzes.add(c);
-                    }
-
-                    // Commit
-                    DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
-                    ds.upsertClassData(clazzes);
-                    ds.close();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadAnnouncements(profile);
-                        }
-                    });
-                } catch (DecryptionException e) {e.printStackTrace();}
-            }
-
-            @Override
-            public void onFailure(int localizedError)  {
-                askCachedVersion(profile, localizedError);
-            }
-        });
-    }
-
-    private void loadAnnouncements(final Profile profile) {
-        changeProgressStatus(R.string.loading_announcements);
-        HttpHandler.getJson(Common.APIBASE + "/announcements", headers, new HttpHandler.JsonRequestCallback() {
-            @Override
-            public void onComplete(JSONObject resp) throws JSONException {
-                try {
-                    ArrayList<Announcement> announcements = new ArrayList<>();
-                    for (int i=0; i<resp.getJSONArray("data").length(); i++) {
-                        JSONObject currentObj = resp.getJSONArray("data").getJSONObject(i);
-                        Announcement a = new Gson().fromJson(currentObj.toString(), Announcement.class);
-                        announcements.add(a);
-                    }
-
-                    // Commit
-                    DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
-                    ds.upsertAnnouncementsData(announcements);
-                    ds.close();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            loadFinish(profile);
-                        }
-                    });
-                } catch (DecryptionException e) {e.printStackTrace();}
-            }
-
-            @Override
-            public void onFailure(int localizedError) {
-                askCachedVersion(profile, localizedError);
-            }
-        });
-    }
-
-    private void loadFinish(Profile profile) {
+    private void loadFinish(Profile profile, int loadTime) {
         Intent it = new Intent(ProfileListActivity.this, MainActivity.class);
         it.putExtra("profile", profile);
+        it.putExtra("loadtime", loadTime);
         startActivity(it);
         showProgress(false);
     }
@@ -336,11 +181,11 @@ public class ProfileListActivity extends AppCompatActivity {
                     if (cal != null) {
                         AlertDialog.Builder cacheDialog = new AlertDialog.Builder(ctxt);
                         cacheDialog.setTitle(R.string.dialog_show_cached_title);
-                        cacheDialog.setMessage(R.string.dialog_show_cached);
+                        cacheDialog.setMessage(getString(R.string.dialog_show_cached, getString(originalMsg)));
                         cacheDialog.setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                loadFinish(profile);
+                                loadFinish(profile, -1);
                                 dialogInterface.dismiss();
                             }
                         });

@@ -86,7 +86,7 @@
                 android:layout_below="@+id/progressBar"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:text="@string/loading_grades"
+                android:text="@string/loading_saving"
                 android:textColor="@android:color/black"
                 android:textSize="18sp" />
 

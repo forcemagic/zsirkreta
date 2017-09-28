@@ -59,7 +59,7 @@ public class ClazzAdapter extends ArrayAdapter<Clazz> {
         }
         for (int i=0; i<getCount(); i++) {
             Clazz subC = getItem(i); assert subC != null;
-            // TODO: Optimize; this should not really be used
+            // I think this is OK.
             if (!c.isHeld() && subC.isHeld() && c.getClassnum() == subC.getClassnum()) return new View(getContext());
         }
 

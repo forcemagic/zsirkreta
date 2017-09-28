@@ -22,7 +22,7 @@
     <string name="dialog_delete_profile_title">Delete Profile</string>
     <string name="dialog_delete_profile">Are you sure about that?</string>
     <string name="dialog_show_cached_title">Network Problems</string>
-    <string name="dialog_show_cached">Something bad happened. Show cached version?</string>
+    <string name="dialog_show_cached">Something bad happened (%1$s). Show cached version?</string>
 
     <!-- Subjects -->
     <string name="subject_english_lang" tools:ignore="UnusedResources">English</string>
@@ -55,19 +55,15 @@
 
     <!-- Loading messages (proc. indicators) -->
     <string name="loading_logging_in">Logging in…</string>
-    <string name="loading_grades">Loading grades…</string>
-    <string name="loading_averages">Loading averages…</string>
-    <string name="loading_avggraph">Loading average graphs…</string>
-    <string name="loading_schedule">Loading schedule…</string>
-    <string name="loading_announcements">Loading announcements…</string>
-    <string name="main_load_complete">Load complete! Time spent with Kreta communication: %1$.2f seconds.</string>
+    <string name="loading_saving">Loading…</string>
+    <string name="main_load_complete">Load complete! Time spent: %1$.2f seconds.</string>
 
     <!-- HTTP errors -->
-    <string name="http_unauthorized">Invalid card ID or password.</string>
+    <string name="http_unauthorized">Invalid card ID or password</string>
     <string name="http_server_error">Something\'s wrong with my server. I\'m sorry :(</string>
-    <string name="http_timeout">The Kreta servers are not responding.</string>
-    <string name="http_connect_timeout">Connection timed out. Either your network is too slow or my servers are having some issues.</string>
-    <string name="http_cant_resolve">You are not connected to the Internet. Please turn on Mobile Data or Wifi to continue.</string>
+    <string name="http_timeout">Request timed out</string>
+    <string name="http_connect_timeout">Connection timed out</string>
+    <string name="http_cant_resolve">You are not connected to the Internet</string>
     <string name="http_unknown">This error… I have no idea what it is actually. Sorry. :(</string>
     <string name="http_bad_gateway">Kreta is having some issues… (Not surprising) Try again later.</string>
 
@@ -112,7 +108,6 @@
     <string name="action_sortbysubject">Sort by subject</string>
     <string name="action_sortbydate">Sort by date</string>
     <string name="http_req_error">Some kind of error occurred. :(</string>
-    <string name="auth_passcode_error">This is not the right code!</string>
     <string name="decrypt_database_fail">Unable to decrypt profile store database.</string>
     <string name="profile_delete_success">Successfully deleted profile.</string>
     <string name="select_date">Select Date</string>
