@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,14 +36,17 @@ import com.speedyblur.kretaremastered.shared.DecryptionException;
 import java.util.ArrayList;
 
 public class AverageAdapter extends BaseExpandableListAdapter {
-    private Context ctxt;
-    private ArrayList<Average> items;
-    private String profileName;
+    private int lastExpandedPos = -1;
+    private final Context ctxt;
+    private final ArrayList<Average> items;
+    private final String profileName;
+    private final ExpandableListView elv;
 
-    public AverageAdapter(Context ctxt, ArrayList<Average> items, String profileName) {
+    public AverageAdapter(Context ctxt, ArrayList<Average> items, String profileName, ExpandableListView elv) {
         this.ctxt = ctxt;
         this.items = items;
         this.profileName = profileName;
+        this.elv = elv;
     }
 
     @Override
@@ -78,6 +82,15 @@ public class AverageAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean hasStableIds() {
         return false;
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        super.onGroupExpanded(groupPosition);
+
+        if (lastExpandedPos != -1 && groupPosition != lastExpandedPos)
+            elv.collapseGroup(lastExpandedPos);
+        lastExpandedPos = groupPosition;
     }
 
     @Override

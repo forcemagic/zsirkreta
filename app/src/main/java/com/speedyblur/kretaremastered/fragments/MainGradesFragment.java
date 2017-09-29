@@ -64,7 +64,7 @@ public class MainGradesFragment extends Fragment {
         }
         expListView.setChildDivider(null);
         expListView.setDividerHeight(0);
-        expListView.setAdapter(new SubjectExpandableGradeAdapter(getContext(), subjectGradeGroups));
+        expListView.setAdapter(new SubjectExpandableGradeAdapter(getContext(), subjectGradeGroups, expListView));
         expListView.setEmptyView(parent.findViewById(R.id.noGradesView));
 
         // Date-grouped (ordered) list

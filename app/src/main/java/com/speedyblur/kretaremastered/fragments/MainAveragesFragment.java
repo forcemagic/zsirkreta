@@ -40,7 +40,7 @@ public class MainAveragesFragment extends Fragment {
         } catch (DecryptionException e) {e.printStackTrace();}
 
         ExpandableListView avgList = (ExpandableListView) parent.findViewById(R.id.averageList);
-        avgList.setAdapter(new AverageAdapter(getContext(), averages, parent.p.getCardid()));
+        avgList.setAdapter(new AverageAdapter(getContext(), averages, parent.p.getCardid(), avgList));
         avgList.setEmptyView(parent.findViewById(R.id.noAveragesView));
     }
 }

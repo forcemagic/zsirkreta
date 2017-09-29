@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,11 +30,15 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
     private final Context context;
     private final LayoutInflater inflater;
     private final ArrayList<SubjectGradeGroup> subjectGradeGroups;
+    private final ExpandableListView elv;
+    private int lastExpandedPos = -1;
 
-    public SubjectExpandableGradeAdapter(Context context, ArrayList<SubjectGradeGroup> subjectGradeGroups) {
+    public SubjectExpandableGradeAdapter(Context context, ArrayList<SubjectGradeGroup> subjectGradeGroups,
+                                         ExpandableListView elv) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.subjectGradeGroups = subjectGradeGroups;
+        this.elv = elv;
     }
 
     @Override
@@ -74,6 +79,15 @@ public class SubjectExpandableGradeAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int i, int i1) {
         return false;
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        super.onGroupExpanded(groupPosition);
+
+        if (lastExpandedPos != -1 && groupPosition != lastExpandedPos)
+            elv.collapseGroup(lastExpandedPos);
+        lastExpandedPos = groupPosition;
     }
 
     // TODO: ViewHolder pattern
