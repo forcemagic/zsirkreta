@@ -3,6 +3,7 @@ package com.speedyblur.kretaremastered.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public class MainGradesFragment extends Fragment {
         } catch (DecryptionException e) {e.printStackTrace();}
 
         // Subject-grouped list
-        ExpandableListView expListView = (ExpandableListView) parent.findViewById(R.id.mainGradeView);
+        RecyclerView subjGrouped = (RecyclerView) parent.findViewById(R.id.mainGradeView);
         ArrayList<SubjectGradeGroup> subjectGradeGroups = new ArrayList<>();
         for (int i=0; i<grades.size(); i++) {
             Grade cGrade = grades.get(i);
@@ -62,10 +63,7 @@ public class MainGradesFragment extends Fragment {
             gList.add(cGrade);
             if (!found) subjectGradeGroups.add(new SubjectGradeGroup(cGrade.getSubject(), gList));
         }
-        expListView.setChildDivider(null);
-        expListView.setDividerHeight(0);
-        expListView.setAdapter(new SubjectExpandableGradeAdapter(getContext(), subjectGradeGroups, expListView));
-        expListView.setEmptyView(parent.findViewById(R.id.noGradesView));
+        subjGrouped.setAdapter(new SubjectExpandableGradeAdapter(subjectGradeGroups));
 
         // Date-grouped (ordered) list
         StickyListHeadersListView dateListView = (StickyListHeadersListView) parent.findViewById(R.id.datedGradeList);

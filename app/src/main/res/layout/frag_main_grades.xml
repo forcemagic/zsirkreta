@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bgcolorActivity"
     tools:context="com.speedyblur.kretaremastered.activities.MainActivity">
 
@@ -46,12 +47,11 @@
             android:divider="@null"
             android:dividerHeight="0dp" />
 
-        <ExpandableListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/mainGradeView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </ExpandableListView>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
 
     </ViewFlipper>
 

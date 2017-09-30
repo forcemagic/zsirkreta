@@ -1,28 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/white"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:animateLayoutChanges="true">
 
-    <TextView
-        android:id="@+id/gradeGroupTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="12dp"
-        android:text="@string/blablabla"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="22sp"
-        android:typeface="normal" />
-
-    <View
-        android:id="@+id/gradeGroupBar"
-        android:layout_below="@id/gradeGroupTitle"
+    <RelativeLayout
+        android:id="@+id/gradeGroupInnerLayout"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginStart="36dp"
-        android:background="@drawable/grade_group_bar" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/gradeGroupTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_margin="12dp"
+            android:text="@string/blablabla"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="22sp"
+            android:typeface="normal" />
+
+        <ImageView
+            android:id="@+id/gradeGroupExpandIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            app:srcCompat="@android:drawable/arrow_down_float"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true" />
+
+        <View
+            android:id="@+id/gradeGroupBar"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/gradeGroupTitle"
+            android:layout_marginStart="36dp"
+            android:background="@drawable/grade_group_bar" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/gradeGroupInnerLayout" />
 
 </RelativeLayout>
