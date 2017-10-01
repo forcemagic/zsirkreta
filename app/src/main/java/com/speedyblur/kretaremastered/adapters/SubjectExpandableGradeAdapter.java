@@ -1,6 +1,7 @@
 package com.speedyblur.kretaremastered.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,13 @@ import android.widget.TextView;
 
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.SubjectGradeGroup;
+import com.speedyblur.kretaremastered.shared.Common;
 
 import java.util.ArrayList;
 
 public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectExpandableGradeAdapter.ListHeaderVH> {
     private final ArrayList<SubjectGradeGroup> subjectGradeGroups;
+    private int currentOpened = -1;
 
     public SubjectExpandableGradeAdapter(ArrayList<SubjectGradeGroup> subjectGradeGroups) {
         this.subjectGradeGroups = subjectGradeGroups;
@@ -30,33 +33,47 @@ public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectE
     @Override
     public void onBindViewHolder(final ListHeaderVH holder, int position) {
         final SubjectGradeGroup sgg = subjectGradeGroups.get(position);
+        final Context ctxt = holder.headerTitle.getContext();
 
-        holder.headerTitle.setText(sgg.getSubject());
+        holder.headerTitle.setText(Common.getLocalizedSubjectName(ctxt, sgg.getSubject()));
+        holder.subView.setHasFixedSize(true);
+        holder.subView.setLayoutManager(new LinearLayoutManager(ctxt));
+        holder.subView.setAdapter(new SubGradeAdapter(sgg.getGrades()));
+        if (position == currentOpened) {
+            holder.expandToggler.setRotation(180f);
+            holder.subView.setVisibility(View.VISIBLE);
+        } else {
+            holder.expandToggler.setRotation(0f);
+            holder.subView.setVisibility(View.GONE);
+        }
         holder.expandToggler.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                holder.subView.setAdapter(new SubGradeAdapter(sgg.getGrades()));
+                currentOpened = holder.getAdapterPosition();
+                notifyItemRangeChanged(0, getItemCount());
             }
         });
     }
+
+
 
     @Override
     public int getItemCount() {
         return subjectGradeGroups.size();
     }
 
-    public static class ListHeaderVH extends RecyclerView.ViewHolder {
-        public TextView headerTitle;
-        public ImageView expandToggler;
-        public View gradeGroupBar;
-        public RecyclerView subView;
+    static class ListHeaderVH extends RecyclerView.ViewHolder {
+        TextView headerTitle;
+        ImageView expandToggler;
+        View gradeGroupBar;
+        RecyclerView subView;
 
-        public ListHeaderVH(View itemView) {
+        ListHeaderVH(View itemView) {
             super(itemView);
             headerTitle = itemView.findViewById(R.id.gradeGroupTitle);
             expandToggler = itemView.findViewById(R.id.gradeGroupExpandIcon);
             gradeGroupBar = itemView.findViewById(R.id.gradeGroupBar);
-            subView = itemView.findViewById(R.id.gradeGroupInnerLayout);
+            subView = itemView.findViewById(R.id.gradeGroupSubView);
         }
     }
 }

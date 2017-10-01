@@ -1,6 +1,8 @@
 package com.speedyblur.kretaremastered.adapters;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +19,8 @@ import java.util.ArrayList;
 public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final ArrayList<Grade> grades;
 
-    public static final int NORM_GRADE = 0;
-    public static final int SPEC_GRADE = 1;
+    private static final int NORM_GRADE = 0;
+    private static final int SPEC_GRADE = 1;
 
     public SubGradeAdapter(ArrayList<Grade> grades) {
         this.grades = grades;
@@ -45,6 +47,13 @@ public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Grade g = grades.get(position);
 
         switch (getItemViewType(position)) {
+            case NORM_GRADE:
+                NormGradeVH ngvh = (NormGradeVH) holder;
+                ngvh.gradeBullet.setColorFilter(ContextCompat.getColor(
+                        ngvh.gradeBullet.getContext(), g.getColorId()), PorterDuff.Mode.SRC_ATOP);
+                ngvh.grade.setText(String.valueOf(g.getGrade()));
+                ngvh.gradeTitle.setText(g.getType());
+                break;
             case SPEC_GRADE:
                 SpecGradeVH sgvh = (SpecGradeVH) holder;
                 sgvh.gradeLayout.setBackgroundColor(g.getColorId());
@@ -53,6 +62,7 @@ public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     sgvh.gradeTitle.setText(R.string.grade_end_of_year);
                 else
                     sgvh.gradeTitle.setText(R.string.grade_end_of_halfterm);
+                break;
         }
     }
 
@@ -69,13 +79,13 @@ public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private static class NormGradeVH extends RecyclerView.ViewHolder {
-        public TextView grade;
-        public ImageView gradeBullet;
-        public TextView gradeTitle;
-        public TextView gradeDesc;
-        public TextView gradeDesc2;
+        TextView grade;
+        ImageView gradeBullet;
+        TextView gradeTitle;
+        TextView gradeDesc;
+        TextView gradeDesc2;
 
-        public NormGradeVH(View itemView) {
+        NormGradeVH(View itemView) {
             super(itemView);
             grade = itemView.findViewById(R.id.grade);
             gradeTitle = itemView.findViewById(R.id.gradeTitle);
@@ -86,11 +96,11 @@ public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private static class SpecGradeVH extends RecyclerView.ViewHolder {
-        public RelativeLayout gradeLayout;
-        public TextView grade;
-        public TextView gradeTitle;
+        RelativeLayout gradeLayout;
+        TextView grade;
+        TextView gradeTitle;
 
-        public SpecGradeVH(View itemView) {
+        SpecGradeVH(View itemView) {
             super(itemView);
             gradeLayout = itemView.findViewById(R.id.importantGradeInnerLayout);
             grade = itemView.findViewById(R.id.grade);

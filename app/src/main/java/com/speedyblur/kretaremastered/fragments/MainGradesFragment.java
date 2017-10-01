@@ -3,6 +3,7 @@ package com.speedyblur.kretaremastered.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,8 @@ public class MainGradesFragment extends Fragment {
             gList.add(cGrade);
             if (!found) subjectGradeGroups.add(new SubjectGradeGroup(cGrade.getSubject(), gList));
         }
+        subjGrouped.setHasFixedSize(false);
+        subjGrouped.setLayoutManager(new LinearLayoutManager(parent));
         subjGrouped.setAdapter(new SubjectExpandableGradeAdapter(subjectGradeGroups));
 
         // Date-grouped (ordered) list
