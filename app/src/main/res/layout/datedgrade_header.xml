@@ -15,7 +15,8 @@
         android:layout_margin="12dp"
         android:text="@string/blablabla"
         android:textColor="@android:color/black"
-        android:textSize="22sp" />
+        android:textSize="22sp"
+        android:layout_alignParentLeft="true" />
 
     <View
         android:id="@+id/datedGradeGroupBar"

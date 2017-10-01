@@ -18,7 +18,8 @@
             android:text="@string/announcementinfo_title"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
     <LinearLayout

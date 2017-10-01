@@ -16,7 +16,8 @@
         android:layout_margin="2dp"
         android:text="@string/blablabla"
         android:textColor="@android:color/black"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:layout_alignLeft="@+id/profileLineSeparator" />
 
     <TextView
         android:id="@+id/profileId"
@@ -26,7 +27,8 @@
         android:layout_alignStart="@+id/profileName"
         android:gravity="center_vertical"
         android:text="@string/blablabla"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_alignLeft="@+id/profileName" />
 
     <ImageButton
         android:id="@+id/deleteProfileBtn"
@@ -37,7 +39,9 @@
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        app:srcCompat="@drawable/delete_icon_black" />
+        app:srcCompat="@drawable/delete_icon_black"
+        android:layout_marginRight="8dp"
+        android:layout_alignParentRight="true" />
 
     <View
         android:id="@+id/profileLineSeparator"

@@ -19,13 +19,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final ArrayList<Grade> grades;
 
     private static final int NORM_GRADE = 0;
     private static final int SPEC_GRADE = 1;
 
-    public SubGradeAdapter(ArrayList<Grade> grades) {
+    SubGradeAdapter(ArrayList<Grade> grades) {
         this.grades = grades;
     }
 
@@ -88,11 +88,11 @@ public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private static class NormGradeVH extends RecyclerView.ViewHolder {
-        TextView grade;
-        ImageView gradeBullet;
-        TextView gradeTitle;
-        TextView gradeDesc;
-        TextView gradeDesc2;
+        final TextView grade;
+        final ImageView gradeBullet;
+        final TextView gradeTitle;
+        final TextView gradeDesc;
+        final TextView gradeDesc2;
 
         NormGradeVH(View itemView) {
             super(itemView);
@@ -105,9 +105,9 @@ public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private static class SpecGradeVH extends RecyclerView.ViewHolder {
-        RelativeLayout gradeLayout;
-        TextView grade;
-        TextView gradeTitle;
+        final RelativeLayout gradeLayout;
+        final TextView grade;
+        final TextView gradeTitle;
 
         SpecGradeVH(View itemView) {
             super(itemView);

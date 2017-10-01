@@ -15,7 +15,7 @@
         android:id="@+id/profileNameHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Userinfo"
+        android:text="@string/blablabla"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp" />
 
@@ -23,6 +23,6 @@
         android:id="@+id/klikNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="klik031937001" />
+        android:text="@string/blablabla" />
 
 </LinearLayout>

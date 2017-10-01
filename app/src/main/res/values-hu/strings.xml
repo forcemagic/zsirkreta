@@ -25,8 +25,6 @@
     <string name="subject_pe">Testnevelés</string>
     <string name="subject_physics">Fizika</string>
     <string name="avglabel_desc">Osztályátlag: %1$.2f - Különbség: %2$.2f</string>
-    <string name="grade_unknown_topic">Ismeretlen Téma</string>
-    <string name="http_req_error">Valami hiba történt :( Nem tudom pontosan mi. Bocsi!</string>
     <string name="welcome_subtitle">Válassz profilt!</string>
     <string name="http_server_error">Valami gáz van a szerveremmel. Bocsi :(</string>
     <string name="welcome_title">Üdvözöllek!</string>
@@ -61,7 +59,6 @@
     <string name="thursday_short">Cs</string>
     <string name="tuesday_short">K</string>
     <string name="wednesday_short">Sz</string>
-    <string name="saturday_short">Sz</string>
     <string name="subject_french_lang">Francia Nyelv</string>
     <string name="loading_logging_in">Bejelentkezés…</string>
     <string name="no_events">Nincs suli ezen a napon! (Azaaaz!)</string>

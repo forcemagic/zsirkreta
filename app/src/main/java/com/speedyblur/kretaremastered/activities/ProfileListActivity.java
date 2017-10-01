@@ -219,7 +219,7 @@ public class ProfileListActivity extends AppCompatActivity {
         });
     }
 
-    public void showOnSnackbar(@StringRes final int message, final int length) {
+    public void showOnSnackbar(@StringRes final int message, @SuppressWarnings("SameParameterValue") final int length) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -235,7 +235,7 @@ public class ProfileListActivity extends AppCompatActivity {
         }
     }
 
-    public void goToNewProfile(View v) {
+    public void goToNewProfile(@SuppressWarnings("UnusedParameters") View v) {
         Intent it = new Intent(ProfileListActivity.this, NewProfileActivity.class);
         startActivityForResult(it, INTENT_REQ_NEWPROF);
     }

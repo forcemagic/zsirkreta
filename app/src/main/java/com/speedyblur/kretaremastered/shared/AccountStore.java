@@ -29,7 +29,7 @@ public class AccountStore {
         } catch (SQLiteException e) {
             Log.e(LOGTAG, "Unable to open DB. (Assuming incorrect password) Got error: "+e.getMessage());
             e.printStackTrace();
-            throw new DecryptionException("Unable to open database. (Is encrypted or is not a DB)");
+            throw new DecryptionException();
         }
         db.execSQL("CREATE TABLE IF NOT EXISTS accounts(cardid VARCHAR(12) PRIMARY KEY NOT NULL, friendlyname VARCHAR(16), passwd VARCHAR(30) NOT NULL);");
     }

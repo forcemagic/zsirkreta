@@ -163,7 +163,8 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    public void goToNext(View v) {
+    @SuppressWarnings("WeakerAccess")
+    public void goToNext(@SuppressWarnings("UnusedParameters") View v) {
         if (currentPage < 3) {
             Fragment frag;
             if (currentPage == 0) {
@@ -185,7 +186,8 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    public void tryDecryptSqlite(View v) {
+    @SuppressWarnings("WeakerAccess")
+    public void tryDecryptSqlite(@SuppressWarnings("UnusedParameters") View v) {
         EditText mDbPasswd = (EditText) findViewById(R.id.unlockDbPassword);
         if (canDecryptSqlite(mDbPasswd.getText().toString())) {
             Common.SQLCRYPT_PWD = mDbPasswd.getText().toString();

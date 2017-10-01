@@ -13,14 +13,19 @@
 
         <TextView
             android:id="@+id/gradeGroupTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_margin="12dp"
             android:text="@string/blablabla"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="22sp"
-            android:typeface="normal" />
+            android:typeface="normal"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:layout_toStartOf="@+id/gradeGroupExpandIcon"
+            android:layout_toLeftOf="@+id/gradeGroupExpandIcon" />
 
         <ImageView
             android:id="@+id/gradeGroupExpandIcon"
@@ -29,7 +34,9 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/dropdown_icon_black" />
+            app:srcCompat="@drawable/dropdown_icon_black"
+            android:layout_marginRight="16dp"
+            android:layout_alignParentRight="true" />
 
         <View
             android:id="@+id/gradeGroupBar"
@@ -37,7 +44,8 @@
             android:layout_height="2dp"
             android:layout_below="@id/gradeGroupTitle"
             android:layout_marginStart="36dp"
-            android:background="@drawable/grade_group_bar" />
+            android:background="@drawable/grade_group_bar"
+            android:layout_marginLeft="36dp" />
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -46,6 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:visibility="gone"
-        android:layout_below="@+id/gradeGroupInnerLayout" />
+        android:layout_below="@+id/gradeGroupInnerLayout"
+        android:layout_alignParentLeft="true" />
 
 </RelativeLayout>

@@ -220,7 +220,7 @@ public class NewProfileActivity extends AppCompatActivity {
      * @param message the message to show
      * @param length Snackbar.LENGTH_*
      */
-    private void showOnSnackbar(@StringRes final int message, final int length) {
+    private void showOnSnackbar(@StringRes final int message, @SuppressWarnings("SameParameterValue") final int length) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

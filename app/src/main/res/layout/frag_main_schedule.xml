@@ -16,7 +16,8 @@
         android:background="@null"
         android:padding="8dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/calendar_icon_black" />
+        app:srcCompat="@drawable/calendar_icon_black"
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:id="@+id/currentScheduleDate"
@@ -31,7 +32,9 @@
         android:textColor="@android:color/black"
         android:textSize="22sp"
         android:layout_toStartOf="@+id/scheduleCurrentWeek"
-        android:layout_toEndOf="@id/calendarImageButton" />
+        android:layout_toEndOf="@id/calendarImageButton"
+        android:layout_toRightOf="@id/calendarImageButton"
+        android:layout_toLeftOf="@+id/scheduleCurrentWeek" />
 
     <TextView
         android:id="@+id/scheduleCurrentWeek"
@@ -45,7 +48,8 @@
         android:paddingEnd="12dp"
         android:paddingStart="12dp"
         android:text="@string/blablabla"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_alignParentRight="true" />
 
     <RelativeLayout
         android:id="@+id/noSchoolView"
@@ -80,7 +84,8 @@
         android:divider="@null"
         android:layout_below="@+id/calendarImageButton"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/scheduleWeekdaySelector" />
+        android:layout_above="@+id/scheduleWeekdaySelector"
+        android:layout_alignParentLeft="true" />
 
     <LinearLayout
         android:id="@+id/scheduleWeekdaySelector"
@@ -90,14 +95,14 @@
         android:layout_alignParentStart="true"
         android:background="@color/transparent"
         android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
 
         <TextView
             android:id="@+id/scheduleMondaySelector"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/monday_short"
             android:textAlignment="center"
@@ -109,7 +114,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/tuesday_short"
             android:textAlignment="center"
@@ -121,7 +125,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/wednesday_short"
             android:textAlignment="center"
@@ -133,7 +136,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/thursday_short"
             android:textAlignment="center"
@@ -145,7 +147,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/friday_short"
             android:textAlignment="center"

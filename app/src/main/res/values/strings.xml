@@ -94,20 +94,17 @@
     <string name="wednesday_short">W</string>
     <string name="thursday_short">T</string>
     <string name="friday_short">F</string>
-    <string name="saturday_short">S</string>
 
     <!-- Misc string values -->
     <string name="blablabla">Something</string><!-- TODO: Remove this placeholder -->
     <string name="unlockdb_title">Enter encryption password</string>
     <string name="fingerprint_unlockdb_title">Awaiting fingerprint…</string>
     <string name="fingerprint_unlockdb_usepassword">Use password</string>
-    <string name="grade_unknown_topic">Unknown Topic</string>
     <string name="grade_end_of_halfterm">Half-year grade</string>
     <string name="grade_end_of_year">End of year grade</string>
     <string name="avglabel_desc">Class average: %1$.2f - Delta: %2$.2f</string>
     <string name="action_sortbysubject">Sort by subject</string>
     <string name="action_sortbydate">Sort by date</string>
-    <string name="http_req_error">Some kind of error occurred. :(</string>
     <string name="decrypt_database_fail">Unable to decrypt profile store database.</string>
     <string name="profile_delete_success">Successfully deleted profile.</string>
     <string name="select_date">Select Date</string>

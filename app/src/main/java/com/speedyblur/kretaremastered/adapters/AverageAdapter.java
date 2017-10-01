@@ -139,12 +139,12 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ProgressBar avgProgress;
-        TextView avgView;
-        TextView subjView;
-        TextView descView;
-        ImageView expandToggler;
-        LineChart chart;
+        final ProgressBar avgProgress;
+        final TextView avgView;
+        final TextView subjView;
+        final TextView descView;
+        final ImageView expandToggler;
+        final LineChart chart;
 
         ViewHolder(View itemView) {
             super(itemView);

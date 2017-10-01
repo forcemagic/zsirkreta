@@ -25,7 +25,7 @@ import java.util.Calendar;
 public class DataStore {
     private final static String LOGTAG = "DataStore";
     private SQLiteDatabase db;
-    private String profileName;
+    private final String profileName;
 
     /**
      * Initializes a new userdata store
@@ -41,7 +41,7 @@ public class DataStore {
             db = SQLiteDatabase.openOrCreateDatabase(dbFile, passwd, null);
         } catch (SQLException e) {
             Log.e(LOGTAG, "Unable to decrypt DB. (Assuming incorrect password) Got error: "+e.getMessage());
-            throw new DecryptionException("Unable to open database. (Is encrypted or is not a DB)");
+            throw new DecryptionException();
         }
     }
 
@@ -270,6 +270,8 @@ public class DataStore {
         }
     }
 
+    // TODO: Implement this (see MainScheduleFragment for details) and remove SuppressWarnings
+    @SuppressWarnings("unused")
     public ArrayList<AllDayEvent> getAllDayEventsData() {
         if (!tableExists("alldayevents_"+profileName)) return new ArrayList<>();
         Cursor c = db.rawQuery("SELECT * FROM alldayevents_"+profileName, null);
@@ -394,7 +396,8 @@ public class DataStore {
     }
 
     // TODO: Call this on every SUCCESSFUL save. Not on every update.
-    public void updateLastSave() {
+    // TODO: Make this public after this (^) todo is complete
+    private void updateLastSave() {
         db.execSQL("CREATE TABLE IF NOT EXISTS lastsave(userid TEXT, stamp INTEGER);");
         db.execSQL("INSERT INTO lastsave (userid, stamp) VALUES (?, ?);", new String[] {profileName, String.valueOf(System.currentTimeMillis())});
     }

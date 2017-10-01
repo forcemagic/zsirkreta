@@ -37,6 +37,7 @@ public class HttpHandler {
      * @param url the target URL
      * @param callback the callback to return to when the request has been executed
      */
+    @SuppressWarnings("unused")
     public static void getJson(String url, JsonRequestCallback callback) {
         getJson(url, new ArrayMap<String, String>(), callback);
     }
@@ -70,6 +71,7 @@ public class HttpHandler {
      * @param headers ArrayMap of headers
      * @param callback the callback to return to when the request has been executed
      */
+    @SuppressWarnings("WeakerAccess")
     public static void postJson(String url, JSONObject payload, ArrayMap<String, String> headers, final JsonRequestCallback callback) {
         Request req = buildReq("POST", url, RequestBody.create(MediaType.parse("application/json"), payload.toString()), headers);
         Log.d("HttpHandler", "Dispatching POST "+url);

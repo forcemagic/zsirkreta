@@ -14,8 +14,8 @@
         android:layout_marginStart="44dp"
         android:layout_marginTop="8dp"
         android:background="@android:color/white"
-        android:id="@+id/avgItemInnerLayout"
-        android:layout_marginLeft="44dp">
+        android:elevation="2dp"
+        android:id="@+id/avgItemInnerLayout">
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -26,9 +26,7 @@
             android:layout_marginStart="38dp"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:layout_toStartOf="@+id/averageExpandToggler"
-            android:layout_toLeftOf="@+id/averageExpandToggler"
-            android:layout_marginLeft="38dp">
+            android:layout_toStartOf="@+id/averageExpandToggler">
 
             <TextView
                 android:id="@+id/avglabel_subject"
@@ -43,8 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
-                android:text="@string/blablabla"
-                android:layout_marginLeft="2dp" />
+                android:text="@string/blablabla" />
 
         </LinearLayout>
 
@@ -55,9 +52,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/dropdown_icon_black"
-            android:layout_marginRight="16dp"
-            android:layout_alignParentRight="true" />
+            app:srcCompat="@drawable/dropdown_icon_black" />
 
     </RelativeLayout>
 
@@ -68,9 +63,9 @@
         android:layout_height="82dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:elevation="3dp"
         android:max="50"
-        android:padding="6dp"
-        android:layout_alignParentLeft="true" />
+        android:padding="6dp" />
 
     <TextView
         android:id="@+id/avglabel_average"
@@ -80,14 +75,13 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="center_vertical"
+        android:elevation="3dp"
         android:gravity="fill_vertical"
         android:text="5.00"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="24sp"
-        tools:ignore="HardcodedText"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/avgProgress" />
+        tools:ignore="HardcodedText" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/averageChart"
@@ -98,8 +92,6 @@
         android:layout_marginStart="24dp"
         android:paddingStart="8dp"
         android:visibility="gone"
-        tools:ignore="RtlSymmetry"
-        android:paddingLeft="8dp"
-        android:layout_marginLeft="24dp" />
+        tools:ignore="RtlSymmetry" />
 
 </RelativeLayout>

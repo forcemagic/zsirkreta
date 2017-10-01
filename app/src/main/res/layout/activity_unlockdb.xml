@@ -52,6 +52,7 @@
                 android:id="@+id/unlockDbTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:labelFor="@+id/unlockDbPassword"
                 android:text="@string/unlockdb_title"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"

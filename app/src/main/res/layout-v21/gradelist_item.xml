@@ -1,62 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/gradeBullet"
         android:layout_alignStart="@+id/gradeBullet"
         android:layout_alignTop="@+id/gradeBullet"
+        android:layout_gravity="center_vertical"
         android:layout_marginBottom="3dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="2dp"
         android:layout_toEndOf="@+id/gradeBullet"
         android:background="@android:color/white"
-        android:elevation="2dp">
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:elevation="2dp"
+        android:paddingStart="36dp"
+        tools:ignore="RtlSymmetry">
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/gradeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="36dp"
-            android:orientation="vertical">
+            android:text="@string/blablabla"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/gradeTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/blablabla"
-                android:textColor="?android:attr/textColorPrimary"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+        <TextView
+            android:id="@+id/gradeDesc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/blablabla"
+            android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/gradeDesc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:text="@string/blablabla"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/gradeDesc2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
-                android:text="@string/blablabla"
-                android:textSize="12sp" />
-        </LinearLayout>
-
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/gradeDesc2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:text="@string/blablabla"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/gradeBullet"
@@ -67,6 +61,7 @@
         android:layout_marginBottom="4dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
+        android:adjustViewBounds="true"
         android:elevation="3dp"
         app:srcCompat="@drawable/normalgrade" />
 
@@ -80,11 +75,12 @@
         android:layout_marginBottom="4dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:elevation="3dp"
         android:gravity="fill_vertical"
         android:text="5"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="36sp" />
+        android:textSize="36sp"
+        android:elevation="3dp"
+        tools:ignore="HardcodedText" />
 
 </RelativeLayout>

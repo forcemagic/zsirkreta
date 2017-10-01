@@ -33,7 +33,6 @@ import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.activities.MainActivity;
 import com.speedyblur.kretaremastered.adapters.ClazzAdapter;
-import com.speedyblur.kretaremastered.models.AllDayEvent;
 import com.speedyblur.kretaremastered.models.Clazz;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
@@ -51,7 +50,7 @@ import java.util.TimerTask;
 
 public class MainScheduleFragment extends Fragment {
     // TODO: Implement this
-    private ArrayList<AllDayEvent> allDayEvents;
+    //private ArrayList<AllDayEvent> allDayEvents;
     private ArrayList<Clazz> clazzes;
     private CalendarDay selectedScheduleDate;
     private Timer timer;
@@ -70,7 +69,7 @@ public class MainScheduleFragment extends Fragment {
         // Fetching DataStore
         try {
             DataStore ds = new DataStore(getContext(), parent.p.getCardid(), Common.SQLCRYPT_PWD);
-            allDayEvents = ds.getAllDayEventsData();
+            //allDayEvents = ds.getAllDayEventsData();
             clazzes = ds.getClassesData();
             ds.close();
         } catch (DecryptionException e) {e.printStackTrace();}
@@ -213,7 +212,7 @@ public class MainScheduleFragment extends Fragment {
     }
 
     private class SwipeDetector implements View.OnTouchListener {
-        private int minDist = 100;
+        private final int minDist = 100;
         private float downX, downY, upX, upY;
 
         @Override

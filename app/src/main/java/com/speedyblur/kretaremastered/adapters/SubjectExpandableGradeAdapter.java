@@ -72,10 +72,10 @@ public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectE
     }
 
     static class ListHeaderVH extends RecyclerView.ViewHolder {
-        TextView headerTitle;
-        ImageView expandToggler;
-        View gradeGroupBar;
-        RecyclerView subView;
+        final TextView headerTitle;
+        final ImageView expandToggler;
+        final View gradeGroupBar;
+        final RecyclerView subView;
 
         ListHeaderVH(View itemView) {
             super(itemView);
