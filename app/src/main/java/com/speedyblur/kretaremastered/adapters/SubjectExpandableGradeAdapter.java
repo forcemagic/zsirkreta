@@ -1,6 +1,9 @@
 package com.speedyblur.kretaremastered.adapters;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,15 +45,21 @@ public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectE
         if (position == currentOpened) {
             holder.expandToggler.setRotation(180f);
             holder.subView.setVisibility(View.VISIBLE);
+            Drawable bar = ContextCompat.getDrawable(ctxt, R.drawable.grade_group_bar).mutate();
+            bar.setColorFilter(ContextCompat.getColor(ctxt, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
+            holder.gradeGroupBar.setBackground(bar);
         } else {
             holder.expandToggler.setRotation(0f);
             holder.subView.setVisibility(View.GONE);
+            holder.gradeGroupBar.setBackgroundResource(R.drawable.grade_group_bar);
         }
-        holder.expandToggler.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentOpened = holder.getAdapterPosition();
-                notifyItemRangeChanged(0, getItemCount());
+                int lastOpened = currentOpened;
+                if (currentOpened == holder.getAdapterPosition()) currentOpened = -1;
+                else currentOpened = holder.getAdapterPosition();
+                notifyItemChanged(lastOpened); notifyItemChanged(currentOpened);
             }
         });
     }

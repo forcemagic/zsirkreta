@@ -26,11 +26,10 @@
             android:id="@+id/gradeGroupExpandIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:srcCompat="@android:drawable/arrow_down_float"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_marginEnd="16dp"
+            app:srcCompat="@drawable/dropdown_icon_black" />
 
         <View
             android:id="@+id/gradeGroupBar"

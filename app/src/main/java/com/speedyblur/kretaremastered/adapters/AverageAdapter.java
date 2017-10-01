@@ -6,25 +6,21 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ExpandableListView;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.LimitLine;
-import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
-import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.speedyblur.kretaremastered.EpochToDateFormatter;
 import com.speedyblur.kretaremastered.R;
@@ -35,83 +31,27 @@ import com.speedyblur.kretaremastered.shared.DecryptionException;
 
 import java.util.ArrayList;
 
-public class AverageAdapter extends BaseExpandableListAdapter {
-    private int lastExpandedPos = -1;
-    private final Context ctxt;
-    private final ArrayList<Average> items;
+public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHolder> {
+    private final ArrayList<Average> averages;
     private final String profileName;
-    private final ExpandableListView elv;
+    private int currentOpened = -1;
 
-    public AverageAdapter(Context ctxt, ArrayList<Average> items, String profileName, ExpandableListView elv) {
-        this.ctxt = ctxt;
-        this.items = items;
+    public AverageAdapter(ArrayList<Average> averages, String profileName) {
+        this.averages = averages;
         this.profileName = profileName;
-        this.elv = elv;
     }
 
     @Override
-    public Average getGroup(int i) {
-        return items.get(i);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater infl = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = infl.inflate(R.layout.avglist_item, parent, false);
+        return new ViewHolder(v);
     }
 
     @Override
-    public int getGroupCount() {
-        return items.size();
-    }
-
-    @Override
-    public long getGroupId(int i) {
-        return i;
-    }
-
-    @Override
-    public Object getChild(int i, int i1) {
-        return null;
-    }
-
-    @Override
-    public int getChildrenCount(int i) {
-        return 1;
-    }
-
-    @Override
-    public long getChildId(int i, int i1) {
-        return i1;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public void onGroupExpanded(int groupPosition) {
-        super.onGroupExpanded(groupPosition);
-
-        if (lastExpandedPos != -1 && groupPosition != lastExpandedPos)
-            elv.collapseGroup(lastExpandedPos);
-        lastExpandedPos = groupPosition;
-    }
-
-    @Override
-    public View getGroupView(int pos, boolean isExp, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null || convertView.getTag() == null) {
-            convertView = LayoutInflater.from(ctxt).inflate(R.layout.avglist_item, parent, false);
-
-            holder = new ViewHolder();
-            holder.avgProgress = convertView.findViewById(R.id.avgProgress);
-            holder.avgView = convertView.findViewById(R.id.avglabel_average);
-            holder.subjView = convertView.findViewById(R.id.avglabel_subject);
-            holder.descView = convertView.findViewById(R.id.avglabel_desc);
-
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-
-        final Average item = this.getGroup(pos);
-        assert item != null;
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        Average item = averages.get(position);
+        Context ctxt = holder.avgProgress.getContext();
 
         LayerDrawable lDrawable = (LayerDrawable) holder.avgProgress.getProgressDrawable();
         lDrawable.getDrawable(2).setColorFilter(ContextCompat.getColor(ctxt, item.getColorId()), PorterDuff.Mode.SRC_ATOP);
@@ -122,113 +62,117 @@ public class AverageAdapter extends BaseExpandableListAdapter {
         holder.subjView.setText(Common.getLocalizedSubjectName(ctxt, item.getSubject()));
         holder.descView.setText(ctxt.getString(R.string.avglabel_desc, item.getClassAverage(), item.getAverage() - item.getClassAverage()));
 
-        return convertView;
-    }
+        if (position == currentOpened) {
+            holder.expandToggler.setRotation(180f);
 
-    @Override
-    public View getChildView(int pos, int i1, boolean b, View convertView, ViewGroup parent) {
-        final ChildHolder holder;
-        if (convertView == null || convertView.getTag() == null) {
-            convertView = LayoutInflater.from(ctxt).inflate(R.layout.dropdown_average_graph, parent, false);
+            // DataStore
+            DataStore ds = null;
+            try {
+                ds = new DataStore(ctxt, profileName, Common.SQLCRYPT_PWD);
+            } catch (DecryptionException e) {
+                e.printStackTrace();
+            }
+            assert ds != null;
 
-            holder = new ChildHolder();
+            // DataSet settings
+            final LineDataSet lds = new LineDataSet(ds.getAverageGraphData(item.getSubject()).getEntries(), "Averages");
+            ds.close();
+            lds.setValueTextColor(R.color.colorPrimaryDark);
+            lds.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+            lds.setDrawFilled(true);
+            lds.setLineWidth(2f);
+            lds.setValueTextSize(12f);
+            lds.setValueFormatter(new IValueFormatter() {
+                @Override
+                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                    if (dataSetIndex != 0 && lds.getEntryForIndex(dataSetIndex - 1).getY() == value &&
+                            !((boolean) entry.getData()) && dataSetIndex != lds.getEntryCount() - 1)
+                        return "";
+                    return String.valueOf((double) Math.round(value * 100) / 100);
+                }
+            });
+            lds.setCircleRadius(2f);
+            lds.setCircleHoleRadius(1f);
+            lds.setCircleColor(Color.BLACK);
+            lds.setFillColor(ContextCompat.getColor(ctxt, R.color.colorAccent));
+            lds.setColor(ContextCompat.getColor(ctxt, R.color.colorAccent));
 
-            // Chart
-            holder.chart = convertView.findViewById(R.id.averageChart);
-            holder.chart.getContentRect().right = 8f;
-            holder.chart.getXAxis().setTextSize(10f);
-            holder.chart.getXAxis().setLabelCount(4);
-            holder.chart.getXAxis().setValueFormatter(new EpochToDateFormatter());
-            holder.chart.getXAxis().setAvoidFirstLastClipping(true);
-            holder.chart.getAxisLeft().setTextSize(18f);
-            holder.chart.getAxisLeft().setAxisMaximum(5.5f);
-            holder.chart.getAxisLeft().setAxisMinimum(0.5f);
-            holder.chart.getAxisLeft().setDrawTopYLabelEntry(true);
-            holder.chart.getAxisLeft().setGranularity(1f);
-            holder.chart.getAxisLeft().setLabelCount(5);
-            holder.chart.getAxisRight().setEnabled(false);
-            holder.chart.getDescription().setEnabled(false);
-            holder.chart.getLegend().setEnabled(false);
-            holder.chart.setScaleEnabled(false);
+            // Getting half-term line (if it exists)
+            int halftermtime = -1;
+            for (int i = 0; i < lds.getEntryCount(); i++) {
+                Entry e = lds.getEntryForIndex(i);
+                if ((boolean) e.getData()) {
+                    halftermtime = (int) e.getX();
+                    break;
+                }
+            }
+            if (halftermtime != -1) {
+                LimitLine limit = new LimitLine(halftermtime);
+                limit.setLineWidth(2f);
+                limit.enableDashedLine(24f, 6f, 0f);
+                limit.setLineColor(ContextCompat.getColor(ctxt, R.color.veryBadGrade));
+                holder.chart.getXAxis().addLimitLine(limit);
+            }
 
-            convertView.setTag(holder);
+
+            // Final data setting
+            holder.chart.setData(new LineData(lds));
+            holder.chart.invalidate();
+            holder.chart.setVisibility(View.VISIBLE);
         } else {
-            holder = (ChildHolder) convertView.getTag();
+            holder.expandToggler.setRotation(0f);
+            holder.chart.setVisibility(View.GONE);
         }
-
-        // DataStore
-        DataStore ds = null;
-        try {
-            ds = new DataStore(ctxt, profileName, Common.SQLCRYPT_PWD);
-        } catch (DecryptionException e) {
-            e.printStackTrace();
-        }
-        assert ds != null;
-
-        // DataSet settings
-        final LineDataSet lds = new LineDataSet(ds.getAverageGraphData(items.get(pos).getSubject()).getEntries(), "Averages");
-        ds.close();
-        lds.setValueTextColor(R.color.colorPrimaryDark);
-        lds.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-        lds.setDrawFilled(true);
-        lds.setLineWidth(2f);
-        lds.setValueTextSize(12f);
-        lds.setValueFormatter(new IValueFormatter() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                if (dataSetIndex != 0 && lds.getEntryForIndex(dataSetIndex - 1).getY() == value &&
-                        !((boolean) entry.getData()) && dataSetIndex != lds.getEntryCount() - 1)
-                    return "";
-                return String.valueOf((double) Math.round(value * 100) / 100);
+            public void onClick(View view) {
+                int lastOpened = currentOpened;
+                if (currentOpened == holder.getAdapterPosition()) currentOpened = -1;
+                else currentOpened = holder.getAdapterPosition();
+                notifyItemChanged(lastOpened); notifyItemChanged(currentOpened);
             }
         });
-        lds.setCircleRadius(2f);
-        lds.setCircleHoleRadius(1f);
-        lds.setCircleColor(Color.BLACK);
-        lds.setFillColor(ContextCompat.getColor(ctxt, R.color.colorAccent));
-        lds.setColor(ContextCompat.getColor(ctxt, R.color.colorAccent));
-
-        // Reset chart
-        holder.chart.getXAxis().removeAllLimitLines();
-
-        // Getting half-term line
-        int halftermtime = -1;
-        for (int i = 0; i < lds.getEntryCount(); i++) {
-            Entry e = lds.getEntryForIndex(i);
-            if ((boolean) e.getData()) {
-                halftermtime = (int) e.getX();
-                break;
-            }
-        }
-        if (halftermtime != -1) {
-            LimitLine limit = new LimitLine(halftermtime);
-            limit.setLineWidth(2f);
-            limit.enableDashedLine(24f, 6f, 0f);
-            limit.setLineColor(ContextCompat.getColor(ctxt, R.color.veryBadGrade));
-            holder.chart.getXAxis().addLimitLine(limit);
-        }
-
-
-        // Final data setting
-        holder.chart.setData(new LineData(lds));
-        holder.chart.invalidate();
-
-        return convertView;
     }
 
     @Override
-    public boolean isChildSelectable(int i, int i1) {
-        return false;
+    public int getItemCount() {
+        return averages.size();
     }
 
-    private static class ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         ProgressBar avgProgress;
         TextView avgView;
         TextView subjView;
         TextView descView;
-    }
-
-    private static class ChildHolder {
+        ImageView expandToggler;
         LineChart chart;
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            avgProgress = itemView.findViewById(R.id.avgProgress);
+            avgView = itemView.findViewById(R.id.avglabel_average);
+            subjView = itemView.findViewById(R.id.avglabel_subject);
+            descView = itemView.findViewById(R.id.avglabel_desc);
+            expandToggler = itemView.findViewById(R.id.averageExpandToggler);
+            chart = itemView.findViewById(R.id.averageChart);
+            setupChart();
+        }
+
+        private void setupChart() {
+            chart.getXAxis().setTextSize(10f);
+            chart.getXAxis().setLabelCount(4);
+            chart.getXAxis().setValueFormatter(new EpochToDateFormatter());
+            chart.getXAxis().setAvoidFirstLastClipping(true);
+            chart.getAxisLeft().setTextSize(18f);
+            chart.getAxisLeft().setAxisMaximum(5.5f);
+            chart.getAxisLeft().setAxisMinimum(0.5f);
+            chart.getAxisLeft().setDrawTopYLabelEntry(true);
+            chart.getAxisLeft().setGranularity(1f);
+            chart.getAxisLeft().setLabelCount(5);
+            chart.getAxisRight().setEnabled(false);
+            chart.getDescription().setEnabled(false);
+            chart.getLegend().setEnabled(false);
+            chart.setScaleEnabled(false);
+        }
     }
 }

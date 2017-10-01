@@ -9,6 +9,7 @@
         android:id="@+id/noAveragesView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:gravity="center">
 
         <TextView
@@ -32,13 +33,11 @@
             android:text="@string/nothingtoseehere" />
     </RelativeLayout>
 
-    <ExpandableListView
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/averageList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:divider="@null"
-        android:groupIndicator="@null"/>
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>

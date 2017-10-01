@@ -14,7 +14,10 @@ import android.widget.TextView;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.Grade;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final ArrayList<Grade> grades;
@@ -53,6 +56,12 @@ public class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         ngvh.gradeBullet.getContext(), g.getColorId()), PorterDuff.Mode.SRC_ATOP);
                 ngvh.grade.setText(String.valueOf(g.getGrade()));
                 ngvh.gradeTitle.setText(g.getType());
+                if (g.getTheme().equals(" - ")) {
+                    ngvh.gradeDesc.setVisibility(View.GONE);
+                } else {
+                    ngvh.gradeDesc.setText(g.getTheme());
+                }
+                ngvh.gradeDesc2.setText(new SimpleDateFormat("yyyy. MM. dd.", Locale.getDefault()).format(new Date((long) g.getDate()*1000)));
                 break;
             case SPEC_GRADE:
                 SpecGradeVH sgvh = (SpecGradeVH) holder;
