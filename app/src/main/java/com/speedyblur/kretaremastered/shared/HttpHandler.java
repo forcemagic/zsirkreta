@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,7 +24,13 @@ import okhttp3.Response;
 
 public class HttpHandler {
 
-    private static final OkHttpClient httpClient = new OkHttpClient();
+    private static final String hostname = "www.speedyblur.com";
+    private static final CertificatePinner certPinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/3mbCPRv7AYBP30hhmhMuNVF5ePn1Tm9BLWtQ4TiTCTU=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+    private static final OkHttpClient httpClient = new OkHttpClient.Builder().certificatePinner(certPinner).build();
 
     /**
      * Issues a GET request against url. Parses JSON for the callback.

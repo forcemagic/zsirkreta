@@ -65,7 +65,7 @@
     <string name="http_connect_timeout">Connection timed out</string>
     <string name="http_cant_resolve">You are not connected to the Internet</string>
     <string name="http_unknown">This error… I have no idea what it is actually. Sorry. :(</string>
-    <string name="http_bad_gateway">Kreta is having some issues… (Not surprising) Try again later.</string>
+    <string name="http_bad_gateway">The Kreta servers are having a great time maintenanced</string>
 
     <!-- Introduction messages -->
     <string name="welcome_first_title">Welcome to Kreta Remastered!</string>
