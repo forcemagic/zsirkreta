@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#222</color>
-    <color name="colorPrimaryDark">#000</color>
+    <color name="colorPrimary">#2b2d30</color>
+    <color name="colorPrimaryDark">#0d0e0f</color>
     <color name="colorAccent">#3030df</color>
+    <color name="headerColor">#FF000000</color>
 
     <color name="excellentGrade">#FF30d130</color>
     <color name="goodGrade">#FF44CC44</color>
@@ -13,7 +14,7 @@
     <color name="weekdaySelector">#FF425363</color>
     <color name="weekdayActive">#FFCC4444</color>
 
-    <color name="bgcolorActivity">#FFF0F0F0</color>
+    <color name="bgcolorActivity">#FFF8F8F8</color>
 
     <color name="transparent">#00000000</color>
 </resources>

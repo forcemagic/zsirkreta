@@ -5,7 +5,7 @@
     android:background="@drawable/side_nav_bar"
     android:gravity="bottom"
     android:orientation="vertical"
-    android:paddingBottom="24dp"
+    android:paddingBottom="8dp"
     android:paddingEnd="24dp"
     android:paddingStart="24dp"
     android:paddingTop="32dp"
@@ -15,6 +15,7 @@
         android:id="@+id/profileNameHead"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
         android:text="@string/blablabla"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp" />

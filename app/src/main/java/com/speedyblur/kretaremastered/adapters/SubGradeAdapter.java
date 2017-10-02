@@ -57,7 +57,7 @@ class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 ngvh.grade.setText(String.valueOf(g.getGrade()));
                 ngvh.gradeTitle.setText(g.getType());
                 if (g.getTheme().equals(" - ")) {
-                    ngvh.gradeDesc.setVisibility(View.GONE);
+                    ngvh.gradeDesc.setText(R.string.japansmile);
                 } else {
                     ngvh.gradeDesc.setText(g.getTheme());
                 }
