@@ -116,7 +116,7 @@ public class DataStore {
         updateLastSave();
     }
 
-    public void putClassesData(ArrayList<Clazz> clazzes) {
+    public void putClassesData(ArrayList<Clazz> clazzes, InsertProcessCallback ipc) {
         // Truncate table
         truncateTableIfExists("clazzes_"+profileName);
 
@@ -142,6 +142,8 @@ public class DataStore {
                         String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "0"
                 });
             }
+
+            ipc.onInsertComplete(i+1, clazzes.size());
         }
 
         updateLastSave();
@@ -423,5 +425,9 @@ public class DataStore {
 
     public void close() {
         db.close();
+    }
+
+    public interface InsertProcessCallback {
+        void onInsertComplete(int current, int total);
     }
 }

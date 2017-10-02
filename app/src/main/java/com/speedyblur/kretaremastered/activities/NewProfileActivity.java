@@ -1,7 +1,5 @@
 package com.speedyblur.kretaremastered.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
@@ -16,6 +14,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
@@ -41,11 +40,11 @@ import java.util.ArrayList;
 public class NewProfileActivity extends AppCompatActivity {
 
     // UI references.
+    private ViewFlipper mLoginFlipperView;
     private EditText mFriendlyNameView;
     private EditText mIdView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
+    private TextView mProgressStatusView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +77,8 @@ public class NewProfileActivity extends AppCompatActivity {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+        mLoginFlipperView = (ViewFlipper) findViewById(R.id.login_flipper);
+        mProgressStatusView = (TextView) findViewById(R.id.login_progress_status);
     }
 
     /**
@@ -159,7 +158,17 @@ public class NewProfileActivity extends AppCompatActivity {
                                 // Commit
                                 DataStore ds = new DataStore(getApplicationContext(), p.getCardid(), Common.SQLCRYPT_PWD);
                                 ds.putAllDayEventsData(allDayEvents);
-                                ds.putClassesData(clazzes);
+                                ds.putClassesData(clazzes, new DataStore.InsertProcessCallback() {
+                                    @Override
+                                    public void onInsertComplete(final int current, final int total) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                mProgressStatusView.setText(getString(R.string.filling_schedule, current, total));
+                                            }
+                                        });
+                                    }
+                                });
                                 ds.close();
 
                                 AccountStore ash = new AccountStore(getApplicationContext(), Common.SQLCRYPT_PWD);
@@ -234,27 +243,8 @@ public class NewProfileActivity extends AppCompatActivity {
      * Shows the progress UI and hides the login form (or, if you want, the other way around)
      * @param show whether to show the progress or not
      */
-    private void showProgress(final boolean show) {
-        // Fade-in progress bar
-        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-        mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        mLoginFormView.animate().setDuration(shortAnimTime).alpha(
-                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            }
-        });
-
-        mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-        mProgressView.animate().setDuration(shortAnimTime).alpha(
-                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            }
-        });
+    private void showProgress(boolean show) {
+        mLoginFlipperView.setDisplayedChild(show ? 1 : 0);
     }
 }
 
