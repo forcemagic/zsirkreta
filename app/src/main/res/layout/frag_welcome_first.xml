@@ -20,8 +20,10 @@
                 android:id="@+id/welcomeFirstTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:text="@string/welcome_first_title"
+                android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="24sp" />
 
@@ -29,18 +31,19 @@
                 android:id="@+id/welcomeFirstSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:layout_margin="4dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:text="@string/welcome_first_subtitle"
+                android:textAlignment="center"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/welcomeFirstDisclaimer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:paddingEnd="8dp"
-                android:paddingStart="8dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:padding="8dp"
                 android:text="@string/login_copyright"
                 android:textAlignment="center"
                 android:textSize="12sp" />

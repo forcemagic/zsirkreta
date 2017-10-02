@@ -21,6 +21,8 @@
                 android:id="@+id/fingerprintUnlockDbTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:text="@string/fingerprint_unlockdb_title"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
@@ -30,6 +32,7 @@
                 android:id="@+id/fingerprintUnlockDbImage"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
                 android:padding="16dp"
                 app:srcCompat="@drawable/fingerprint_icon_black" />
 
@@ -52,6 +55,8 @@
                 android:id="@+id/unlockDbTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:labelFor="@+id/unlockDbPassword"
                 android:text="@string/unlockdb_title"
                 android:textAlignment="center"

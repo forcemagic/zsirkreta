@@ -52,11 +52,9 @@ public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectE
             holder.subView.setVisibility(View.VISIBLE);
             Drawable bar = ContextCompat.getDrawable(ctxt, R.drawable.grade_group_bar).mutate();
             bar.setColorFilter(ContextCompat.getColor(ctxt, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
-            holder.gradeGroupBar.setBackground(bar);
         } else {
             holder.expandToggler.setRotation(0f);
             holder.subView.setVisibility(View.GONE);
-            holder.gradeGroupBar.setBackgroundResource(R.drawable.grade_group_bar);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,14 +77,12 @@ public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectE
     static class ListHeaderVH extends RecyclerView.ViewHolder {
         final TextView headerTitle;
         final ImageView expandToggler;
-        final View gradeGroupBar;
         final RecyclerView subView;
 
         ListHeaderVH(View itemView) {
             super(itemView);
             headerTitle = itemView.findViewById(R.id.gradeGroupTitle);
             expandToggler = itemView.findViewById(R.id.gradeGroupExpandIcon);
-            gradeGroupBar = itemView.findViewById(R.id.gradeGroupBar);
             subView = itemView.findViewById(R.id.gradeGroupSubView);
         }
     }

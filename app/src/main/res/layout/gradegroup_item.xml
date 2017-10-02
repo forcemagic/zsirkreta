@@ -16,12 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginRight="18dp"
             android:layout_toLeftOf="@+id/gradeGroupExpandIcon"
             android:layout_toStartOf="@+id/gradeGroupExpandIcon"
+            android:padding="12dp"
             android:text="@string/blablabla"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="20sp"
@@ -32,18 +31,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/dropdown_icon_black"
-            android:layout_marginRight="16dp"
-            android:layout_alignParentRight="true" />
+            android:layout_marginEnd="18dp"
+            android:layout_marginRight="18dp"
+            app:srcCompat="@drawable/dropdown_icon_black" />
 
-        <View
-            android:id="@+id/gradeGroupBar"
-            android:layout_width="60dp"
-            android:layout_height="2dp"
-            android:layout_below="@id/gradeGroupTitle"
-            android:background="@drawable/grade_group_bar" />
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
