@@ -81,7 +81,7 @@
         android:id="@+id/scheduleList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
+        android:divider="@drawable/grade_group_bar"
         android:layout_below="@+id/calendarImageButton"
         android:layout_alignParentStart="true"
         android:layout_above="@+id/scheduleWeekdaySelector"

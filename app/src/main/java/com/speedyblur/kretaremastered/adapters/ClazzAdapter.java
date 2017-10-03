@@ -66,7 +66,9 @@ public class ClazzAdapter extends ArrayAdapter<Clazz> {
         holder.scheduleStatus.setImageDrawable(c.getIcon(getContext()));
         holder.scheduleClassNum.setText(getContext().getString(R.string.class_number, c.getClassnum()));
         holder.scheduleTheme.setVisibility(View.VISIBLE);
-        if (c.getTheme().equals("")) holder.scheduleTheme.setVisibility(View.GONE);
+        if (c.getTheme().equals("") && (long) c.getBeginTime()*1000 > System.currentTimeMillis())
+            holder.scheduleTheme.setVisibility(View.GONE);
+        else if (c.getTheme().equals("")) holder.scheduleTheme.setText(R.string.japansmile);
         else holder.scheduleTheme.setText(c.getTheme());
         holder.scheduleSubject.setText(Common.getLocalizedSubjectName(getContext(), c.getSubject()));
 

@@ -8,27 +8,48 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/avgProgress"
-        android:layout_alignParentTop="true"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/white"
-        android:id="@+id/avgItemInnerLayout"
-        android:layout_marginLeft="44dp">
+        android:id="@+id/avgInnerLayout">
+
+        <ProgressBar
+            android:id="@+id/avgProgress"
+            style="@style/Widget.ProgressBar.Vertical"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:max="50"
+            android:padding="6dp" />
+
+        <TextView
+            android:id="@+id/avglabel_average"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignEnd="@+id/avgProgress"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/avgProgress"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="5.00"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            tools:ignore="HardcodedText" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="38dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@+id/avgProgress"
+            android:layout_toRightOf="@+id/avgProgress"
             android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:layout_toStartOf="@+id/averageExpandToggler"
-            android:layout_toLeftOf="@+id/averageExpandToggler"
-            android:layout_marginLeft="38dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/avglabel_subject"
@@ -42,9 +63,9 @@
                 android:id="@+id/avglabel_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
                 android:layout_marginStart="2dp"
-                android:text="@string/blablabla"
-                android:layout_marginLeft="2dp" />
+                android:text="@string/blablabla" />
 
         </LinearLayout>
 
@@ -53,53 +74,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/dropdown_icon_black"
             android:layout_marginRight="16dp"
-            android:layout_alignParentRight="true" />
+            app:srcCompat="@drawable/dropdown_icon_black" />
 
     </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/avgProgress"
-        style="@style/Widget.ProgressBar.Vertical"
-        android:layout_width="82dp"
-        android:layout_height="82dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:max="50"
-        android:padding="6dp"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:id="@+id/avglabel_average"
-        android:layout_width="82dp"
-        android:layout_height="82dp"
-        android:layout_alignEnd="@+id/avgProgress"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/avgProgress"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:text="5.00"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        tools:ignore="HardcodedText" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/averageChart"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:layout_below="@+id/avgItemInnerLayout"
+        android:layout_below="@+id/avgInnerLayout"
         android:layout_marginBottom="4dp"
+        android:layout_marginLeft="24dp"
         android:layout_marginStart="24dp"
-        android:paddingStart="8dp"
-        android:visibility="gone"
-        tools:ignore="RtlSymmetry"
+        android:layout_marginTop="4dp"
         android:paddingLeft="8dp"
-        android:layout_marginLeft="24dp" />
+        android:paddingStart="8dp"
+        tools:ignore="RtlSymmetry" />
 
 </RelativeLayout>

@@ -21,7 +21,7 @@
             android:id="@+id/gradeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="3dp"
             android:text="@string/blablabla"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="16sp"
@@ -41,7 +41,7 @@
             android:id="@+id/gradeDesc2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="3dp"
             android:text="@string/blablabla"
             android:textSize="12sp" />
     </LinearLayout>

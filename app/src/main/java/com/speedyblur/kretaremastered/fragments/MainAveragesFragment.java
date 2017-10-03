@@ -16,6 +16,7 @@ import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
+import com.speedyblur.kretaremastered.shared.GradeSeparatorDecoration;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,7 @@ public class MainAveragesFragment extends Fragment {
         } catch (DecryptionException e) {e.printStackTrace();}
 
         RecyclerView avgList = (RecyclerView) parent.findViewById(R.id.averageList);
+        avgList.addItemDecoration(new GradeSeparatorDecoration(getContext()));
         avgList.setLayoutManager(new LinearLayoutManager(getContext()));
         avgList.setAdapter(new AverageAdapter(averages, parent.p.getCardid()));
     }

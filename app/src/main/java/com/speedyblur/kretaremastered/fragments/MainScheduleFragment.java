@@ -113,7 +113,8 @@ public class MainScheduleFragment extends Fragment {
                 ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, classNum.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
                 mSubject.setText(ssb);
 
-                mTheme.setText(c.getTheme());
+                if (c.getTheme().equals("")) mTheme.setText(R.string.japansmile);
+                else mTheme.setText(c.getTheme());
                 mTeacher.setText(c.getTeacher());
                 SimpleDateFormat fmt = new SimpleDateFormat("h:mm a", Locale.getDefault());
                 mTime.setText(fmt.format(new Date((long) c.getBeginTime()*1000))+" - "+fmt.format(new Date((long) c.getEndTime()*1000)));
