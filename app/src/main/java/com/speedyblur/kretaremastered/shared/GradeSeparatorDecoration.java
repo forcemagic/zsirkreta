@@ -10,7 +10,7 @@ import android.view.View;
 import com.speedyblur.kretaremastered.R;
 
 public class GradeSeparatorDecoration extends RecyclerView.ItemDecoration {
-    private Drawable mDivider;
+    private final Drawable mDivider;
 
     public GradeSeparatorDecoration(Context ctxt) {
         mDivider = ContextCompat.getDrawable(ctxt, R.drawable.grade_group_bar);

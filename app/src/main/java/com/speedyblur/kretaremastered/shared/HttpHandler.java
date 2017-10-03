@@ -50,7 +50,7 @@ public class HttpHandler {
      */
     public static void getJson(String url, ArrayMap<String, String> headers, final JsonRequestCallback callback) {
         Request req = buildReq("GET", url, null, headers);
-        Log.d("HttpHandler", "Dispatching GET "+url);
+        Log.v("HttpHandler", "Dispatching GET "+url);
         httpClient.newCall(req).enqueue(new MainCallbackHandler(callback));
     }
 
@@ -74,7 +74,7 @@ public class HttpHandler {
     @SuppressWarnings("WeakerAccess")
     public static void postJson(String url, JSONObject payload, ArrayMap<String, String> headers, final JsonRequestCallback callback) {
         Request req = buildReq("POST", url, RequestBody.create(MediaType.parse("application/json"), payload.toString()), headers);
-        Log.d("HttpHandler", "Dispatching POST "+url);
+        Log.v("HttpHandler", "Dispatching POST "+url);
         httpClient.newCall(req).enqueue(new MainCallbackHandler(callback));
     }
 
@@ -129,7 +129,6 @@ public class HttpHandler {
 
         @Override
         public void onFailure(@NonNull Call call, @NonNull IOException e) {
-            Log.e("HttpHandler", "Failed to complete request.");
             if (e.getMessage().equals("timeout")) {
                 Log.e("HttpHandler", "Timeout error.");
                 jsCallback.onFailure(R.string.http_timeout);
@@ -147,7 +146,6 @@ public class HttpHandler {
 
         @Override
         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-            Log.d("HttpHandler", "Got response. Parsing...");
             if (response.isSuccessful()) {
                 try {
                     //noinspection ConstantConditions

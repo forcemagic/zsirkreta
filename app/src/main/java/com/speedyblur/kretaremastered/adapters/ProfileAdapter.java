@@ -19,10 +19,6 @@ import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.shared.AccountStore;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
-import com.speedyblur.kretaremastered.shared.HttpHandler;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -37,19 +33,26 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
     @NonNull
     @Override
     public View getView(int pos, View convertView, @NonNull ViewGroup parent) {
-        convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.profile_item, parent, false);
+        ProfileViewHolder holder;
+        if (convertView == null || convertView.getTag() == null) {
+            convertView = LayoutInflater.from(this.getContext()).inflate(R.layout.profile_item, parent, false);
 
-        // UI Refs
-        TextView mProfileName = convertView.findViewById(R.id.profileName);
-        TextView mProfileId = convertView.findViewById(R.id.profileId);
-        ImageButton mProfileDelete = convertView.findViewById(R.id.deleteProfileBtn);
-        View mProfLineSep = convertView.findViewById(R.id.profileLineSeparator);
+            holder = new ProfileViewHolder();
+            holder.profileName = convertView.findViewById(R.id.profileName);
+            holder.profileId = convertView.findViewById(R.id.profileId);
+            holder.profileDeleteBtn = convertView.findViewById(R.id.deleteProfileBtn);
+            holder.profileDeleteBtn.setFocusable(false);
+            holder.profileSeparator = convertView.findViewById(R.id.profileLineSeparator);
+
+            convertView.setTag(holder);
+        } else {
+            holder = (ProfileViewHolder) convertView.getTag();
+        }
 
         final Profile p = this.getItem(pos);
         assert p != null;
 
-        convertView.setOnClickListener(new LoginClickListener(p));
-        mProfileDelete.setOnClickListener(new View.OnClickListener() {
+        holder.profileDeleteBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder deleteDialog = new AlertDialog.Builder(getContext());
@@ -81,55 +84,28 @@ public class ProfileAdapter extends ArrayAdapter<Profile> {
         });
 
         if (p.hasFriendlyName()) {
-            mProfileName.setText(p.getFriendlyName());
-            mProfileId.setText(p.getCardid());
+            holder.profileName.setText(p.getFriendlyName());
+            holder.profileId.setText(p.getCardid());
         } else {
             // TODO: Rewrite this awful centering
-            mProfileName.setText(p.getCardid());
-            mProfileName.setGravity(Gravity.CENTER_VERTICAL);
-            mProfileId.setVisibility(View.GONE);
+            holder.profileName.setText(p.getCardid());
+            holder.profileName.setGravity(Gravity.CENTER_VERTICAL);
+            holder.profileId.setVisibility(View.GONE);
         }
 
         if (pos == getCount() - 1) {
-            mProfLineSep.setVisibility(View.INVISIBLE);
+            holder.profileSeparator.setVisibility(View.INVISIBLE);
         } else {
-            mProfLineSep.setVisibility(View.VISIBLE);
+            holder.profileSeparator.setVisibility(View.VISIBLE);
         }
 
         return convertView;
     }
 
-    private class LoginClickListener implements View.OnClickListener {
-        private final Profile p;
-
-        private LoginClickListener(Profile p) {
-            this.p = p;
-        }
-
-        @Override
-        public void onClick(View view) {
-            parentActivity.showProgress(true);
-            parentActivity.changeProgressStatus(R.string.loading_logging_in);
-
-            JSONObject payload = new JSONObject();
-            try {
-                payload.put("username", p.getCardid());
-                payload.put("password", p.getPasswd());
-            } catch (JSONException e) { e.printStackTrace(); }
-
-            // Enqueue request
-            HttpHandler.postJson(Common.APIBASE + "/auth", payload, new HttpHandler.JsonRequestCallback() {
-                @Override
-                public void onComplete(JSONObject resp) throws JSONException {
-                    String authToken = resp.getString("token");
-                    parentActivity.doLoadResourceLogin(authToken, p);
-                }
-
-                @Override
-                public void onFailure(int localizedError) {
-                    parentActivity.askCachedVersion(p, localizedError);
-                }
-            });
-        }
+    private static class ProfileViewHolder {
+        TextView profileName;
+        TextView profileId;
+        ImageButton profileDeleteBtn;
+        View profileSeparator;
     }
 }

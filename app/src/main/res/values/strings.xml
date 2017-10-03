@@ -119,6 +119,7 @@
     <string name="dialog_close">Close</string>
     <string name="no_announcements">No announcements here!</string>
     <string name="filling_schedule">Filling Your schedule (%1$d/%2$d)…</string>
+    <string name="login_lastprofile">Logging you in with the last profile in use</string>
 
     <!-- Unknown string values -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -48,7 +49,6 @@ public class ProfileListActivity extends AppCompatActivity {
     private final static int INTENT_REQ_NEWPROF = 1;
     private final Context ctxt = this;
 
-    private final ArrayMap<String, String> headers = new ArrayMap<>();
     private ArrayList<Profile> profiles;
     private ArrayAdapter<Profile> profileAdapter;
     private ViewFlipper mViewFlipper;
@@ -73,93 +73,130 @@ public class ProfileListActivity extends AppCompatActivity {
 
             profileAdapter = new ProfileAdapter(this, profiles);
             mProfileList.setAdapter(profileAdapter);
+            mProfileList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    doLoadResourceLogin((Profile) adapterView.getItemAtPosition(i));
+                }
+            });
             Log.d(LOGTAG, String.format("We have %s profile(s). List population complete.", profiles.size()));
         } catch (DecryptionException e) {
             showOnSnackbar(R.string.decrypt_database_fail, Snackbar.LENGTH_LONG);
         }
+
+        String lastUsedProfile = getSharedPreferences("main", MODE_PRIVATE).getString("lastUsedProfile", "");
+        if (!lastUsedProfile.equals("")) {
+            for (int i=0; i<profiles.size(); i++) {
+                if (profiles.get(i).getCardid().equals(lastUsedProfile)) {
+                    doLoadResourceLogin(profiles.get(i));
+                    showOnSnackbar(R.string.login_lastprofile, Snackbar.LENGTH_SHORT);
+                }
+            }
+        }
     }
 
     // LOADERS START HERE
-    public void doLoadResourceLogin(String authToken, final Profile profile) {
-        headers.put("X-Auth-Token", authToken);
+    public void doLoadResourceLogin(final Profile profile) {
+        showProgress(true);
+        changeProgressStatus(R.string.loading_logging_in);
 
-        final long loadBeginTime = System.currentTimeMillis();
-        HttpHandler.getJson(Common.APIBASE + "/bundle", headers, new HttpHandler.JsonRequestCallback() {
+        JSONObject payload = new JSONObject();
+        try {
+            payload.put("username", profile.getCardid());
+            payload.put("password", profile.getPasswd());
+        } catch (JSONException e) { e.printStackTrace(); }
+
+        HttpHandler.postJson(Common.APIBASE + "/auth", payload, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
-                changeProgressStatus(R.string.loading_saving);
+                ArrayMap<String, String> headers = new ArrayMap<>();
+                headers.put("X-Auth-Token", resp.getString("token"));
 
-                ArrayList<Grade> grades = new ArrayList<>();
-                ArrayList<Average> averages = new ArrayList<>();
-                ArrayList<AvgGraphData> avgGraphDatas = new ArrayList<>();
-                ArrayList<Clazz> clazzes = new ArrayList<>();
-                ArrayList<Announcement> announcements = new ArrayList<>();
-
-                JSONArray rawGrades = resp.getJSONObject("grades").getJSONArray("data");
-                JSONArray rawAvg = resp.getJSONObject("avg").getJSONArray("data");
-                JSONArray rawGraphData = resp.getJSONObject("avggraph").getJSONArray("data");
-                JSONArray rawClazzes = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("classes");
-                //JSONArray rawAllDayEvents = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("allday");
-                JSONArray rawAnnouncements = resp.getJSONObject("announcements").getJSONArray("data");
-                for (int i=0; i<rawGrades.length(); i++) {
-                    JSONObject currentObj = rawGrades.getJSONObject(i);
-                    Grade g = new Gson().fromJson(currentObj.toString(), Grade.class);
-                    grades.add(g);
-                }
-                for (int i=0; i<rawAvg.length(); i++) {
-                    JSONObject currentObj = rawAvg.getJSONObject(i);
-                    Average avg = new Gson().fromJson(currentObj.toString(), Average.class);
-                    averages.add(avg);
-                }
-                for (int i = 0; i<rawGraphData.length(); i++) {
-                    JSONObject currentObj = rawGraphData.getJSONObject(i);
-                    GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
-                    gsonBuilder.registerTypeAdapter(AvgGraphData.class, new AvgGraphDataDeserializer());
-                    AvgGraphData agd = gsonBuilder.create().fromJson(currentObj.toString(), AvgGraphData.class);
-                    avgGraphDatas.add(agd);
-                }
-                for (int i=0; i<rawClazzes.length(); i++) {
-                    JSONObject currentObj = rawClazzes.getJSONObject(i);
-                    GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
-                    gsonBuilder.registerTypeAdapter(Clazz.class, new ClazzDeserializer());
-                    Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
-                    clazzes.add(c);
-                }
-                for (int i=0; i<rawAnnouncements.length(); i++) {
-                    JSONObject currentObj = rawAnnouncements.getJSONObject(i);
-                    Announcement a = new Gson().fromJson(currentObj.toString(), Announcement.class);
-                    announcements.add(a);
-                }
-
-                try {
-                    DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
-                    ds.putGradesData(grades);
-                    ds.putAveragesData(averages);
-                    ds.putAverageGraphData(avgGraphDatas);
-                    ds.upsertClassData(clazzes);
-                    ds.upsertAnnouncementsData(announcements);
-                    ds.close();
-                } catch (DecryptionException e) {e.printStackTrace();}
-
-                final long loadEndTime = System.currentTimeMillis();
-                Log.v("KretaApi", "Fetch completed in "+String.valueOf(loadEndTime-loadBeginTime)+"ms");
-
-                runOnUiThread(new Runnable() {
+                final long loadBeginTime = System.currentTimeMillis();
+                HttpHandler.getJson(Common.APIBASE + "/bundle", headers, new HttpHandler.JsonRequestCallback() {
                     @Override
-                    public void run() {
-                        loadFinish(profile, (int) (loadEndTime-loadBeginTime));
+                    public void onComplete(JSONObject resp) throws JSONException {
+                        changeProgressStatus(R.string.loading_saving);
+
+                        ArrayList<Grade> grades = new ArrayList<>();
+                        ArrayList<Average> averages = new ArrayList<>();
+                        ArrayList<AvgGraphData> avgGraphDatas = new ArrayList<>();
+                        ArrayList<Clazz> clazzes = new ArrayList<>();
+                        ArrayList<Announcement> announcements = new ArrayList<>();
+
+                        JSONArray rawGrades = resp.getJSONObject("grades").getJSONArray("data");
+                        JSONArray rawAvg = resp.getJSONObject("avg").getJSONArray("data");
+                        JSONArray rawGraphData = resp.getJSONObject("avggraph").getJSONArray("data");
+                        JSONArray rawClazzes = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("classes");
+                        //JSONArray rawAllDayEvents = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("allday");
+                        JSONArray rawAnnouncements = resp.getJSONObject("announcements").getJSONArray("data");
+                        for (int i = 0; i < rawGrades.length(); i++) {
+                            JSONObject currentObj = rawGrades.getJSONObject(i);
+                            Grade g = new Gson().fromJson(currentObj.toString(), Grade.class);
+                            grades.add(g);
+                        }
+                        for (int i = 0; i < rawAvg.length(); i++) {
+                            JSONObject currentObj = rawAvg.getJSONObject(i);
+                            Average avg = new Gson().fromJson(currentObj.toString(), Average.class);
+                            averages.add(avg);
+                        }
+                        for (int i = 0; i < rawGraphData.length(); i++) {
+                            JSONObject currentObj = rawGraphData.getJSONObject(i);
+                            GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
+                            gsonBuilder.registerTypeAdapter(AvgGraphData.class, new AvgGraphDataDeserializer());
+                            AvgGraphData agd = gsonBuilder.create().fromJson(currentObj.toString(), AvgGraphData.class);
+                            avgGraphDatas.add(agd);
+                        }
+                        for (int i = 0; i < rawClazzes.length(); i++) {
+                            JSONObject currentObj = rawClazzes.getJSONObject(i);
+                            GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
+                            gsonBuilder.registerTypeAdapter(Clazz.class, new ClazzDeserializer());
+                            Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
+                            clazzes.add(c);
+                        }
+                        for (int i = 0; i < rawAnnouncements.length(); i++) {
+                            JSONObject currentObj = rawAnnouncements.getJSONObject(i);
+                            Announcement a = new Gson().fromJson(currentObj.toString(), Announcement.class);
+                            announcements.add(a);
+                        }
+
+                        try {
+                            DataStore ds = new DataStore(ctxt, profile.getCardid(), Common.SQLCRYPT_PWD);
+                            ds.putGradesData(grades);
+                            ds.putAveragesData(averages);
+                            ds.putAverageGraphData(avgGraphDatas);
+                            ds.upsertClassData(clazzes);
+                            ds.upsertAnnouncementsData(announcements);
+                            ds.close();
+                        } catch (DecryptionException e) {e.printStackTrace();}
+
+                        final long loadEndTime = System.currentTimeMillis();
+                        Log.v("KretaApi", "Fetch completed in " + String.valueOf(loadEndTime - loadBeginTime) + "ms");
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                loadFinish(profile, (int) (loadEndTime - loadBeginTime));
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(int localizedError) {
+                        askCachedVersion(profile, localizedError);
                     }
                 });
             }
 
             @Override
-            public void onFailure(int localizedError)   {
+            public void onFailure(int localizedError) {
                 askCachedVersion(profile, localizedError);
             }
         });
     }
 
     private void loadFinish(Profile profile, int loadTime) {
+        getSharedPreferences("main", MODE_PRIVATE).edit().putString("lastUsedProfile", profile.getCardid()).apply();
         Intent it = new Intent(ProfileListActivity.this, MainActivity.class);
         it.putExtra("profile", profile);
         it.putExtra("loadtime", loadTime);
@@ -206,11 +243,11 @@ public class ProfileListActivity extends AppCompatActivity {
         });
     }
 
-    public void showProgress(boolean doShow) {
+    private void showProgress(boolean doShow) {
         mViewFlipper.setDisplayedChild(doShow ? 1 : 0);
     }
 
-    public void changeProgressStatus(@StringRes final int message) {
+    private void changeProgressStatus(@StringRes final int message) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -219,7 +256,7 @@ public class ProfileListActivity extends AppCompatActivity {
         });
     }
 
-    public void showOnSnackbar(@StringRes final int message, @SuppressWarnings("SameParameterValue") final int length) {
+    public void showOnSnackbar(@StringRes final int message, final int length) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
