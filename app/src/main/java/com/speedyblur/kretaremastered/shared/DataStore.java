@@ -1,5 +1,6 @@
 package com.speedyblur.kretaremastered.shared;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -404,5 +405,27 @@ public class DataStore {
 
     public interface InsertProcessCallback {
         void onInsertComplete(int current, int total);
+    }
+
+    public static void asyncQuery(final Activity a, final String sid, final String passwd, final IDataStore ids) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    DataStore ds = new DataStore(a, sid, passwd);
+                    final Object al = ids.requestFromStore(ds);
+                    ds.close();
+                    a.runOnUiThread(new Runnable() {
+                        @Override
+                        @SuppressWarnings("unchecked")
+                        public void run() {
+                            ids.processRequest(al);
+                        }
+                    });
+                } catch (DecryptionException e) {
+                    ids.onDecryptionFailure(e);
+                }
+            }
+        }).start();
     }
 }

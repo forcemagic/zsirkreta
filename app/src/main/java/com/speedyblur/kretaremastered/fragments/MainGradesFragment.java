@@ -19,6 +19,7 @@ import com.speedyblur.kretaremastered.models.SubjectGradeGroup;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
+import com.speedyblur.kretaremastered.shared.IDataStore;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,51 +38,59 @@ public class MainGradesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        MainActivity parent = (MainActivity) getActivity();
+        final MainActivity parent = (MainActivity) getActivity();
+        final RecyclerView subjGrouped = (RecyclerView) parent.findViewById(R.id.mainGradeView);
+        final StickyListHeadersListView dateListView = (StickyListHeadersListView) parent.findViewById(R.id.datedGradeList);
 
-        // Grades list
-        ArrayList<Grade> grades = new ArrayList<>();
-        try {
-            DataStore ds = new DataStore(getContext(), parent.p.getCardid(), Common.SQLCRYPT_PWD);
-            grades = ds.getGradesData();
-            ds.close();
-        } catch (DecryptionException e) {e.printStackTrace();}
+        DataStore.asyncQuery(parent, parent.p.getCardid(), Common.SQLCRYPT_PWD, new IDataStore<ArrayList<Grade>>() {
 
-        // Subject-grouped list
-        // TODO: Improve sorting
-        RecyclerView subjGrouped = (RecyclerView) parent.findViewById(R.id.mainGradeView);
-        ArrayList<SubjectGradeGroup> subjectGradeGroups = new ArrayList<>();
-        for (int i=grades.size()-1; i>0; i--) {
-            Grade cGrade = grades.get(i);
-            boolean found = false;
-            for (int j=0; j<subjectGradeGroups.size(); j++) {
-                if (subjectGradeGroups.get(j).getSubject().equals(cGrade.getSubject())) {
-                    subjectGradeGroups.get(j).addToGrades(cGrade);
-                    found = true;
-                }
-            }
-            ArrayList<Grade> gList = new ArrayList<>();
-            gList.add(cGrade);
-            if (!found) subjectGradeGroups.add(new SubjectGradeGroup(cGrade.getSubject(), gList));
-        }
-        subjGrouped.setHasFixedSize(false);
-        subjGrouped.setLayoutManager(new LinearLayoutManager(parent));
-        subjGrouped.setAdapter(new SubjectExpandableGradeAdapter(subjectGradeGroups));
-
-        // Date-grouped (ordered) list
-        StickyListHeadersListView dateListView = (StickyListHeadersListView) parent.findViewById(R.id.datedGradeList);
-        ArrayList<Grade> gradesWithoutEndterm = new ArrayList<>();
-        for (int i=0; i<grades.size(); i++) {
-            if (!grades.get(i).getType().contains("végi") && !grades.get(i).getType().contains("Félévi")) gradesWithoutEndterm.add(grades.get(i));
-        }
-        Collections.sort(gradesWithoutEndterm, new Comparator<Grade>() {
             @Override
-            public int compare(Grade g1, Grade g2) {
-                return g2.getDate() - g1.getDate();
+            public ArrayList<Grade> requestFromStore(DataStore ds) {
+                return ds.getGradesData();
+            }
+
+            @Override
+            public void processRequest(ArrayList<Grade> data) {
+                // Date-grouped (ordered) list
+                ArrayList<Grade> gradesWithoutEndterm = new ArrayList<>();
+                for (int i=0; i<data.size(); i++) {
+                    if (!data.get(i).getType().contains("végi") && !data.get(i).getType().contains("Félévi")) gradesWithoutEndterm.add(data.get(i));
+                }
+                Collections.sort(gradesWithoutEndterm, new Comparator<Grade>() {
+                    @Override
+                    public int compare(Grade g1, Grade g2) {
+                        return g2.getDate() - g1.getDate();
+                    }
+                });
+                dateListView.setAdapter(new StickyDateGradeAdapter(getContext(), gradesWithoutEndterm));
+                dateListView.setEmptyView(parent.findViewById(R.id.noGradesView));
+
+                // Subject-grouped list
+                // TODO: Improve sorting
+                ArrayList<SubjectGradeGroup> subjectGradeGroups = new ArrayList<>();
+                for (int i=data.size()-1; i>0; i--) {
+                    Grade cGrade = data.get(i);
+                    boolean found = false;
+                    for (int j=0; j<subjectGradeGroups.size(); j++) {
+                        if (subjectGradeGroups.get(j).getSubject().equals(cGrade.getSubject())) {
+                            subjectGradeGroups.get(j).addToGrades(cGrade);
+                            found = true;
+                        }
+                    }
+                    ArrayList<Grade> gList = new ArrayList<>();
+                    gList.add(cGrade);
+                    if (!found) subjectGradeGroups.add(new SubjectGradeGroup(cGrade.getSubject(), gList));
+                }
+                subjGrouped.setHasFixedSize(false);
+                subjGrouped.setLayoutManager(new LinearLayoutManager(parent));
+                subjGrouped.setAdapter(new SubjectExpandableGradeAdapter(subjectGradeGroups));
+            }
+
+            @Override
+            public void onDecryptionFailure(DecryptionException e) {
+
             }
         });
-        dateListView.setAdapter(new StickyDateGradeAdapter(getContext(), gradesWithoutEndterm));
-        dateListView.setEmptyView(parent.findViewById(R.id.noGradesView));
 
         // Setup viewFlipper
         ((ViewFlipper) parent.findViewById(R.id.gradeOrderFlipper)).setDisplayedChild(0);

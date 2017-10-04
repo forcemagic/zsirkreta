@@ -17,6 +17,7 @@ import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
 import com.speedyblur.kretaremastered.shared.GradeSeparatorDecoration;
+import com.speedyblur.kretaremastered.shared.IDataStore;
 
 import java.util.ArrayList;
 
@@ -31,19 +32,27 @@ public class MainAveragesFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        MainActivity parent = (MainActivity) getActivity();
+        final MainActivity parent = (MainActivity) getActivity();
+        final RecyclerView avgList = (RecyclerView) parent.findViewById(R.id.averageList);
 
-        // Averages list
-        ArrayList<Average> averages = new ArrayList<>();
-        try {
-            DataStore ds = new DataStore(getContext(), parent.p.getCardid(), Common.SQLCRYPT_PWD);
-            averages = ds.getAveragesData();
-            ds.close();
-        } catch (DecryptionException e) {e.printStackTrace();}
+        DataStore.asyncQuery(parent, parent.p.getCardid(), Common.SQLCRYPT_PWD, new IDataStore<ArrayList<Average>>() {
 
-        RecyclerView avgList = (RecyclerView) parent.findViewById(R.id.averageList);
-        avgList.addItemDecoration(new GradeSeparatorDecoration(getContext()));
-        avgList.setLayoutManager(new LinearLayoutManager(getContext()));
-        avgList.setAdapter(new AverageAdapter(averages, parent.p.getCardid()));
+            @Override
+            public ArrayList<Average> requestFromStore(DataStore ds) {
+                return ds.getAveragesData();
+            }
+
+            @Override
+            public void processRequest(ArrayList<Average> data) {
+                avgList.addItemDecoration(new GradeSeparatorDecoration(getContext()));
+                avgList.setLayoutManager(new LinearLayoutManager(getContext()));
+                avgList.setAdapter(new AverageAdapter(data, parent.p.getCardid()));
+            }
+
+            @Override
+            public void onDecryptionFailure(DecryptionException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

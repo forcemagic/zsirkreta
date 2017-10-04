@@ -37,6 +37,7 @@ import com.speedyblur.kretaremastered.models.Clazz;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
+import com.speedyblur.kretaremastered.shared.IDataStore;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,20 +65,74 @@ public class MainScheduleFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        MainActivity parent = (MainActivity) getActivity();
+        final MainActivity parent = (MainActivity) getActivity();
+        final ListView schedList = (ListView) parent.findViewById(R.id.scheduleList);
 
-        // Fetching DataStore
-        try {
-            DataStore ds = new DataStore(getContext(), parent.p.getCardid(), Common.SQLCRYPT_PWD);
-            //allDayEvents = ds.getAllDayEventsData();
-            clazzes = ds.getClassesData();
-            ds.close();
-        } catch (DecryptionException e) {e.printStackTrace();}
-        Collections.sort(clazzes, new Comparator<Clazz>() {
+        DataStore.asyncQuery(parent, parent.p.getCardid(), Common.SQLCRYPT_PWD, new IDataStore<ArrayList<Clazz>>() {
+
             @Override
-            public int compare(Clazz c1, Clazz c2) {
-                if (c1.getBeginTime() == c2.getBeginTime() && c1.getEndTime() == c2.getEndTime()) return 0;
-                return new Date((long) c1.getBeginTime()*1000).compareTo(new Date((long) c2.getEndTime()*1000));
+            public ArrayList<Clazz> requestFromStore(DataStore ds) {
+                ArrayList<Clazz> clazzes = ds.getClassesData();
+                Collections.sort(clazzes, new Comparator<Clazz>() {
+                    @Override
+                    public int compare(Clazz c1, Clazz c2) {
+                        if (c1.getBeginTime() == c2.getBeginTime() && c1.getEndTime() == c2.getEndTime()) return 0;
+                        return new Date((long) c1.getBeginTime()*1000).compareTo(new Date((long) c2.getEndTime()*1000));
+                    }
+                });
+                return clazzes;
+            }
+
+            @Override
+            public void processRequest(ArrayList<Clazz> data) {
+                schedList.setEmptyView(parent.findViewById(R.id.noSchoolView));
+                schedList.setOnTouchListener(new SwipeDetector());
+                schedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                        Clazz c = (Clazz) adapterView.getItemAtPosition(pos);
+                        View dialView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_class_details, null);
+
+                        ImageView mClassIcon = dialView.findViewById(R.id.classInfoIcon);
+                        TextView mSubject = dialView.findViewById(R.id.classInfoSubject);
+                        TextView mTheme = dialView.findViewById(R.id.classInfoTheme);
+                        TextView mTeacher = dialView.findViewById(R.id.classInfoTeacher);
+                        TextView mTime = dialView.findViewById(R.id.classInfoTime);
+                        TextView mRoom = dialView.findViewById(R.id.classInfoRoom);
+
+                        mClassIcon.setImageDrawable(c.getIcon(getContext()));
+
+                        mSubject.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf"));
+                        String classNum = getString(R.string.class_number, c.getClassnum());
+                        SpannableStringBuilder ssb = new SpannableStringBuilder(classNum+" "+Common.getLocalizedSubjectName(getContext(), c.getSubject()));
+                        ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, classNum.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                        mSubject.setText(ssb);
+
+                        if (c.getTheme().equals("")) mTheme.setText(R.string.japansmile);
+                        else mTheme.setText(c.getTheme());
+                        mTeacher.setText(c.getTeacher());
+                        SimpleDateFormat fmt = new SimpleDateFormat("h:mm a", Locale.getDefault());
+                        mTime.setText(fmt.format(new Date((long) c.getBeginTime()*1000))+" - "+fmt.format(new Date((long) c.getEndTime()*1000)));
+                        mRoom.setText(c.getRoom().replace("(", "").replace(")", ""));
+
+                        new AlertDialog.Builder(getContext()).setView(dialView)
+                                .setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.dismiss();
+                                    }
+                                }).show();
+                    }
+                });
+
+
+
+                selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
+            }
+
+            @Override
+            public void onDecryptionFailure(DecryptionException e) {
+                e.printStackTrace();
             }
         });
 
@@ -88,50 +143,7 @@ public class MainScheduleFragment extends Fragment {
         parent.findViewById(R.id.scheduleThursdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.scheduleFridaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.calendarImageButton).setOnClickListener(new CalendarClick());
-
-        ListView schedList = (ListView) parent.findViewById(R.id.scheduleList);
-        schedList.setEmptyView(parent.findViewById(R.id.noSchoolView));
-        schedList.setOnTouchListener(new SwipeDetector());
-        schedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                Clazz c = (Clazz) adapterView.getItemAtPosition(pos);
-                View dialView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_class_details, null);
-
-                ImageView mClassIcon = dialView.findViewById(R.id.classInfoIcon);
-                TextView mSubject = dialView.findViewById(R.id.classInfoSubject);
-                TextView mTheme = dialView.findViewById(R.id.classInfoTheme);
-                TextView mTeacher = dialView.findViewById(R.id.classInfoTeacher);
-                TextView mTime = dialView.findViewById(R.id.classInfoTime);
-                TextView mRoom = dialView.findViewById(R.id.classInfoRoom);
-
-                mClassIcon.setImageDrawable(c.getIcon(getContext()));
-
-                mSubject.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf"));
-                String classNum = getString(R.string.class_number, c.getClassnum());
-                SpannableStringBuilder ssb = new SpannableStringBuilder(classNum+" "+Common.getLocalizedSubjectName(getContext(), c.getSubject()));
-                ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, classNum.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                mSubject.setText(ssb);
-
-                if (c.getTheme().equals("")) mTheme.setText(R.string.japansmile);
-                else mTheme.setText(c.getTheme());
-                mTeacher.setText(c.getTeacher());
-                SimpleDateFormat fmt = new SimpleDateFormat("h:mm a", Locale.getDefault());
-                mTime.setText(fmt.format(new Date((long) c.getBeginTime()*1000))+" - "+fmt.format(new Date((long) c.getEndTime()*1000)));
-                mRoom.setText(c.getRoom().replace("(", "").replace(")", ""));
-
-                new AlertDialog.Builder(getContext()).setView(dialView)
-                        .setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        }).show();
-            }
-        });
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
-
-        selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
     }
 
     @Override
