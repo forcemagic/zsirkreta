@@ -21,40 +21,11 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ViewFlipper xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/main_viewflipper"
+    <FrameLayout
+        android:id="@+id/master_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        <fragment
-            android:id="@+id/gradesFragment"
-            android:name="com.speedyblur.kretaremastered.fragments.MainGradesFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/frag_main_averages" />
-
-        <fragment
-            android:id="@+id/averagesFragment"
-            android:name="com.speedyblur.kretaremastered.fragments.MainAveragesFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/frag_main_averages" />
-
-        <fragment
-            android:id="@+id/scheduleFragment"
-            android:name="com.speedyblur.kretaremastered.fragments.MainScheduleFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/frag_main_schedule" />
-
-        <fragment
-            android:id="@+id/announcementsFragment"
-            android:name="com.speedyblur.kretaremastered.fragments.MainAnnouncementsFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout="@layout/frag_main_announcements" />
-
-    </ViewFlipper>
+        android:layout_weight="1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

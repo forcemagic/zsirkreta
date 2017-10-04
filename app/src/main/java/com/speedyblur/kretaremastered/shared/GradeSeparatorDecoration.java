@@ -20,16 +20,15 @@ public class GradeSeparatorDecoration extends RecyclerView.ItemDecoration {
     public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
         int left = parent.getPaddingLeft();
         int right = parent.getWidth() - parent.getPaddingRight();
-
         int childCount = parent.getChildCount();
-        for (int i = 0; i < childCount; i++) {
+        int dividerHeight = mDivider.getIntrinsicHeight();
+
+        for (int i = 1; i < childCount; i++) {
             View child = parent.getChildAt(i);
-
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
-
-            int top = child.getBottom() + params.bottomMargin;
-            int bottom = top + mDivider.getIntrinsicHeight();
-
+            int ty = (int)(child.getTranslationY() + 0.5f);
+            int top = child.getTop() - params.topMargin + ty;
+            int bottom = top + dividerHeight;
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
         }

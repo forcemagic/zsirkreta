@@ -48,9 +48,10 @@ public class MainGradesFragment extends Fragment {
         } catch (DecryptionException e) {e.printStackTrace();}
 
         // Subject-grouped list
+        // TODO: Improve sorting
         RecyclerView subjGrouped = (RecyclerView) parent.findViewById(R.id.mainGradeView);
         ArrayList<SubjectGradeGroup> subjectGradeGroups = new ArrayList<>();
-        for (int i=0; i<grades.size(); i++) {
+        for (int i=grades.size()-1; i>0; i--) {
             Grade cGrade = grades.get(i);
             boolean found = false;
             for (int j=0; j<subjectGradeGroups.size(); j++) {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -11,10 +12,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.speedyblur.kretaremastered.R;
+import com.speedyblur.kretaremastered.fragments.MainAnnouncementsFragment;
+import com.speedyblur.kretaremastered.fragments.MainAveragesFragment;
+import com.speedyblur.kretaremastered.fragments.MainGradesFragment;
+import com.speedyblur.kretaremastered.fragments.MainScheduleFragment;
 import com.speedyblur.kretaremastered.models.Profile;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -25,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // UI ref
     private Toolbar toolbar;
     private Menu menu;
-    private ViewFlipper vf;
+    private FragmentManager fragManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +59,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView profNameHead = navigationView.getHeaderView(0).findViewById(R.id.profileNameHead);
         profNameHead.setText(p.getFriendlyName().equals("") ? p.getCardid() : p.getFriendlyName());
 
+        // Fragment setup
+        fragManager = getSupportFragmentManager();
+        fragManager.beginTransaction().add(R.id.master_fragment, new MainGradesFragment()).commit();
+
         // Popup stats
         int timeTaken = getIntent().getIntExtra("loadtime", -1);
         if (timeTaken != -1)
             Snackbar.make(findViewById(R.id.main_coord_view), getString(R.string.main_load_complete, (float) timeTaken/1000), Snackbar.LENGTH_SHORT).show();
 
-        vf = (ViewFlipper) findViewById(R.id.main_viewflipper);
-
         if (savedInstanceState != null) {
-            vf.setDisplayedChild(savedInstanceState.getInt("viewFlipperState"));
+            // TODO: 10/4/17 Implement fragment state save
             shouldShowMenu = savedInstanceState.getBoolean("shouldShowMenu");
             if (shouldShowMenu) lastMenuState = savedInstanceState.getString("sortingTitle");
             toolbar.setTitle(savedInstanceState.getString("toolbarTitle"));
-        } else {
-            vf.setDisplayedChild(0);
         }
     }
 
@@ -76,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     protected void onSaveInstanceState(Bundle b) {
-        b.putInt("viewFlipperState", vf.getDisplayedChild());
         b.putBoolean("shouldShowMenu", shouldShowMenu);
         if (shouldShowMenu) b.putString("sortingTitle", menu.getItem(0).getTitle().toString());
         b.putString("toolbarTitle", toolbar.getTitle().toString());
@@ -133,25 +138,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.nav_grades) {
             toolbar.setTitle(R.string.title_activity_grades);
             getMenuInflater().inflate(R.menu.main, menu);
-            ((ViewFlipper) findViewById(R.id.gradeOrderFlipper)).setDisplayedChild(0);
             shouldShowMenu = true;
             invalidateOptionsMenu();
-            vf.setDisplayedChild(0);
+
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commitNow();
+            ((ViewFlipper) findViewById(R.id.gradeOrderFlipper)).setDisplayedChild(0);
         } else if (id == R.id.nav_avgs) {
             toolbar.setTitle(R.string.title_activity_avgs);
             shouldShowMenu = false;
             invalidateOptionsMenu();
-            vf.setDisplayedChild(1);
+
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainAveragesFragment()).commitNow();
         } else if (id == R.id.nav_schedule) {
             toolbar.setTitle(R.string.title_activity_schedule);
             shouldShowMenu = false;
             invalidateOptionsMenu();
-            vf.setDisplayedChild(2);
+
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainScheduleFragment()).commitNow();
         } else if (id == R.id.nav_announcements) {
             toolbar.setTitle(R.string.title_activity_announcements);
             shouldShowMenu = false;
             invalidateOptionsMenu();
-            vf.setDisplayedChild(3);
+
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainAnnouncementsFragment()).commitNow();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

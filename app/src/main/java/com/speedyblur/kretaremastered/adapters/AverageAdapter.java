@@ -1,5 +1,7 @@
 package com.speedyblur.kretaremastered.adapters;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;

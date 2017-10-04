@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:divider="@drawable/grade_group_bar"
-            android:dividerHeight="1.5dp" />
+            android:dividerHeight="1dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mainGradeView"
