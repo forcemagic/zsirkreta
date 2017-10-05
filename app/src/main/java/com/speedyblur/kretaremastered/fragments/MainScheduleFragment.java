@@ -54,7 +54,6 @@ public class MainScheduleFragment extends Fragment {
     //private ArrayList<AllDayEvent> allDayEvents;
     private ArrayList<Clazz> clazzes;
     private CalendarDay selectedScheduleDate;
-    private Timer timer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -85,6 +84,7 @@ public class MainScheduleFragment extends Fragment {
 
             @Override
             public void processRequest(ArrayList<Clazz> data) {
+                clazzes = data;
                 schedList.setEmptyView(parent.findViewById(R.id.noSchoolView));
                 schedList.setOnTouchListener(new SwipeDetector());
                 schedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -125,9 +125,8 @@ public class MainScheduleFragment extends Fragment {
                     }
                 });
 
-
-
                 selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
+                showAbsenceListForDate(selectedScheduleDate);
             }
 
             @Override
@@ -144,31 +143,6 @@ public class MainScheduleFragment extends Fragment {
         parent.findViewById(R.id.scheduleFridaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.calendarImageButton).setOnClickListener(new CalendarClick());
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        timer.cancel();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        timer = new Timer();
-        TimerTask doRefreshSchedule = new TimerTask() {
-            @Override
-            public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showAbsenceListForDate(selectedScheduleDate);
-                    }
-                });
-            }
-        };
-        timer.schedule(doRefreshSchedule, 0, 30000);
     }
 
     private void resetSelectBullet(int day) {
