@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // SwipeRefreshLayout setup
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.master_swiperefresh);
+        swipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -77,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         if (savedInstanceState != null) {
-            // TODO: 10/4/17 Implement fragment state save
             shouldShowMenu = savedInstanceState.getBoolean("shouldShowMenu");
             if (shouldShowMenu) lastMenuState = savedInstanceState.getString("sortingTitle");
             toolbar.setTitle(savedInstanceState.getString("toolbarTitle"));
@@ -174,26 +175,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             shouldShowMenu = true;
             invalidateOptionsMenu();
 
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commitNow();
-            ((ViewFlipper) findViewById(R.id.gradeOrderFlipper)).setDisplayedChild(0);
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
         } else if (id == R.id.nav_avgs) {
             toolbar.setTitle(R.string.title_activity_avgs);
             shouldShowMenu = false;
             invalidateOptionsMenu();
 
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainAveragesFragment()).commitNow();
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainAveragesFragment()).commit();
         } else if (id == R.id.nav_schedule) {
             toolbar.setTitle(R.string.title_activity_schedule);
             shouldShowMenu = false;
             invalidateOptionsMenu();
 
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainScheduleFragment()).commitNow();
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainScheduleFragment()).commit();
         } else if (id == R.id.nav_announcements) {
             toolbar.setTitle(R.string.title_activity_announcements);
             shouldShowMenu = false;
             invalidateOptionsMenu();
 
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainAnnouncementsFragment()).commitNow();
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainAnnouncementsFragment()).commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

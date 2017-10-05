@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -55,6 +56,17 @@ public class MainAnnouncementsFragment extends Fragment {
         // Setup view
         aList.setEmptyView(parent.findViewById(R.id.announcementsEmptyView));
         aList.setAdapter(adapter);
+        aList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                parent.setSwipeRefreshEnabled(!absListView.canScrollVertically(-1));
+            }
+        });
         aList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -83,7 +95,6 @@ public class MainAnnouncementsFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 if (!a.isSeen()) updateFromDS(parent);
-
                                 dialogInterface.dismiss();
                             }
                         }).show();
