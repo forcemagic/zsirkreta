@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -22,6 +21,7 @@ import com.speedyblur.kretaremastered.fragments.MainAveragesFragment;
 import com.speedyblur.kretaremastered.fragments.MainGradesFragment;
 import com.speedyblur.kretaremastered.fragments.MainScheduleFragment;
 import com.speedyblur.kretaremastered.models.Profile;
+import com.speedyblur.kretaremastered.shared.Common;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean shouldShowMenu = true;
@@ -63,17 +63,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragManager = getSupportFragmentManager();
         fragManager.beginTransaction().add(R.id.master_fragment, new MainGradesFragment()).commit();
 
-        // Popup stats
-        int timeTaken = getIntent().getIntExtra("loadtime", -1);
-        if (timeTaken != -1)
-            Snackbar.make(findViewById(R.id.main_coord_view), getString(R.string.main_load_complete, (float) timeTaken/1000), Snackbar.LENGTH_SHORT).show();
-
         if (savedInstanceState != null) {
             // TODO: 10/4/17 Implement fragment state save
             shouldShowMenu = savedInstanceState.getBoolean("shouldShowMenu");
             if (shouldShowMenu) lastMenuState = savedInstanceState.getString("sortingTitle");
             toolbar.setTitle(savedInstanceState.getString("toolbarTitle"));
-        }
+        } else doProfileUpdate();
+    }
+
+    public void doProfileUpdate() {
+        Common.fetchAccountAsync(this, p, new Common.IFetchAccount() {
+            @Override
+            public void onFetchComplete() {
+                fragManager.beginTransaction().detach(fragManager.findFragmentById(R.id.master_fragment))
+                        .attach(fragManager.findFragmentById(R.id.master_fragment)).commit();
+            }
+
+            @Override
+            public void onFetchError(int localizedErrorMsg) {
+                Snackbar.make(findViewById(R.id.main_coord_view), localizedErrorMsg, Snackbar.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**

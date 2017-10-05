@@ -39,12 +39,18 @@
         android:layout_height="match_parent"
         tools:ignore="UselessParent">
 
-        <se.emilsjolander.stickylistheaders.StickyListHeadersListView
-            android:id="@+id/datedGradeList"
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@drawable/grade_group_bar"
-            android:dividerHeight="1dp" />
+            android:layout_height="match_parent">
+
+            <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+                android:id="@+id/datedGradeList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@drawable/grade_group_bar"
+                android:dividerHeight="1dp" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/mainGradeView"

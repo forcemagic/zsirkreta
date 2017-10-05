@@ -68,7 +68,7 @@ public class MainGradesFragment extends Fragment {
                 // Subject-grouped list
                 // TODO: Improve sorting
                 ArrayList<SubjectGradeGroup> subjectGradeGroups = new ArrayList<>();
-                for (int i=data.size()-1; i>0; i--) {
+                for (int i=data.size()-1; i>=0; i--) {
                     Grade cGrade = data.get(i);
                     boolean found = false;
                     for (int j=0; j<subjectGradeGroups.size(); j++) {

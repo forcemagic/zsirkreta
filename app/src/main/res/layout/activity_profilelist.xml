@@ -7,98 +7,63 @@
     android:orientation="vertical"
     tools:context="com.speedyblur.kretaremastered.activities.ProfileListActivity">
 
-    <ViewFlipper
-        android:id="@+id/profileSelectorFlipper"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minHeight="8dp"
+        android:padding="16dp">
 
-        <RelativeLayout
-            android:layout_width="330dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:minHeight="8dp"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/welcomeTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:text="@string/welcome_title"
-                android:textAlignment="center"
-                android:textColor="@android:color/black"
-                android:textSize="24sp" />
-
-            <TextView
-                android:id="@+id/welcomeSubTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/welcomeTitle"
-                android:layout_marginBottom="8dp"
-                android:gravity="center_horizontal"
-                android:text="@string/welcome_subtitle"
-                android:textAlignment="center" />
-
-            <TextView
-                android:id="@+id/emptyListViewText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/welcomeSubTitle"
-                android:gravity="center_horizontal"
-                android:text="@string/empty_profilelist"
-                android:textAlignment="center"
-                android:visibility="gone" />
-
-            <ListView
-                android:id="@+id/profileList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/emptyListViewText"
-                android:divider="@null"
-                android:layout_alignParentLeft="true" />
-
-            <Button
-                android:id="@+id/addProfileButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/profileList"
-                android:onClick="goToNewProfile"
-                android:text="@string/profile_add"
-                android:layout_alignParentLeft="true" />
-        </RelativeLayout>
-
-        <RelativeLayout
+        <TextView
+            android:id="@+id/welcomeTitle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/welcome_title"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center" />
+        <TextView
+            android:id="@+id/welcomeSubTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/welcomeTitle"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal"
+            android:text="@string/welcome_subtitle"
+            android:textAlignment="center" />
 
-            <TextView
-                android:id="@+id/loadingStatusText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/progressBar"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:text="@string/loading_saving"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
+        <TextView
+            android:id="@+id/emptyListViewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/welcomeSubTitle"
+            android:gravity="center_horizontal"
+            android:text="@string/empty_profilelist"
+            android:textAlignment="center"
+            android:visibility="gone" />
 
-        </RelativeLayout>
+        <ListView
+            android:id="@+id/profileList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/emptyListViewText"
+            android:divider="@null" />
 
-    </ViewFlipper>
+        <Button
+            android:id="@+id/addProfileButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/profileList"
+            android:onClick="goToNewProfile"
+            android:text="@string/profile_add" />
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

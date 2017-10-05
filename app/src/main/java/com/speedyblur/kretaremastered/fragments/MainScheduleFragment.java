@@ -46,8 +46,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainScheduleFragment extends Fragment {
     // TODO: Implement this
@@ -142,6 +140,7 @@ public class MainScheduleFragment extends Fragment {
         parent.findViewById(R.id.scheduleThursdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.scheduleFridaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.calendarImageButton).setOnClickListener(new CalendarClick());
+        parent.findViewById(R.id.currentScheduleDate).setOnClickListener(new CalendarClick());
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
     }
 
@@ -191,11 +190,9 @@ public class MainScheduleFragment extends Fragment {
         currentDate.setText(new SimpleDateFormat("MMMM dd.", Locale.getDefault()).format(c.getTime()));
 
         Calendar postCal = (Calendar) day.getCalendar().clone();
-        TextView currentWeek = getActivity().findViewById(R.id.scheduleCurrentWeek);
         SimpleDateFormat weekFmt = new SimpleDateFormat("MMM. dd.", Locale.getDefault());
         postCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); String dateMonday = weekFmt.format(postCal.getTime());
         postCal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY); String dateFriday = weekFmt.format(postCal.getTime());
-        currentWeek.setText(getString(R.string.current_week, dateMonday, dateFriday));
     }
 
     private class SwipeDetector implements View.OnTouchListener {
