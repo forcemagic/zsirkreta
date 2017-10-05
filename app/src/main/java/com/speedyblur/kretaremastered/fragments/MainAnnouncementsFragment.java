@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+// TODO: 10/5/17 Unify this with others
 public class MainAnnouncementsFragment extends Fragment {
     private ArrayList<Announcement> announcements;
 

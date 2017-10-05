@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ViewFlipper;
 
 import com.speedyblur.kretaremastered.R;
@@ -64,6 +65,17 @@ public class MainGradesFragment extends Fragment {
                 });
                 dateListView.setAdapter(new StickyDateGradeAdapter(getContext(), gradesWithoutEndterm));
                 dateListView.setEmptyView(parent.findViewById(R.id.noGradesView));
+                dateListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                        parent.setSwipeRefreshEnabled(!absListView.canScrollVertically(-1));
+                    }
+                });
 
                 // Subject-grouped list
                 // TODO: Improve sorting
@@ -84,6 +96,13 @@ public class MainGradesFragment extends Fragment {
                 subjGrouped.setHasFixedSize(false);
                 subjGrouped.setLayoutManager(new LinearLayoutManager(parent));
                 subjGrouped.setAdapter(new SubjectExpandableGradeAdapter(subjectGradeGroups));
+                subjGrouped.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                        parent.setSwipeRefreshEnabled(!recyclerView.canScrollVertically(-1));
+                    }
+                });
             }
 
             @Override
@@ -95,4 +114,5 @@ public class MainGradesFragment extends Fragment {
         // Setup viewFlipper
         ((ViewFlipper) parent.findViewById(R.id.gradeOrderFlipper)).setDisplayedChild(0);
     }
+
 }

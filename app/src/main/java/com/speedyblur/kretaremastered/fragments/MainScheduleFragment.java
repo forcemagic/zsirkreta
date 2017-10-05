@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -83,46 +84,6 @@ public class MainScheduleFragment extends Fragment {
             @Override
             public void processRequest(ArrayList<Clazz> data) {
                 clazzes = data;
-                schedList.setEmptyView(parent.findViewById(R.id.noSchoolView));
-                schedList.setOnTouchListener(new SwipeDetector());
-                schedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                        Clazz c = (Clazz) adapterView.getItemAtPosition(pos);
-                        View dialView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_class_details, null);
-
-                        ImageView mClassIcon = dialView.findViewById(R.id.classInfoIcon);
-                        TextView mSubject = dialView.findViewById(R.id.classInfoSubject);
-                        TextView mTheme = dialView.findViewById(R.id.classInfoTheme);
-                        TextView mTeacher = dialView.findViewById(R.id.classInfoTeacher);
-                        TextView mTime = dialView.findViewById(R.id.classInfoTime);
-                        TextView mRoom = dialView.findViewById(R.id.classInfoRoom);
-
-                        mClassIcon.setImageDrawable(c.getIcon(getContext()));
-
-                        mSubject.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf"));
-                        String classNum = getString(R.string.class_number, c.getClassnum());
-                        SpannableStringBuilder ssb = new SpannableStringBuilder(classNum+" "+Common.getLocalizedSubjectName(getContext(), c.getSubject()));
-                        ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, classNum.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
-                        mSubject.setText(ssb);
-
-                        if (c.getTheme().equals("")) mTheme.setText(R.string.japansmile);
-                        else mTheme.setText(c.getTheme());
-                        mTeacher.setText(c.getTeacher());
-                        SimpleDateFormat fmt = new SimpleDateFormat("h:mm a", Locale.getDefault());
-                        mTime.setText(fmt.format(new Date((long) c.getBeginTime()*1000))+" - "+fmt.format(new Date((long) c.getEndTime()*1000)));
-                        mRoom.setText(c.getRoom().replace("(", "").replace(")", ""));
-
-                        new AlertDialog.Builder(getContext()).setView(dialView)
-                                .setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.dismiss();
-                                    }
-                                }).show();
-                    }
-                });
-
                 selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
                 showAbsenceListForDate(selectedScheduleDate);
             }
@@ -130,6 +91,58 @@ public class MainScheduleFragment extends Fragment {
             @Override
             public void onDecryptionFailure(DecryptionException e) {
                 e.printStackTrace();
+            }
+        });
+
+        // ListView setup
+        schedList.setEmptyView(parent.findViewById(R.id.noSchoolView));
+        schedList.setOnTouchListener(new SwipeDetector());
+        schedList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                parent.setSwipeRefreshEnabled(!absListView.canScrollVertically(-1));
+            }
+        });
+        schedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                Clazz c = (Clazz) adapterView.getItemAtPosition(pos);
+                View dialView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_class_details, null);
+
+                ImageView mClassIcon = dialView.findViewById(R.id.classInfoIcon);
+                TextView mSubject = dialView.findViewById(R.id.classInfoSubject);
+                TextView mTheme = dialView.findViewById(R.id.classInfoTheme);
+                TextView mTeacher = dialView.findViewById(R.id.classInfoTeacher);
+                TextView mTime = dialView.findViewById(R.id.classInfoTime);
+                TextView mRoom = dialView.findViewById(R.id.classInfoRoom);
+
+                mClassIcon.setImageDrawable(c.getIcon(getContext()));
+
+                mSubject.setTypeface(Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf"));
+                String classNum = getString(R.string.class_number, c.getClassnum());
+                SpannableStringBuilder ssb = new SpannableStringBuilder(classNum+" "+Common.getLocalizedSubjectName(getContext(), c.getSubject()));
+                ssb.setSpan(new StyleSpan(Typeface.BOLD), 0, classNum.length(), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
+                mSubject.setText(ssb);
+
+                if (c.getTheme().equals("")) mTheme.setText(R.string.japansmile);
+                else mTheme.setText(c.getTheme());
+                mTeacher.setText(c.getTeacher());
+                SimpleDateFormat fmt = new SimpleDateFormat("h:mm a", Locale.getDefault());
+                mTime.setText(fmt.format(new Date((long) c.getBeginTime()*1000))+" - "+fmt.format(new Date((long) c.getEndTime()*1000)));
+                mRoom.setText(c.getRoom().replace("(", "").replace(")", ""));
+
+                new AlertDialog.Builder(getContext()).setView(dialView)
+                        .setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }).show();
             }
         });
 

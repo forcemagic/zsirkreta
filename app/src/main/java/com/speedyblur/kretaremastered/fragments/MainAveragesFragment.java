@@ -44,14 +44,22 @@ public class MainAveragesFragment extends Fragment {
 
             @Override
             public void processRequest(ArrayList<Average> data) {
-                avgList.addItemDecoration(new GradeSeparatorDecoration(getContext()));
-                avgList.setLayoutManager(new LinearLayoutManager(getContext()));
                 avgList.setAdapter(new AverageAdapter(data, parent.p.getCardid()));
             }
 
             @Override
             public void onDecryptionFailure(DecryptionException e) {
                 e.printStackTrace();
+            }
+        });
+
+        avgList.addItemDecoration(new GradeSeparatorDecoration(getContext()));
+        avgList.setLayoutManager(new LinearLayoutManager(getContext()));
+        avgList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                parent.setSwipeRefreshEnabled(!recyclerView.canScrollVertically(-1));
             }
         });
     }

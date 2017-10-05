@@ -21,8 +21,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-// TODO: Make this whole thing ASYNCHRONOUS
-// TODO: Refactoring. This DS needs optimizations. A LOT.
 public class DataStore {
     private final static String LOGTAG = "DataStore";
     private SQLiteDatabase db;

@@ -99,6 +99,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    public void setSwipeRefreshEnabled(boolean b) {
+        swipeRefresh.setEnabled(b);
+    }
+
     /**
      * Saves instance to a bundle
      * @param b The bundle to put things in
