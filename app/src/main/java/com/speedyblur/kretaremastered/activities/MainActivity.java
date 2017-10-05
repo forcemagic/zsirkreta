@@ -23,8 +23,10 @@ import com.speedyblur.kretaremastered.fragments.MainGradesFragment;
 import com.speedyblur.kretaremastered.fragments.MainScheduleFragment;
 import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.shared.Common;
+import com.speedyblur.kretaremastered.shared.IRefreshHandler;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private IRefreshHandler irh;
     private boolean shouldShowMenu = true;
     private String lastMenuState;
     public Profile p;
@@ -87,16 +89,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Common.fetchAccountAsync(this, p, new Common.IFetchAccount() {
             @Override
             public void onFetchComplete() {
-                fragManager.beginTransaction().detach(fragManager.findFragmentById(R.id.master_fragment))
-                        .attach(fragManager.findFragmentById(R.id.master_fragment)).commit();
+                irh.onRefreshComplete();
                 swipeRefresh.setRefreshing(false);
             }
 
             @Override
             public void onFetchError(int localizedErrorMsg) {
                 Snackbar.make(findViewById(R.id.main_coord_view), localizedErrorMsg, Snackbar.LENGTH_SHORT).show();
+                swipeRefresh.setRefreshing(false);
             }
         });
+    }
+
+    public void setRefreshHandler(IRefreshHandler irh) {
+        this.irh = irh;
     }
 
     public void setSwipeRefreshEnabled(boolean b) {

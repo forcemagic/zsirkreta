@@ -39,6 +39,7 @@ import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
 import com.speedyblur.kretaremastered.shared.IDataStore;
+import com.speedyblur.kretaremastered.shared.IRefreshHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,31 +67,11 @@ public class MainScheduleFragment extends Fragment {
         final MainActivity parent = (MainActivity) getActivity();
         final ListView schedList = (ListView) parent.findViewById(R.id.scheduleList);
 
-        DataStore.asyncQuery(parent, parent.p.getCardid(), Common.SQLCRYPT_PWD, new IDataStore<ArrayList<Clazz>>() {
-
+        updateFromDS(parent);
+        parent.setRefreshHandler(new IRefreshHandler() {
             @Override
-            public ArrayList<Clazz> requestFromStore(DataStore ds) {
-                ArrayList<Clazz> clazzes = ds.getClassesData();
-                Collections.sort(clazzes, new Comparator<Clazz>() {
-                    @Override
-                    public int compare(Clazz c1, Clazz c2) {
-                        if (c1.getBeginTime() == c2.getBeginTime() && c1.getEndTime() == c2.getEndTime()) return 0;
-                        return new Date((long) c1.getBeginTime()*1000).compareTo(new Date((long) c2.getEndTime()*1000));
-                    }
-                });
-                return clazzes;
-            }
-
-            @Override
-            public void processRequest(ArrayList<Clazz> data) {
-                clazzes = data;
-                selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
-                showAbsenceListForDate(selectedScheduleDate);
-            }
-
-            @Override
-            public void onDecryptionFailure(DecryptionException e) {
-                e.printStackTrace();
+            public void onRefreshComplete() {
+                updateFromDS(parent);
             }
         });
 
@@ -157,6 +138,36 @@ public class MainScheduleFragment extends Fragment {
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
     }
 
+    private void updateFromDS(MainActivity parent) {
+        DataStore.asyncQuery(parent, parent.p.getCardid(), Common.SQLCRYPT_PWD, new IDataStore<ArrayList<Clazz>>() {
+
+            @Override
+            public ArrayList<Clazz> requestFromStore(DataStore ds) {
+                ArrayList<Clazz> clazzes = ds.getClassesData();
+                Collections.sort(clazzes, new Comparator<Clazz>() {
+                    @Override
+                    public int compare(Clazz c1, Clazz c2) {
+                        if (c1.getBeginTime() == c2.getBeginTime() && c1.getEndTime() == c2.getEndTime()) return 0;
+                        return new Date((long) c1.getBeginTime()*1000).compareTo(new Date((long) c2.getEndTime()*1000));
+                    }
+                });
+                return clazzes;
+            }
+
+            @Override
+            public void processRequest(ArrayList<Clazz> data) {
+                clazzes = data;
+                if (selectedScheduleDate == null) selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
+                showAbsenceListForDate(selectedScheduleDate);
+            }
+
+            @Override
+            public void onDecryptionFailure(DecryptionException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     private void resetSelectBullet(int day) {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         getActivity().findViewById(R.id.scheduleMondaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
@@ -202,6 +213,7 @@ public class MainScheduleFragment extends Fragment {
         currentDate.setTypeface(Typeface.create(tFace, Typeface.BOLD));
         currentDate.setText(new SimpleDateFormat("MMMM dd.", Locale.getDefault()).format(c.getTime()));
 
+        // TODO: 10/5/17 Implement this
         Calendar postCal = (Calendar) day.getCalendar().clone();
         SimpleDateFormat weekFmt = new SimpleDateFormat("MMM. dd.", Locale.getDefault());
         postCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); String dateMonday = weekFmt.format(postCal.getTime());

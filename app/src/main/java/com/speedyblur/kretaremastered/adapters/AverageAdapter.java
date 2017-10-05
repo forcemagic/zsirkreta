@@ -1,7 +1,5 @@
 package com.speedyblur.kretaremastered.adapters;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -33,7 +31,7 @@ import com.speedyblur.kretaremastered.shared.DecryptionException;
 import java.util.ArrayList;
 
 public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHolder> {
-    private final ArrayList<Average> averages;
+    public ArrayList<Average> averages;
     private final String profileName;
     private int currentOpened = -1;
 

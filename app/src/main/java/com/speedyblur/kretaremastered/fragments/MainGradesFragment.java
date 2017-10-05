@@ -21,6 +21,7 @@ import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
 import com.speedyblur.kretaremastered.shared.IDataStore;
+import com.speedyblur.kretaremastered.shared.IRefreshHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,6 +30,8 @@ import java.util.Comparator;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class MainGradesFragment extends Fragment {
+    private SubjectExpandableGradeAdapter subjGroupedAdapter;
+    private StickyDateGradeAdapter dateGradeAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +46,48 @@ public class MainGradesFragment extends Fragment {
         final RecyclerView subjGrouped = (RecyclerView) parent.findViewById(R.id.mainGradeView);
         final StickyListHeadersListView dateListView = (StickyListHeadersListView) parent.findViewById(R.id.datedGradeList);
 
+        // Setup adapters
+        subjGroupedAdapter = new SubjectExpandableGradeAdapter(new ArrayList<SubjectGradeGroup>());
+        dateGradeAdapter = new StickyDateGradeAdapter(getContext(), new ArrayList<Grade>());
+
+        updateFromDS(parent);
+        parent.setRefreshHandler(new IRefreshHandler() {
+            @Override
+            public void onRefreshComplete() {
+                updateFromDS(parent);
+            }
+        });
+
+        // Setup views
+        dateListView.setAdapter(dateGradeAdapter);
+        dateListView.setEmptyView(parent.findViewById(R.id.noGradesView));
+        dateListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                parent.setSwipeRefreshEnabled(!absListView.canScrollVertically(-1));
+            }
+        });
+        subjGrouped.setHasFixedSize(false);
+        subjGrouped.setLayoutManager(new LinearLayoutManager(parent));
+        subjGrouped.setAdapter(subjGroupedAdapter);
+        subjGrouped.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                parent.setSwipeRefreshEnabled(!recyclerView.canScrollVertically(-1));
+            }
+        });
+
+        // Setup viewFlipper
+        ((ViewFlipper) parent.findViewById(R.id.gradeOrderFlipper)).setDisplayedChild(0);
+    }
+
+    private void updateFromDS(MainActivity parent) {
         DataStore.asyncQuery(parent, parent.p.getCardid(), Common.SQLCRYPT_PWD, new IDataStore<ArrayList<Grade>>() {
 
             @Override
@@ -63,19 +108,8 @@ public class MainGradesFragment extends Fragment {
                         return g2.getDate() - g1.getDate();
                     }
                 });
-                dateListView.setAdapter(new StickyDateGradeAdapter(getContext(), gradesWithoutEndterm));
-                dateListView.setEmptyView(parent.findViewById(R.id.noGradesView));
-                dateListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(AbsListView absListView, int i) {
-
-                    }
-
-                    @Override
-                    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                        parent.setSwipeRefreshEnabled(!absListView.canScrollVertically(-1));
-                    }
-                });
+                dateGradeAdapter.grades = gradesWithoutEndterm;
+                dateGradeAdapter.notifyDataSetChanged();
 
                 // Subject-grouped list
                 // TODO: Improve sorting
@@ -93,26 +127,14 @@ public class MainGradesFragment extends Fragment {
                     gList.add(cGrade);
                     if (!found) subjectGradeGroups.add(new SubjectGradeGroup(cGrade.getSubject(), gList));
                 }
-                subjGrouped.setHasFixedSize(false);
-                subjGrouped.setLayoutManager(new LinearLayoutManager(parent));
-                subjGrouped.setAdapter(new SubjectExpandableGradeAdapter(subjectGradeGroups));
-                subjGrouped.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-                        parent.setSwipeRefreshEnabled(!recyclerView.canScrollVertically(-1));
-                    }
-                });
+                subjGroupedAdapter.subjectGradeGroups = subjectGradeGroups;
+                subjGroupedAdapter.notifyItemRangeChanged(0, subjGroupedAdapter.getItemCount());
             }
 
             @Override
             public void onDecryptionFailure(DecryptionException e) {
-
+                e.printStackTrace();
             }
         });
-
-        // Setup viewFlipper
-        ((ViewFlipper) parent.findViewById(R.id.gradeOrderFlipper)).setDisplayedChild(0);
     }
-
 }

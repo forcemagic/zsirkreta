@@ -27,7 +27,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHeadersAdapter {
     private final Context ctxt;
     private final LayoutInflater inflater;
-    private final ArrayList<Grade> grades;
+    public ArrayList<Grade> grades;
 
     public StickyDateGradeAdapter(@NonNull Context context, ArrayList<Grade> grades) {
         ctxt = context;

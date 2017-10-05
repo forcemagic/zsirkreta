@@ -21,7 +21,7 @@ import com.speedyblur.kretaremastered.shared.GradeSeparatorDecoration;
 import java.util.ArrayList;
 
 public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectExpandableGradeAdapter.ListHeaderVH> {
-    private final ArrayList<SubjectGradeGroup> subjectGradeGroups;
+    public ArrayList<SubjectGradeGroup> subjectGradeGroups;
     private int currentOpened = -1;
 
     public SubjectExpandableGradeAdapter(ArrayList<SubjectGradeGroup> subjectGradeGroups) {

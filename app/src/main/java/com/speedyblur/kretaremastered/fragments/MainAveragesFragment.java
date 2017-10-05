@@ -18,10 +18,12 @@ import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
 import com.speedyblur.kretaremastered.shared.GradeSeparatorDecoration;
 import com.speedyblur.kretaremastered.shared.IDataStore;
+import com.speedyblur.kretaremastered.shared.IRefreshHandler;
 
 import java.util.ArrayList;
 
 public class MainAveragesFragment extends Fragment {
+    AverageAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -35,6 +37,35 @@ public class MainAveragesFragment extends Fragment {
         final MainActivity parent = (MainActivity) getActivity();
         final RecyclerView avgList = (RecyclerView) parent.findViewById(R.id.averageList);
 
+        adapter = new AverageAdapter(new ArrayList<Average>(), parent.p.getCardid());
+
+        updateFromDS(parent);
+        parent.setRefreshHandler(new IRefreshHandler() {
+            @Override
+            public void onRefreshComplete() {
+                updateFromDS(parent);
+            }
+        });
+
+        // Setup view
+        avgList.addItemDecoration(new GradeSeparatorDecoration(getContext()));
+        avgList.setLayoutManager(new LinearLayoutManager(getContext()));
+        avgList.setAdapter(adapter);
+        avgList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                parent.setSwipeRefreshEnabled(!recyclerView.canScrollVertically(-1));
+            }
+        });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("averages", adapter.averages);
+    }
+
+    private void updateFromDS(MainActivity parent) {
         DataStore.asyncQuery(parent, parent.p.getCardid(), Common.SQLCRYPT_PWD, new IDataStore<ArrayList<Average>>() {
 
             @Override
@@ -44,22 +75,13 @@ public class MainAveragesFragment extends Fragment {
 
             @Override
             public void processRequest(ArrayList<Average> data) {
-                avgList.setAdapter(new AverageAdapter(data, parent.p.getCardid()));
+                adapter.averages = data;
+                adapter.notifyItemRangeChanged(0, adapter.getItemCount());
             }
 
             @Override
             public void onDecryptionFailure(DecryptionException e) {
                 e.printStackTrace();
-            }
-        });
-
-        avgList.addItemDecoration(new GradeSeparatorDecoration(getContext()));
-        avgList.setLayoutManager(new LinearLayoutManager(getContext()));
-        avgList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                parent.setSwipeRefreshEnabled(!recyclerView.canScrollVertically(-1));
             }
         });
     }
