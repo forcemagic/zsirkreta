@@ -1,16 +1,13 @@
 package com.speedyblur.kretaremastered.shared;
 
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.Announcement;
 import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.models.AvgGraphData;
@@ -36,13 +33,6 @@ public class Common {
     }
 
     public static void fetchAccountAsync(final Activity a, final Profile profile, final IFetchAccount ifa) {
-        final int notifId = 1;
-        final NotificationManager nmgr = (NotificationManager) a.getSystemService(Context.NOTIFICATION_SERVICE);
-        NotificationCompat.Builder notif = new NotificationCompat.Builder(a);
-        notif.setOngoing(true).setProgress(0, 0, true).setContentTitle(a.getString(R.string.loading_saving))
-            .setSmallIcon(android.R.drawable.ic_popup_sync);
-
-        nmgr.notify(1, notif.build());
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -116,7 +106,6 @@ public class Common {
 
                                 final long loadEndTime = System.currentTimeMillis();
                                 Log.v("KretaApi", "Fetch completed in " + String.valueOf(loadEndTime - loadBeginTime) + "ms");
-                                nmgr.cancel(notifId);
                                 a.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -127,7 +116,6 @@ public class Common {
 
                             @Override
                             public void onFailure(final int localizedError) {
-                                nmgr.cancel(notifId);
                                 a.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -140,7 +128,6 @@ public class Common {
 
                     @Override
                     public void onFailure(final int localizedError) {
-                        nmgr.cancel(notifId);
                         a.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

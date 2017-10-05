@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private Menu menu;
     private FragmentManager fragManager;
+    private SwipeRefreshLayout swipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragManager = getSupportFragmentManager();
         fragManager.beginTransaction().add(R.id.master_fragment, new MainGradesFragment()).commit();
 
+        // SwipeRefreshLayout setup
+        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.master_swiperefresh);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                doProfileUpdate();
+            }
+        });
+
         if (savedInstanceState != null) {
             // TODO: 10/4/17 Implement fragment state save
             shouldShowMenu = savedInstanceState.getBoolean("shouldShowMenu");
@@ -72,11 +83,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void doProfileUpdate() {
+        swipeRefresh.setRefreshing(true);
         Common.fetchAccountAsync(this, p, new Common.IFetchAccount() {
             @Override
             public void onFetchComplete() {
                 fragManager.beginTransaction().detach(fragManager.findFragmentById(R.id.master_fragment))
                         .attach(fragManager.findFragmentById(R.id.master_fragment)).commit();
+                swipeRefresh.setRefreshing(false);
             }
 
             @Override
