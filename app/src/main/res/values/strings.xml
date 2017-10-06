@@ -53,8 +53,6 @@
 
     <!-- Loading messages (proc. indicators) -->
     <string name="loading_logging_in">Logging in…</string>
-    <string name="loading_saving">Loading…</string>
-    <string name="main_load_complete">Load complete! Time spent: %1$.2f seconds.</string>
 
     <!-- HTTP errors -->
     <string name="http_unauthorized">Invalid card ID or password</string>
@@ -113,7 +111,6 @@
     <string name="nothingtoseehere">There\'s nothing to see here. (Yet)</string>
     <string name="japansmile" translatable="false">¯\\_(ツ)_/¯</string>
     <string name="substitute_class">Substitutes %1$s</string>
-    <string name="current_week">M: %1$s\nF: %2$s</string>
     <string name="dialog_close">Close</string>
     <string name="no_announcements">No announcements here!</string>
     <string name="filling_schedule">Filling Your schedule (%1$.2f%%)…</string>

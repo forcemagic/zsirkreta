@@ -65,7 +65,7 @@ public class MainScheduleFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         final MainActivity parent = (MainActivity) getActivity();
-        final ListView schedList = (ListView) parent.findViewById(R.id.scheduleList);
+        final ListView schedList = parent.findViewById(R.id.scheduleList);
 
         updateFromDS(parent);
         parent.setRefreshHandler(new IRefreshHandler() {

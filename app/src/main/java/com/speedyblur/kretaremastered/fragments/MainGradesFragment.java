@@ -43,8 +43,8 @@ public class MainGradesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         final MainActivity parent = (MainActivity) getActivity();
-        final RecyclerView subjGrouped = (RecyclerView) parent.findViewById(R.id.mainGradeView);
-        final StickyListHeadersListView dateListView = (StickyListHeadersListView) parent.findViewById(R.id.datedGradeList);
+        final RecyclerView subjGrouped = parent.findViewById(R.id.mainGradeView);
+        final StickyListHeadersListView dateListView = parent.findViewById(R.id.datedGradeList);
 
         // Setup adapters
         subjGroupedAdapter = new SubjectExpandableGradeAdapter(new ArrayList<SubjectGradeGroup>());

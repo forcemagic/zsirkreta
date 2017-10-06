@@ -6,7 +6,6 @@
     tools:context="com.speedyblur.kretaremastered.activities.MainActivity">
 
     <RelativeLayout
-        android:id="@+id/noAveragesView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
@@ -23,7 +22,6 @@
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/noAveragesDescView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/noAveragesTextView"

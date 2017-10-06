@@ -51,7 +51,6 @@
             app:srcCompat="@drawable/no_absence_icon_black" />
 
         <TextView
-            android:id="@+id/noEventNoticeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/smileView"

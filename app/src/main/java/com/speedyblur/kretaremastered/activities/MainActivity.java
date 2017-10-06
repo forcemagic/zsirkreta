@@ -46,18 +46,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         p = getIntent().getParcelableExtra("profile");
 
         // Toolbar setup
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.title_activity_grades);
         setSupportActionBar(toolbar);
 
         // Drawer setup
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         // NavView setup
-        NavigationView navigationView = (NavigationView) findViewById(R.id.mainNav);
+        NavigationView navigationView = findViewById(R.id.mainNav);
         navigationView.setNavigationItemSelectedListener(this);
 
         // Set profile name to drawer header
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragManager.beginTransaction().add(R.id.master_fragment, new MainGradesFragment()).commit();
 
         // SwipeRefreshLayout setup
-        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.master_swiperefresh);
+        swipeRefresh = findViewById(R.id.master_swiperefresh);
         swipeRefresh.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         // Currently this check is not necessary, but let's do it anyway
         if (item.getItemId() == R.id.action_changesort) {
-            ViewFlipper gradeVf = (ViewFlipper) findViewById(R.id.gradeOrderFlipper);
+            ViewFlipper gradeVf = findViewById(R.id.gradeOrderFlipper);
             if (item.getTitle() == getResources().getString(R.string.action_sortbysubject)) {
                 item.setTitle(R.string.action_sortbydate);
                 gradeVf.setDisplayedChild(1);
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragManager.beginTransaction().replace(R.id.master_fragment, new MainAnnouncementsFragment()).commit();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

@@ -17,7 +17,6 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/welcomeFirstTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -28,7 +27,6 @@
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/welcomeFirstSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -38,7 +36,6 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/welcomeFirstDisclaimer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -49,7 +46,6 @@
                 android:textSize="12sp" />
 
             <ImageButton
-                android:id="@+id/welcomeFirstContinueBtn"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

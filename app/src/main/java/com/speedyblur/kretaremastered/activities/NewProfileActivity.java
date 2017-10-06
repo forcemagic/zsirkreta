@@ -57,9 +57,9 @@ public class NewProfileActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.profile_add);
 
         // Set up the login form.
-        mIdView = (EditText) findViewById(R.id.studentid);
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mFriendlyNameView = (EditText) findViewById(R.id.friendlyname);
+        mIdView = findViewById(R.id.studentid);
+        mPasswordView = findViewById(R.id.password);
+        mFriendlyNameView = findViewById(R.id.friendlyname);
         mFriendlyNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -71,7 +71,7 @@ public class NewProfileActivity extends AppCompatActivity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.login_btn);
+        Button mEmailSignInButton = findViewById(R.id.login_btn);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,9 +79,9 @@ public class NewProfileActivity extends AppCompatActivity {
             }
         });
 
-        mLoginFlipperView = (ViewFlipper) findViewById(R.id.login_flipper);
-        mProgressStatusView = (TextView) findViewById(R.id.login_progress_status);
-        mProgressBar = (ProgressBar) findViewById(R.id.login_progress);
+        mLoginFlipperView = findViewById(R.id.login_flipper);
+        mProgressStatusView = findViewById(R.id.login_progress_status);
+        mProgressBar = findViewById(R.id.login_progress);
     }
 
     /**

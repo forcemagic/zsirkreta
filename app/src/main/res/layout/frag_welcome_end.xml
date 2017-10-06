@@ -17,7 +17,6 @@
             android:orientation="vertical" >
 
             <TextView
-                android:id="@+id/welcomeEndTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -28,7 +27,6 @@
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/welcomeEndSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -39,7 +37,6 @@
                 android:textSize="14sp" />
 
             <ImageButton
-                android:id="@+id/welcomeEndConfirm"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

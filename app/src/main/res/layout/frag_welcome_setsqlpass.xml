@@ -16,7 +16,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/welcomeSqlpassTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -27,7 +26,6 @@
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/welcomeSqlpassSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -47,7 +45,6 @@
                 android:inputType="textPassword" />
 
             <ImageButton
-                android:id="@+id/sqlPassAcceptBtn"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

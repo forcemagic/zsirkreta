@@ -34,7 +34,7 @@ public class ProfileListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profilelist);
 
         // Setting up ListView
-        ListView mProfileList = (ListView) findViewById(R.id.profileList);
+        ListView mProfileList = findViewById(R.id.profileList);
         mProfileList.setEmptyView(findViewById(R.id.emptyListViewText));
 
         try {

@@ -58,8 +58,8 @@ public class WelcomeActivity extends AppCompatActivity {
             if (!canDecryptSqlite(Common.SQLCRYPT_PWD)) {
                 setContentView(R.layout.activity_unlockdb);
 
-                final ViewFlipper vf = (ViewFlipper) findViewById(R.id.unlockdbFlipper);
-                final TextView statusText = (TextView) findViewById(R.id.fingerprintUnlockDbTitle);
+                final ViewFlipper vf = findViewById(R.id.unlockdbFlipper);
+                final TextView statusText = findViewById(R.id.fingerprintUnlockDbTitle);
 
                 // Handle Fingerprint stuff
                 if (shPrefs.getBoolean("doUseFingerprint", false)) {
@@ -116,7 +116,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 } else vf.setDisplayedChild(1);
 
                 // Set up "Enter" key action
-                EditText mPasswdView = (EditText) findViewById(R.id.unlockDbPassword);
+                EditText mPasswdView = findViewById(R.id.unlockDbPassword);
                 mPasswdView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -137,7 +137,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void commitSqlPassword(final View v) {
-        EditText mSqlPass = (EditText) findViewById(R.id.sqlPass);
+        EditText mSqlPass = findViewById(R.id.sqlPass);
         String gotPasswd = mSqlPass.getText().toString().trim();
         if (!TextUtils.isEmpty(gotPasswd)) {
             Common.SQLCRYPT_PWD = gotPasswd;
@@ -188,7 +188,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     @SuppressWarnings("WeakerAccess")
     public void tryDecryptSqlite(@SuppressWarnings("UnusedParameters") View v) {
-        EditText mDbPasswd = (EditText) findViewById(R.id.unlockDbPassword);
+        EditText mDbPasswd = findViewById(R.id.unlockDbPassword);
         if (canDecryptSqlite(mDbPasswd.getText().toString())) {
             Common.SQLCRYPT_PWD = mDbPasswd.getText().toString();
             finish();

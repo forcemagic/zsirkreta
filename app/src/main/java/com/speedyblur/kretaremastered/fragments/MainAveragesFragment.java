@@ -35,7 +35,7 @@ public class MainAveragesFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         final MainActivity parent = (MainActivity) getActivity();
-        final RecyclerView avgList = (RecyclerView) parent.findViewById(R.id.averageList);
+        final RecyclerView avgList = parent.findViewById(R.id.averageList);
 
         adapter = new AverageAdapter(new ArrayList<Average>(), parent.p.getCardid());
 

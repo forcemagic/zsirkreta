@@ -41,7 +41,7 @@ public class MainAnnouncementsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         final MainActivity parent = (MainActivity) getActivity();
-        final ListView aList = (ListView) parent.findViewById(R.id.announcementsList);
+        final ListView aList = parent.findViewById(R.id.announcementsList);
 
         adapter = new AnnouncementAdapter(getContext(), new ArrayList<Announcement>());
 
