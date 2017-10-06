@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -44,6 +45,7 @@ public class NewProfileActivity extends AppCompatActivity {
     private EditText mFriendlyNameView;
     private EditText mIdView;
     private EditText mPasswordView;
+    private ProgressBar mProgressBar;
     private TextView mProgressStatusView;
 
     @Override
@@ -79,6 +81,7 @@ public class NewProfileActivity extends AppCompatActivity {
 
         mLoginFlipperView = (ViewFlipper) findViewById(R.id.login_flipper);
         mProgressStatusView = (TextView) findViewById(R.id.login_progress_status);
+        mProgressBar = (ProgressBar) findViewById(R.id.login_progress);
     }
 
     /**
@@ -119,6 +122,10 @@ public class NewProfileActivity extends AppCompatActivity {
      * @param friendlyName a friendly name for the profile
      */
     private void doLoginSaveIfValid(final String studentId, final String passwd, final String friendlyName) {
+        mProgressBar.setIndeterminate(true);
+        mProgressBar.setProgress(0);
+        mProgressStatusView.setText(R.string.loading_logging_in);
+
         // Populate a JSONObject with the payload
         JSONObject payload = new JSONObject();
         try {
@@ -155,6 +162,14 @@ public class NewProfileActivity extends AppCompatActivity {
                                     clazzes.add(c);
                                 }
 
+                                // I do not like setting these every time an INSERT INTO completes
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mProgressBar.setIndeterminate(false);
+                                        mProgressBar.setMax(10000);
+                                    }
+                                });
                                 // Commit
                                 DataStore ds = new DataStore(getApplicationContext(), p.getCardid(), Common.SQLCRYPT_PWD);
                                 ds.putAllDayEventsData(allDayEvents);
@@ -164,7 +179,9 @@ public class NewProfileActivity extends AppCompatActivity {
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                mProgressStatusView.setText(getString(R.string.filling_schedule, current, total));
+                                                float percentage = (float) current / total * 100;
+                                                mProgressBar.setProgress(Math.round(percentage*100));
+                                                mProgressStatusView.setText(getString(R.string.filling_schedule, percentage));
                                             }
                                         });
                                     }

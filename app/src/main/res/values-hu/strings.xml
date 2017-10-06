@@ -62,8 +62,6 @@
     <string name="subject_french_lang">Francia Nyelv</string>
     <string name="loading_logging_in">Bejelentkezés…</string>
     <string name="no_events">Nincs suli ezen a napon! (Azaaaz!)</string>
-    <string name="dialog_show_cached">%1$s. Megjelenítsem a legutolsó verziót?</string>
-    <string name="dialog_show_cached_title">Kérdés</string>
     <string name="dialog_no">Nem</string>
     <string name="dialog_yes">Igen</string>
     <string name="dialog_delete_profile">Biztos vagy benne?</string>
@@ -99,6 +97,6 @@
     <string name="announcementinfo_date">Dátum:</string>
     <string name="announcementinfo_title">Üzenet</string>
     <string name="loading_saving">Betöltés…</string>
-    <string name="filling_schedule">Az órarended betöltése (%1$d/%2$d)…</string>
+    <string name="filling_schedule">Az órarended betöltése (%1$.2f%%)…</string>
     <string name="login_lastprofile">Bejelentkezés a legutolsó profil használatával.</string>
 </resources>
