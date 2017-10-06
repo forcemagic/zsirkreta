@@ -1,22 +1,22 @@
 package com.speedyblur.kretaremastered.activities;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.view.View;
 import android.widget.ViewFlipper;
 
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.fragments.MainAnnouncementsFragment;
 import com.speedyblur.kretaremastered.fragments.MainAveragesFragment;
@@ -26,7 +26,7 @@ import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.IRefreshHandler;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
     private IRefreshHandler irh;
     private boolean shouldShowMenu = true;
     private String lastMenuState;
@@ -37,11 +37,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Menu menu;
     private FragmentManager fragManager;
     private SwipeRefreshLayout swipeRefresh;
+    private Drawer drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_inner);
 
         p = getIntent().getParcelableExtra("profile");
 
@@ -51,18 +52,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         // Drawer setup
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
-        // NavView setup
-        NavigationView navigationView = findViewById(R.id.mainNav);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        // Set profile name to drawer header
-        TextView profNameHead = navigationView.getHeaderView(0).findViewById(R.id.profileNameHead);
-        profNameHead.setText(p.getFriendlyName().equals("") ? p.getCardid() : p.getFriendlyName());
+        AccountHeaderBuilder accHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.side_nav_bar)
+                .addProfiles(
+                        new ProfileDrawerItem()
+                                .withName(p.hasFriendlyName() ? p.getFriendlyName() : p.getCardid())
+                                .withEmail(p.hasFriendlyName() ? p.getCardid() : null)
+                                .withIcon(R.mipmap.ic_launcher_round)
+                );
+        drawer = new DrawerBuilder().withActivity(this).withToolbar(toolbar)
+                .withAccountHeader(accHeader.build())
+                .inflateMenu(R.menu.activity_main_drawer)
+                .withOnDrawerItemClickListener(this)
+                .build();
 
         // Fragment setup
         fragManager = getSupportFragmentManager();
@@ -122,17 +125,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onSaveInstanceState(b);
     }
 
-    /**
-     * Closes drawer if it's open.
-     */
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        if (drawer.isDrawerOpen()) drawer.closeDrawer();
+        else super.onBackPressed();
     }
 
     @Override
@@ -166,29 +162,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.nav_grades) {
+    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+        if (position == 1) {
             toolbar.setTitle(R.string.title_activity_grades);
             getMenuInflater().inflate(R.menu.main, menu);
             shouldShowMenu = true;
             invalidateOptionsMenu();
 
             fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
-        } else if (id == R.id.nav_avgs) {
+        } else if (position == 2) {
             toolbar.setTitle(R.string.title_activity_avgs);
             shouldShowMenu = false;
             invalidateOptionsMenu();
 
             fragManager.beginTransaction().replace(R.id.master_fragment, new MainAveragesFragment()).commit();
-        } else if (id == R.id.nav_schedule) {
+        } else if (position == 3) {
             toolbar.setTitle(R.string.title_activity_schedule);
             shouldShowMenu = false;
             invalidateOptionsMenu();
 
             fragManager.beginTransaction().replace(R.id.master_fragment, new MainScheduleFragment()).commit();
-        } else if (id == R.id.nav_announcements) {
+        } else if (position == 4) {
             toolbar.setTitle(R.string.title_activity_announcements);
             shouldShowMenu = false;
             invalidateOptionsMenu();
@@ -196,8 +190,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragManager.beginTransaction().replace(R.id.master_fragment, new MainAnnouncementsFragment()).commit();
         }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return false;
     }
 }
