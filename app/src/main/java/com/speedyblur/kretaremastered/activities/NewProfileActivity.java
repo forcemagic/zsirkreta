@@ -199,6 +199,10 @@ public class NewProfileActivity extends AppCompatActivity {
                                         i.putExtra("profile", p);
                                         setResult(RESULT_OK, i);
                                         finish();
+                                        if (i.getBooleanExtra("doOpenMainActivity", false)) {
+                                            Intent mainIntent = new Intent(NewProfileActivity.this, MainActivity.class);
+                                            startActivity(mainIntent);
+                                        }
                                     }
                                 });
                             } catch (DecryptionException e) {

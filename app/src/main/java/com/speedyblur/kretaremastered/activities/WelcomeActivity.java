@@ -25,9 +25,12 @@ import com.speedyblur.kretaremastered.fragments.WelcomeSlideEndFragment;
 import com.speedyblur.kretaremastered.fragments.WelcomeSlideFingerprintFragment;
 import com.speedyblur.kretaremastered.fragments.WelcomeSlideFirstFragment;
 import com.speedyblur.kretaremastered.fragments.WelcomeSlideSetsqlpassFragment;
+import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.shared.AccountStore;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
+
+import java.util.ArrayList;
 
 import io.reactivex.functions.Consumer;
 
@@ -36,6 +39,7 @@ import io.reactivex.functions.Consumer;
 public class WelcomeActivity extends AppCompatActivity {
 
     private int currentPage;
+    private ArrayList<Profile> profiles;
     private SharedPreferences shPrefs;
 
     @Override
@@ -90,9 +94,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                 case AUTHENTICATED:
                                     Common.SQLCRYPT_PWD = fdr.getDecrypted();
                                     if (canDecryptSqlite(Common.SQLCRYPT_PWD)) {
-                                        finish();
-                                        Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
-                                        startActivity(it);
+                                        tryToContinue();
                                     } else {
                                         showOnStatusbar(getString(R.string.decrypt_database_fail));
                                     }
@@ -129,9 +131,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 });
             } else {
                 // We can use the default password, as nothing else has been provided previously
-                finish();
-                Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
-                startActivity(it);
+                tryToContinue();
             }
         }
     }
@@ -181,7 +181,8 @@ public class WelcomeActivity extends AppCompatActivity {
         } else {
             shPrefs.edit().putBoolean("isFirstStart", false).apply();
             finish();
-            Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
+            Intent it = new Intent(WelcomeActivity.this, NewProfileActivity.class);
+            it.putExtra("doOpenMainActivity", true);
             startActivity(it);
         }
     }
@@ -191,9 +192,7 @@ public class WelcomeActivity extends AppCompatActivity {
         EditText mDbPasswd = findViewById(R.id.unlockDbPassword);
         if (canDecryptSqlite(mDbPasswd.getText().toString())) {
             Common.SQLCRYPT_PWD = mDbPasswd.getText().toString();
-            finish();
-            Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
-            startActivity(it);
+            tryToContinue();
         } else {
             mDbPasswd.setError(getResources().getString(R.string.decrypt_database_fail));
         }
@@ -202,12 +201,24 @@ public class WelcomeActivity extends AppCompatActivity {
     private boolean canDecryptSqlite(String passwd) {
         try {
             AccountStore ash = new AccountStore(this, passwd);
+            profiles = ash.getAccounts();
             ash.close();
-            Log.d("DecryptDB", "Decryption succeeded.");
             return true;
         } catch (DecryptionException e) {
-            Log.w("DecryptDB", "Decryption failed.");
             return false;
+        }
+    }
+
+    private void tryToContinue() {
+        if (profiles.size() > 0) {
+            finish();
+            Intent it = new Intent(WelcomeActivity.this, MainActivity.class);
+            startActivity(it);
+        } else {
+            finish();
+            Intent it = new Intent(WelcomeActivity.this, NewProfileActivity.class);
+            it.putExtra("doOpenMainActivity", true);
+            startActivity(it);
         }
     }
 
