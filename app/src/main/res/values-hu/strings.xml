@@ -6,8 +6,6 @@
     <string name="login_copyright">Az alábbi nyílra kattintva Ön elfogadja, hogy ezen alkalmazás teljesen független az eKreta Informatikai Zrt.-töl. A KRÉTA eredeti webes alkalmazás Copyright © 2017 eKréta Informatikai Zrt.</string>
     <string name="login_passwd_hint">Jelszó</string>
     <string name="login_studentcard_hint">Oktatási azonosító</string>
-    <string name="navigation_drawer_close">Navigációs menü bezárása</string>
-    <string name="navigation_drawer_open">Navigációs menü megnyitása</string>
     <string name="title_activity_grades">Jegyek</string>
     <string name="title_activity_avgs">Átlagok</string>
     <string name="subject_art">Rajz</string>
@@ -25,10 +23,7 @@
     <string name="subject_pe">Testnevelés</string>
     <string name="subject_physics">Fizika</string>
     <string name="avglabel_desc">Osztályátlag: %1$.2f - Különbség: %2$.2f</string>
-    <string name="welcome_subtitle">Válassz profilt!</string>
     <string name="http_server_error">Valami gáz van a szerveremmel. Bocsi :(</string>
-    <string name="welcome_title">Üdvözöllek!</string>
-    <string name="profile_delete_success">Profil sikeresen törölve.</string>
     <string name="profile_add">Profil Hozzáadása</string>
     <string name="login_friendlyname_hint">Profil név (Nem Kötelezö)</string>
     <string name="http_unknown">Ez a hiba… Ötletem sincs mi lehet. :(</string>
@@ -43,7 +38,6 @@
     <string name="welcome_first_title">Üdvözöl a Kréta Remastered!</string>
     <string name="welcome_sqlpass_subtitle">Ez a jelszó lesz használatos a profiljaid titkosításánál. Egy jelszót megadni ERÖSEN AJÁNLOTT, de nem kötelezö. Fontos tudni, hogy ha nem adsz meg jelszót, bárkinek, akinek egy kis fogalma is van az Android rendszerröl, elérheti a profiljaidat.</string>
     <string name="welcome_sqlpass_title">Titkosítási jelszó megadása</string>
-    <string name="empty_profilelist">Ide jönnének a profilok, de úgy látszik, most egy sincs belöle. Adj hozzá egyet!</string>
     <string name="profile_exists">A profil már létezik.</string>
     <string name="http_cant_resolve">Nincs neted</string>
     <string name="http_connect_timeout">Idötúllépés a kapcsolatban</string>
@@ -94,6 +88,7 @@
     <string name="announcementinfo_author">Tanár:</string>
     <string name="announcementinfo_date">Dátum:</string>
     <string name="announcementinfo_title">Üzenet</string>
-    <string name="filling_schedule">Az órarended betöltése (%1$.2f%%)…</string>
-    <string name="login_lastprofile">Bejelentkezés a legutolsó profil használatával.</string>
+    <string name="filling_schedule">Az órarended betöltése %1$.1f%%…</string>
+    <string name="profile_delete">Profilok Törlése…</string>
+    <string name="nodelete_active_profile">Nem törölheted a kiválasztott profilt.</string>
 </resources>

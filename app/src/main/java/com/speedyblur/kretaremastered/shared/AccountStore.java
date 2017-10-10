@@ -62,7 +62,6 @@ public class AccountStore {
     }
 
     public void dropAccount(String cardid) {
-        Log.d(LOGTAG, "Preparing to drop account "+cardid);
         db.execSQL("DELETE FROM accounts WHERE cardid='"+cardid+"'");
 
         try {

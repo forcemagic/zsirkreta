@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -188,7 +187,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void tryDecryptSqlite(@SuppressWarnings("UnusedParameters") View v) {
+    public void tryDecryptSqlite(@SuppressWarnings({"UnusedParameters", "SameParameterValue"}) View v) {
         EditText mDbPasswd = findViewById(R.id.unlockDbPassword);
         if (canDecryptSqlite(mDbPasswd.getText().toString())) {
             Common.SQLCRYPT_PWD = mDbPasswd.getText().toString();

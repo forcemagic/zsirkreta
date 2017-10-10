@@ -3,6 +3,7 @@ package com.speedyblur.kretaremastered.adapters;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,11 +50,11 @@ class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Grade g = grades.get(position);
 
+        Context c = holder.itemView.getContext();
         switch (getItemViewType(position)) {
             case NORM_GRADE:
                 NormGradeVH ngvh = (NormGradeVH) holder;
-                ngvh.gradeBullet.setColorFilter(ContextCompat.getColor(
-                        ngvh.gradeBullet.getContext(), g.getColorId()), PorterDuff.Mode.SRC_ATOP);
+                ngvh.gradeBullet.setColorFilter(ContextCompat.getColor(c, g.getColorId()), PorterDuff.Mode.SRC_ATOP);
                 ngvh.grade.setText(String.valueOf(g.getGrade()));
                 ngvh.gradeTitle.setText(g.getType());
                 if (g.getTheme().equals(" - ")) {
@@ -65,7 +66,8 @@ class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             case SPEC_GRADE:
                 SpecGradeVH sgvh = (SpecGradeVH) holder;
-                sgvh.gradeLayout.setBackgroundColor(g.getColorId());
+                sgvh.gradeLayout.setBackgroundColor(ColorUtils.setAlphaComponent(ContextCompat.getColor(c, g.getColorId()), 100));
+                sgvh.gradeBullet.setColorFilter(ContextCompat.getColor(c, g.getColorId()), PorterDuff.Mode.SRC_ATOP);
                 sgvh.grade.setText(String.valueOf(g.getGrade()));
                 if (g.getType().contains("végi"))
                     sgvh.gradeTitle.setText(R.string.grade_end_of_year);
@@ -106,12 +108,14 @@ class SubGradeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static class SpecGradeVH extends RecyclerView.ViewHolder {
         final RelativeLayout gradeLayout;
+        final ImageView gradeBullet;
         final TextView grade;
         final TextView gradeTitle;
 
         SpecGradeVH(View itemView) {
             super(itemView);
             gradeLayout = itemView.findViewById(R.id.importantGradeInnerLayout);
+            gradeBullet = itemView.findViewById(R.id.gradeBullet);
             grade = itemView.findViewById(R.id.grade);
             gradeTitle = itemView.findViewById(R.id.gradeTitle);
         }

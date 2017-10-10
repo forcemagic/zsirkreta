@@ -1,16 +1,21 @@
 package com.speedyblur.kretaremastered.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.ViewFlipper;
 
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -22,6 +27,7 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.speedyblur.kretaremastered.R;
+import com.speedyblur.kretaremastered.adapters.ProfileAdapter;
 import com.speedyblur.kretaremastered.fragments.MainAnnouncementsFragment;
 import com.speedyblur.kretaremastered.fragments.MainAveragesFragment;
 import com.speedyblur.kretaremastered.fragments.MainGradesFragment;
@@ -40,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
 
     private IRefreshHandler irh;
     private boolean shouldShowMenu = true;
-    private String lastMenuState;
     private ArrayList<Profile> profiles;
     public Profile p;
 
@@ -52,10 +57,11 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
     private AccountHeader accHeader;
     private Drawer drawer;
 
+    // TODO: Implement savedInstanceState handling
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_inner);
+        setContentView(R.layout.activity_main);
 
         // Toolbar setup
         toolbar = findViewById(R.id.toolbar);
@@ -64,30 +70,12 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
 
         // TODO: Make this asynchronous
         // Fetch Accounts (UI block, sorry about that :/)
-        List<IProfile> finalProfiles = new ArrayList<>();
         try {
             AccountStore as = new AccountStore(this, Common.SQLCRYPT_PWD);
             profiles = as.getAccounts();
             as.close();
         } catch (DecryptionException e) {e.printStackTrace();}
 
-        for (int i=0; i<profiles.size(); i++) {
-            final Profile cProfile = profiles.get(i);
-
-            finalProfiles.add(new ProfileDrawerItem()
-                    .withName(cProfile.hasFriendlyName() ? cProfile.getCardid() : null)
-                    .withEmail(cProfile.hasFriendlyName() ? cProfile.getFriendlyName() : cProfile.getCardid())
-                    .withIdentifier(Long.parseLong(cProfile.getCardid()))
-                    .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                        @Override
-                        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                            p = cProfile;
-                            doProfileUpdate();
-                            return true;
-                        }
-                    })
-            );
-        }
         String lastUsedProfile = getSharedPreferences("main", MODE_PRIVATE).getString("lastUsedProfile", "");
         if (!lastUsedProfile.equals("")) {
             for (int i = 0; i < profiles.size(); i++) {
@@ -102,24 +90,14 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
 
         assert p != null;
 
-        // Drawer setup
+        // Drawer & Account Header setup
         accHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.side_nav_bar)
                 .withOnlyMainProfileImageVisible(true)
-                .withProfiles(finalProfiles)
-                .addProfiles(new ProfileSettingDrawerItem()
-                        .withName(R.string.profile_add)
-                        .withIcon(R.drawable.add_profile_icon_black)
-                        .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                            @Override
-                            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                                Intent it = new Intent(MainActivity.this, NewProfileActivity.class);
-                                startActivityForResult(it, INTENT_REQ_NEWPROF);
-                                return true;
-                            }
-                        })
-                ).build();
+                .build();
+        populateProfiles();
+
         drawer = new DrawerBuilder().withActivity(this).withToolbar(toolbar)
                 .withAccountHeader(accHeader)
                 .inflateMenu(R.menu.activity_main_drawer)
@@ -142,11 +120,10 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
 
         accHeader.setActiveProfile(Long.parseLong(p.getCardid()));
 
-        // TODO: Implement savedInstanceState handling
         doProfileUpdate();
     }
 
-    public void doProfileUpdate() {
+    private void doProfileUpdate() {
         swipeRefresh.setRefreshing(true);
         Common.fetchAccountAsync(this, p, new Common.IFetchAccount() {
             @Override
@@ -161,6 +138,93 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
                 swipeRefresh.setRefreshing(false);
             }
         });
+    }
+
+    // This code escalated quickly. TODO: Refactor.
+    private void populateProfiles() {
+        List<IProfile> finalProfiles = new ArrayList<>();
+        for (int i=0; i<profiles.size(); i++) {
+            final Profile cProfile = profiles.get(i);
+
+            finalProfiles.add(new ProfileDrawerItem()
+                    .withName(cProfile.hasFriendlyName() ? cProfile.getCardid() : null)
+                    .withEmail(cProfile.hasFriendlyName() ? cProfile.getFriendlyName() : cProfile.getCardid())
+                    .withIdentifier(Long.parseLong(cProfile.getCardid()))
+                    .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                        @Override
+                        public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                            p = cProfile;
+                            irh.onRefreshComplete();
+                            doProfileUpdate();
+                            return true;
+                        }
+                    })
+            );
+        }
+
+        accHeader.clear();
+        accHeader.setProfiles(finalProfiles);
+        accHeader.addProfiles(new ProfileSettingDrawerItem()
+                .withName(R.string.profile_add)
+                .withIcon(R.drawable.add_profile_icon_black)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        Intent it = new Intent(MainActivity.this, NewProfileActivity.class);
+                        startActivityForResult(it, INTENT_REQ_NEWPROF);
+                        return true;
+                    }
+                }), new ProfileSettingDrawerItem()
+                .withName(R.string.profile_delete)
+                .withIcon(R.drawable.delete_icon_black)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        View inflView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_delete_profiles, null);
+
+                        final ListView lv = inflView.findViewById(R.id.deleteProfileList);
+                        lv.setAdapter(new ProfileAdapter(view.getContext(), profiles, p));
+                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                final Profile p = (Profile) parent.getItemAtPosition(position);
+
+                                if (p.getCardid().equals(MainActivity.this.p.getCardid()))
+                                    return;
+
+                                new AlertDialog.Builder(view.getContext())
+                                        .setTitle(R.string.dialog_delete_profile_title)
+                                        .setMessage(R.string.dialog_delete_profile)
+                                        .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                try {
+                                                    AccountStore as = new AccountStore(MainActivity.this, Common.SQLCRYPT_PWD);
+                                                    lv.setAdapter(new ProfileAdapter(MainActivity.this, profiles, p));
+                                                    as.dropAccount(p.getCardid());
+                                                    profiles.remove(p);
+                                                    populateProfiles();
+                                                    dialog.dismiss();
+                                                } catch (DecryptionException e) {e.printStackTrace();}
+                                            }
+                                        })
+                                        .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        }).show();
+                            }
+                        });
+
+                        new AlertDialog.Builder(view.getContext())
+                                .setTitle(R.string.dialog_delete_profile_title)
+                                .setView(inflView)
+                                .show();
+                        return true;
+                    }
+                })
+        );
     }
 
     public void setRefreshHandler(IRefreshHandler irh) {
@@ -181,8 +245,6 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
-        MenuItem mChangeSort = menu.getItem(0);
-        if (lastMenuState != null) mChangeSort.setTitle(lastMenuState);
         return true;
     }
 
@@ -207,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
         return super.onOptionsItemSelected(item);
     }
 
+    // TODO: Possibly... refactor?
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
         if (position == 1) {
@@ -240,25 +303,15 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == INTENT_REQ_NEWPROF) {
             if (data != null && data.hasExtra("profile")) {
                 final Profile cProfile = data.getParcelableExtra("profile");
 
-                // Added that just to be sure
                 profiles.add(cProfile);
-                accHeader.addProfiles(new ProfileDrawerItem().withName(cProfile.hasFriendlyName() ? cProfile.getCardid() : null)
-                        .withEmail(cProfile.hasFriendlyName() ? cProfile.getFriendlyName() : cProfile.getCardid())
-                        .withIdentifier(Long.parseLong(cProfile.getCardid()))
-                        .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
-                            @Override
-                            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                                p = cProfile;
-                                doProfileUpdate();
-                                return true;
-                            }
-                        })
-                );
+                populateProfiles();
                 accHeader.setActiveProfile(Long.parseLong(cProfile.getCardid()));
+                fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
                 doProfileUpdate();
             }
         }

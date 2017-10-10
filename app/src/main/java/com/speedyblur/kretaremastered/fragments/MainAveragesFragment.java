@@ -23,7 +23,7 @@ import com.speedyblur.kretaremastered.shared.IRefreshHandler;
 import java.util.ArrayList;
 
 public class MainAveragesFragment extends Fragment {
-    AverageAdapter adapter;
+    private AverageAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
