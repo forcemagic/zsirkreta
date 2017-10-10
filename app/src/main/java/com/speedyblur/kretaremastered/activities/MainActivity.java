@@ -1,11 +1,7 @@
 package com.speedyblur.kretaremastered.activities;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -17,15 +13,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ViewFlipper;
 
-import com.mikepenz.crossfader.Crossfader;
-import com.mikepenz.iconics.typeface.IIcon;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.holder.ImageHolder;
-import com.mikepenz.materialdrawer.holder.StringHolder;
-import com.mikepenz.materialdrawer.interfaces.ICrossfader;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
@@ -99,16 +90,17 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
         }
         String lastUsedProfile = getSharedPreferences("main", MODE_PRIVATE).getString("lastUsedProfile", "");
         if (!lastUsedProfile.equals("")) {
-            for (int i=0; i<profiles.size(); i++) {
+            for (int i = 0; i < profiles.size(); i++) {
                 if (profiles.get(i).getCardid().equals(lastUsedProfile)) {
                     p = profiles.get(i);
                     break;
                 }
             }
-        } else {
-            Intent it = new Intent(MainActivity.this, NewProfileActivity.class);
-            startActivityForResult(it, INTENT_REQ_NEWPROF);
         }
+        if (p == null && profiles.size() > 0)
+            p = profiles.get(0);
+
+        assert p != null;
 
         // Drawer setup
         accHeader = new AccountHeaderBuilder()
@@ -144,16 +136,14 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
             }
         });
 
-        if (p != null) {
-            // Fragment setup
-            fragManager = getSupportFragmentManager();
-            fragManager.beginTransaction().add(R.id.master_fragment, new MainGradesFragment()).commit();
+        // Fragment setup
+        fragManager = getSupportFragmentManager();
+        fragManager.beginTransaction().add(R.id.master_fragment, new MainGradesFragment()).commit();
 
-            accHeader.setActiveProfile(Long.parseLong(p.getCardid()));
+        accHeader.setActiveProfile(Long.parseLong(p.getCardid()));
 
-            // TODO: Implement savedInstanceState handling
-            doProfileUpdate();
-        }
+        // TODO: Implement savedInstanceState handling
+        doProfileUpdate();
     }
 
     public void doProfileUpdate() {
