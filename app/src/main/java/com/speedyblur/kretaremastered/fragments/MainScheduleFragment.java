@@ -7,7 +7,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -26,11 +26,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.prolificinteractive.materialcalendarview.DayViewDecorator;
-import com.prolificinteractive.materialcalendarview.DayViewFacade;
-import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
-import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.activities.MainActivity;
 import com.speedyblur.kretaremastered.adapters.ClazzAdapter;
@@ -53,7 +50,7 @@ public class MainScheduleFragment extends Fragment {
     // TODO: Implement this
     //private ArrayList<AllDayEvent> allDayEvents;
     private ArrayList<Clazz> clazzes;
-    private CalendarDay selectedScheduleDate;
+    private Calendar selectedScheduleDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -133,7 +130,6 @@ public class MainScheduleFragment extends Fragment {
         parent.findViewById(R.id.scheduleWednesdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.scheduleThursdaySelector).setOnClickListener(new BulletClick());
         parent.findViewById(R.id.scheduleFridaySelector).setOnClickListener(new BulletClick());
-        parent.findViewById(R.id.calendarImageButton).setOnClickListener(new CalendarClick());
         parent.findViewById(R.id.currentScheduleDate).setOnClickListener(new CalendarClick());
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
     }
@@ -157,7 +153,7 @@ public class MainScheduleFragment extends Fragment {
             @Override
             public void processRequest(ArrayList<Clazz> data) {
                 clazzes = data;
-                if (selectedScheduleDate == null) selectedScheduleDate = CalendarDay.from(Calendar.getInstance());
+                if (selectedScheduleDate == null) selectedScheduleDate = Calendar.getInstance();
                 showAbsenceListForDate(selectedScheduleDate);
             }
 
@@ -191,19 +187,18 @@ public class MainScheduleFragment extends Fragment {
         }
     }
 
-    private void showAbsenceListForDate(CalendarDay day) {
+    private void showAbsenceListForDate(Calendar day) {
         selectedScheduleDate = day;
 
-        Calendar c = day.getCalendar();
         ArrayList<Clazz> listElements = new ArrayList<>();
         for (int i=0; i<clazzes.size(); i++) {
             Calendar toCompare = Calendar.getInstance();
             toCompare.setTimeInMillis((long)clazzes.get(i).getBeginTime()*1000);
-            if (toCompare.get(Calendar.YEAR) == c.get(Calendar.YEAR) && toCompare.get(Calendar.DAY_OF_YEAR) == c.get(Calendar.DAY_OF_YEAR))
+            if (toCompare.get(Calendar.YEAR) == day.get(Calendar.YEAR) && toCompare.get(Calendar.DAY_OF_YEAR) == day.get(Calendar.DAY_OF_YEAR))
                 listElements.add(clazzes.get(i));
         }
 
-        resetSelectBullet(c.get(Calendar.DAY_OF_WEEK));
+        resetSelectBullet(day.get(Calendar.DAY_OF_WEEK));
 
         ListView lv = getActivity().findViewById(R.id.scheduleList);
         lv.setAdapter(new ClazzAdapter(getContext(), listElements));
@@ -211,10 +206,10 @@ public class MainScheduleFragment extends Fragment {
         TextView currentDate = getActivity().findViewById(R.id.currentScheduleDate);
         Typeface tFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf");
         currentDate.setTypeface(Typeface.create(tFace, Typeface.BOLD));
-        currentDate.setText(new SimpleDateFormat("MMMM dd.", Locale.getDefault()).format(c.getTime()));
+        currentDate.setText(new SimpleDateFormat("MMMM dd.", Locale.getDefault()).format(day.getTime()));
 
         // TODO: 10/5/17 Implement this
-        Calendar postCal = (Calendar) day.getCalendar().clone();
+        Calendar postCal = (Calendar) day.clone();
         SimpleDateFormat weekFmt = new SimpleDateFormat("MMM. dd.", Locale.getDefault());
         postCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); String dateMonday = weekFmt.format(postCal.getTime());
         postCal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY); String dateFriday = weekFmt.format(postCal.getTime());
@@ -241,7 +236,7 @@ public class MainScheduleFragment extends Fragment {
 
                     if (Math.abs(deltaX) > Math.abs(deltaY)) {
                         if (Math.abs(deltaX) > minDist) {
-                            final Calendar c = selectedScheduleDate.getCalendar();
+                            final Calendar c = selectedScheduleDate;
                             if (deltaX > 0) {
                                 c.add(Calendar.DATE, 1);
                                 view.animate().translationX(-100f).alpha(0f).setDuration(100).setListener(new AnimatorListenerAdapter() {
@@ -249,7 +244,7 @@ public class MainScheduleFragment extends Fragment {
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
                                         animation.removeListener(this);
-                                        showAbsenceListForDate(CalendarDay.from(c));
+                                        showAbsenceListForDate(c);
                                         view.animate().translationX(100f).setDuration(100).setListener(new AnimatorListenerAdapter() {
                                             @Override
                                             public void onAnimationEnd(Animator animation) {
@@ -268,7 +263,7 @@ public class MainScheduleFragment extends Fragment {
                                     public void onAnimationEnd(Animator animation) {
                                         super.onAnimationEnd(animation);
                                         animation.removeListener(this);
-                                        showAbsenceListForDate(CalendarDay.from(c));
+                                        showAbsenceListForDate(c);
                                         view.animate().translationX(-100f).setDuration(100).setListener(new AnimatorListenerAdapter() {
                                             @Override
                                             public void onAnimationEnd(Animator animation) {
@@ -292,7 +287,7 @@ public class MainScheduleFragment extends Fragment {
     private class BulletClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            Calendar c = selectedScheduleDate.getCalendar();
+            Calendar c = selectedScheduleDate;
             if (v.getId() == R.id.scheduleMondaySelector) {
                 c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
             } else if (v.getId() == R.id.scheduleTuesdaySelector) {
@@ -306,71 +301,53 @@ public class MainScheduleFragment extends Fragment {
             }
 
             resetSelectBullet(c.get(Calendar.DAY_OF_WEEK));
-            showAbsenceListForDate(CalendarDay.from(c));
+            showAbsenceListForDate(c);
         }
     }
 
     private class CalendarClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            AlertDialog.Builder calDialog = new AlertDialog.Builder(getContext());
-
-            // Calendar setup
-            View inflView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_calendar, null);
-            final MaterialCalendarView cView = inflView.findViewById(R.id.absenceCalendar);
-            final ArrayList<CalendarDay> provenDates = new ArrayList<>();
-            final ArrayList<CalendarDay> unprovenDates = new ArrayList<>();
-            for (int i=0; i<clazzes.size(); i++) {
-                if (clazzes.get(i).isAbsent()) {
-                    if (clazzes.get(i).isAbsent() && clazzes.get(i).getAbsenceDetails().isProven())
-                        provenDates.add(CalendarDay.from(new Date((long) clazzes.get(i).getBeginTime() * 1000)));
-                    else if (clazzes.get(i).isAbsent() && !clazzes.get(i).getAbsenceDetails().isProven())
-                        unprovenDates.add(CalendarDay.from(new Date((long) clazzes.get(i).getBeginTime() * 1000)));
-                }
+            final CompactCalendarView cal = getActivity().findViewById(R.id.scheduleCalendarView);
+            cal.shouldDrawIndicatorsBelowSelectedDays(true);
+            cal.setCurrentDate(selectedScheduleDate.getTime());
+            if (cal.getHeight() > 0) {
+                cal.hideCalendarWithAnimation();
             }
 
-            cView.setSelectedDate(selectedScheduleDate);
-            cView.addDecorators(new DayViewDecorator() {
+            ArrayList<Event> evts = new ArrayList<>();
+            for (int i=0; i<clazzes.size(); i++) {
+                Clazz c = clazzes.get(i);
+
+                if (c.isAbsent()) {
+                    if (c.getAbsenceDetails().isProven())
+                        evts.add(new Event(ContextCompat.getColor(getContext(), R.color.goodGrade), (long) c.getBeginTime()*1000));
+                    else
+                        evts.add(new Event(ContextCompat.getColor(getContext(), R.color.badGrade), (long) c.getBeginTime()*1000));
+                }
+            }
+            cal.removeAllEvents();
+            cal.addEvents(evts);
+
+            cal.showCalendarWithAnimation();
+            cal.setListener(new CompactCalendarView.CompactCalendarViewListener() {
                 @Override
-                public boolean shouldDecorate(CalendarDay day) {
-                    return provenDates.contains(day);
+                public void onDayClick(Date dateClicked) {
+                    selectedScheduleDate.setTime(dateClicked);
+                    showAbsenceListForDate(selectedScheduleDate);
+                    if (cal.isAnimating()) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                cal.hideCalendarWithAnimation();
+                            }
+                        }, 800);
+                    } else cal.hideCalendarWithAnimation();
                 }
 
                 @Override
-                public void decorate(DayViewFacade view) {
-                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.calendar_goodbullet));
-                }
-            }, new DayViewDecorator() {
-                @Override
-                public boolean shouldDecorate(CalendarDay day) {
-                    return unprovenDates.contains(day);
-                }
-
-                @Override
-                public void decorate(DayViewFacade view) {
-                    view.setBackgroundDrawable(ContextCompat.getDrawable(getContext(), R.drawable.calendar_badbullet));
-                }
-            }, new DayViewDecorator() {
-                @Override
-                public boolean shouldDecorate(CalendarDay day) {
-                    Calendar c = day.getCalendar();
-                    return c.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR) &&
-                            c.get(Calendar.DAY_OF_YEAR) == Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
-                }
-
-                @Override
-                public void decorate(DayViewFacade view) {
-                    // TODO: Decorate
-                }
-            });
-
-            final AlertDialog dif = calDialog.setView(inflView).setTitle(R.string.select_date).show();
-
-            cView.setOnDateChangedListener(new OnDateSelectedListener() {
-                @Override
-                public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
-                    showAbsenceListForDate(date);
-                    dif.dismiss();
+                public void onMonthScroll(Date firstDayOfNewMonth) {
+                    // Method stub
                 }
             });
         }
