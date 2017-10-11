@@ -1,42 +1,11 @@
-# Kreta Remastered
+# ZsírKréta
 
 [![Build Status](https://travis-ci.org/forcemagic/kreta-remastered.svg?branch=master)](https://travis-ci.org/forcemagic/kreta-remastered)
 
 [![Get it on Google Play](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.speedyblur.kretaremastered&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
 
-Google Play and the Google Play logo are trademarks of Google Inc.
-
-A Google Play és a Google Play logo a Google Inc. bejegyzett védjegyei.
-
----
-
-# Features
-
-* Multiple profile (account) management
-* Profiles are encrypted with AES-256 using fingerprint and/or password authentication
-* Colorful grades :rainbow:
-* Grade list (timeline or subject-grouped view)
-* Average list + GRAPHS! :tada:
-* Schedule view with absence indicator
-
-# Features & Suggestions
-
-Just look at the issue tracker (see below).
-
-Suggestions are more than welcome: just send a mail to [`k.ideas@speedyblur.com`](mailto:k.ideas@speedyblur.com)
-
-# Issues (aka. bugs)
-
-There are two ways to report a bug (in Hungarian or in English):
-
-* Via the issue tracker [here](https://github.com/forcemagic/kreta-remastered/issues)
-* Via email: [`k.bug@speedyblur.com`](mailto:k.bug@speedyblur.com) (These will be forwarded to the issue tracker)
-* **IMPORTANT!** Problems regarding localization should go to the [`k.i18n@speedyblur.com`](mailto:k.i18n@speedyblur.com) email
-
-# Build info
-
-Application uses `v26.0.1` build tools, and SDK version `26`.
-Check the [`app/build.gradle`](https://github.com/forcemagic/kreta-remastered/blob/master/app/build.gradle) file for more info.
+> Google Play and the Google Play logo are trademarks of Google Inc.
+> A Google Play és a Google Play logo a Google Inc. bejegyzett védjegyei.
 
 ---
 
@@ -69,3 +38,32 @@ Két mód létezik erre (magyar és angol nyelven is):
 Az alkalmazás `v26.0.1`-es build eszközöket használ, SDK verzió: `26`.
 Továbbiakért látogasd meg az [`app/build.gradle`](https://github.com/forcemagic/kreta-remastered/blob/master/app/build.gradle) fájlt.
 
+---
+
+# Features
+
+* Multiple profile (account) management
+* Profiles are encrypted with AES-256 using fingerprint and/or password authentication
+* Colorful grades :rainbow:
+* Grade list (timeline or subject-grouped view)
+* Average list + GRAPHS! :tada:
+* Schedule view with absence indicator
+
+# Features & Suggestions
+
+Just look at the issue tracker (see below).
+
+Suggestions are more than welcome: just send a mail to [`k.ideas@speedyblur.com`](mailto:k.ideas@speedyblur.com)
+
+# Issues (aka. bugs)
+
+There are two ways to report a bug (in Hungarian or in English):
+
+* Via the issue tracker [here](https://github.com/forcemagic/kreta-remastered/issues)
+* Via email: [`k.bug@speedyblur.com`](mailto:k.bug@speedyblur.com) (These will be forwarded to the issue tracker)
+* **IMPORTANT!** Problems regarding localization should go to the [`k.i18n@speedyblur.com`](mailto:k.i18n@speedyblur.com) email
+
+# Build info
+
+Application uses `v26.0.1` build tools, and SDK version `26`.
+Check the [`app/build.gradle`](https://github.com/forcemagic/kreta-remastered/blob/master/app/build.gradle) file for more info.
