@@ -137,99 +137,98 @@ public class NewProfileActivity extends AppCompatActivity {
         HttpHandler.postJson(Common.APIBASE + "/auth", payload, new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JSONObject resp) throws JSONException {
-                try {
-                    final Profile p = new Profile(studentId, passwd, friendlyName);
+                final Profile p = new Profile(studentId, passwd, friendlyName);
 
-                    ArrayMap<String, String> headers = new ArrayMap<>();
-                    headers.put("X-Auth-Token", resp.getString("token"));
-                    HttpHandler.getJson(Common.APIBASE + "/schedule", headers, new HttpHandler.JsonRequestCallback() {
-                        @Override
-                        public void onComplete(JSONObject resp) throws JSONException {
-                            try {
-                                ArrayList<AllDayEvent> allDayEvents = new ArrayList<>();
-                                for (int i=0; i<resp.getJSONObject("data").getJSONArray("allday").length(); i++) {
-                                    JSONObject currentObj = resp.getJSONObject("data").getJSONArray("allday").getJSONObject(i);
-                                    AllDayEvent ade = new Gson().fromJson(currentObj.toString(), AllDayEvent.class);
-                                    allDayEvents.add(ade);
-                                }
-
-                                ArrayList<Clazz> clazzes = new ArrayList<>();
-                                for (int i=0; i<resp.getJSONObject("data").getJSONArray("classes").length(); i++) {
-                                    JSONObject currentObj = resp.getJSONObject("data").getJSONArray("classes").getJSONObject(i);
-                                    GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
-                                    gsonBuilder.registerTypeAdapter(Clazz.class, new ClazzDeserializer());
-                                    Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
-                                    clazzes.add(c);
-                                }
-
-                                // I do not like setting these every time an INSERT INTO completes
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        mProgressBar.setIndeterminate(false);
-                                        mProgressBar.setMax(10000);
-                                    }
-                                });
-                                // Commit
-                                DataStore ds = new DataStore(getApplicationContext(), p.getCardid(), Common.SQLCRYPT_PWD);
-                                ds.putAllDayEventsData(allDayEvents);
-                                ds.putClassesData(clazzes, new DataStore.InsertProcessCallback() {
-                                    @Override
-                                    public void onInsertComplete(final int current, final int total) {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                float percentage = (float) current / total * 100;
-                                                mProgressBar.setProgress(Math.round(percentage*100));
-                                                mProgressStatusView.setText(getString(R.string.filling_schedule, percentage));
-                                            }
-                                        });
-                                    }
-                                });
-                                ds.close();
-
-                                AccountStore ash = new AccountStore(getApplicationContext(), Common.SQLCRYPT_PWD);
-                                ash.addAccount(p);
-                                ash.close();
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Intent i = getIntent();
-                                        i.putExtra("profile", p);
-                                        setResult(RESULT_OK, i);
-                                        finish();
-                                        if (i.getBooleanExtra("doOpenMainActivity", false)) {
-                                            Intent mainIntent = new Intent(NewProfileActivity.this, MainActivity.class);
-                                            startActivity(mainIntent);
-                                        }
-                                    }
-                                });
-                            } catch (DecryptionException e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        showProgress(false);
-                                    }
-                                });
-                                showOnSnackbar(R.string.decrypt_database_fail, Snackbar.LENGTH_LONG);
+                ArrayMap<String, String> headers = new ArrayMap<>();
+                headers.put("X-Auth-Token", resp.getString("token"));
+                HttpHandler.getJson(Common.APIBASE + "/schedule", headers, new HttpHandler.JsonRequestCallback() {
+                    @Override
+                    public void onComplete(JSONObject resp) throws JSONException {
+                        try {
+                            ArrayList<AllDayEvent> allDayEvents = new ArrayList<>();
+                            for (int i = 0; i < resp.getJSONObject("data").getJSONArray("allday").length(); i++) {
+                                JSONObject currentObj = resp.getJSONObject("data").getJSONArray("allday").getJSONObject(i);
+                                AllDayEvent ade = new Gson().fromJson(currentObj.toString(), AllDayEvent.class);
+                                allDayEvents.add(ade);
                             }
-                        }
 
-                        @Override
-                        public void onFailure(int localizedError)  {
-                            showOnSnackbar(localizedError, Snackbar.LENGTH_LONG);
+                            ArrayList<Clazz> clazzes = new ArrayList<>();
+                            for (int i = 0; i < resp.getJSONObject("data").getJSONArray("classes").length(); i++) {
+                                JSONObject currentObj = resp.getJSONObject("data").getJSONArray("classes").getJSONObject(i);
+                                GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
+                                gsonBuilder.registerTypeAdapter(Clazz.class, new ClazzDeserializer());
+                                Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
+                                clazzes.add(c);
+                            }
+
+                            // I do not like setting these every time an INSERT INTO completes
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mProgressBar.setIndeterminate(false);
+                                    mProgressBar.setMax(10000);
+                                }
+                            });
+                            // Commit
+                            DataStore ds = new DataStore(getApplicationContext(), p.getCardid(), Common.SQLCRYPT_PWD);
+                            ds.putAllDayEventsData(allDayEvents);
+                            ds.putClassesData(clazzes, new DataStore.InsertProcessCallback() {
+                                @Override
+                                public void onInsertComplete(final int current, final int total) {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            float percentage = (float) current / total * 100;
+                                            mProgressBar.setProgress(Math.round(percentage * 100));
+                                            mProgressStatusView.setText(getString(R.string.filling_schedule, percentage));
+                                        }
+                                    });
+                                }
+                            });
+                            ds.close();
+
+                            AccountStore ash = new AccountStore(getApplicationContext(), Common.SQLCRYPT_PWD);
+                            ash.addAccount(p);
+                            ash.close();
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Intent i = getIntent();
+                                    i.putExtra("profile", p);
+                                    setResult(RESULT_OK, i);
+                                    finish();
+                                    if (i.getBooleanExtra("doOpenMainActivity", false)) {
+                                        Intent mainIntent = new Intent(NewProfileActivity.this, MainActivity.class);
+                                        startActivity(mainIntent);
+                                    }
+                                }
+                            });
+                        } catch (DecryptionException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showProgress(false);
+                                }
+                            });
+                            showOnSnackbar(R.string.decrypt_database_fail, Snackbar.LENGTH_LONG);
+                        } catch (SQLiteConstraintException e) {
+                            // TODO: Check this beforehand
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showProgress(false);
+                                }
+                            });
+                            showOnSnackbar(R.string.profile_exists, Snackbar.LENGTH_LONG);
                         }
-                    });
-                } catch (SQLiteConstraintException e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            showProgress(false);
-                        }
-                    });
-                    showOnSnackbar(R.string.profile_exists, Snackbar.LENGTH_LONG);
-                }
+                    }
+
+                    @Override
+                    public void onFailure(int localizedError) {
+                        showOnSnackbar(localizedError, Snackbar.LENGTH_LONG);
+                    }
+                });
             }
 
             @Override

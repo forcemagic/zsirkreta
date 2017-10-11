@@ -105,24 +105,33 @@ public class DataStore {
                 " room TEXT, classnum INTEGER, begin INTEGER, end INTEGER, theme TEXT, isheld INTEGER, isabsent INTEGER, absencetype TEXT, absenceprovementtype TEXT," +
                 " proven INTEGER, UNIQUE (subject, begin, end) ON CONFLICT IGNORE);");
 
-        for (int i=0; i<clazzes.size(); i++) {
-            Clazz c = clazzes.get(i);
-            if (c.isAbsent()) {
-                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, " +
-                        "isabsent, absencetype, absenceprovementtype, proven) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
-                        c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
-                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "1", c.getAbsenceDetails().getType(),
-                        c.getAbsenceDetails().getProvementType(), c.getAbsenceDetails().isProven() ? "1" : "0"
-                });
-            } else {
-                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, isabsent) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
-                        c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
-                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "0"
-                });
-            }
+        db.beginTransaction();
+        try {
+            for (int i = 0; i < clazzes.size(); i++) {
+                Clazz c = clazzes.get(i);
+                if (c.isAbsent()) {
+                    db.execSQL("INSERT INTO clazzes_" + profileName + " (subject, grp, teacher, room, classnum, begin, end, theme, isheld, " +
+                            "isabsent, absencetype, absenceprovementtype, proven) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
+                            c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
+                            String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "1", c.getAbsenceDetails().getType(),
+                            c.getAbsenceDetails().getProvementType(), c.getAbsenceDetails().isProven() ? "1" : "0"
+                    });
+                } else {
+                    db.execSQL("INSERT INTO clazzes_" + profileName + " (subject, grp, teacher, room, classnum, begin, end, theme, isheld, isabsent) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
+                            c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
+                            String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "0"
+                    });
+                }
 
-            ipc.onInsertComplete(i+1, clazzes.size());
+                ipc.onInsertComplete(i + 1, clazzes.size());
+            }
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            Log.e(LOGTAG, "Unable to end DB transaction.");
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
         }
 
         updateLastSave();
