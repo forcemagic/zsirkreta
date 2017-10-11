@@ -14,6 +14,7 @@ public class SubjectGradeGroup implements Parcelable {
         this.grades = grades;
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected SubjectGradeGroup(Parcel in) {
         subject = in.readString();
         grades = in.createTypedArrayList(Grade.CREATOR);

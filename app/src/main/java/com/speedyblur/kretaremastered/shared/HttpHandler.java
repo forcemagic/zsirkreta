@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.CertificatePinner;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -23,13 +24,20 @@ import okhttp3.Response;
 
 public class HttpHandler {
 
-    private static final OkHttpClient httpClient = new OkHttpClient();
+    private static final String hostname = "www.speedyblur.com";
+    private static final CertificatePinner certPinner = new CertificatePinner.Builder()
+            .add(hostname, "sha256/3mbCPRv7AYBP30hhmhMuNVF5ePn1Tm9BLWtQ4TiTCTU=")
+            .add(hostname, "sha256/YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=")
+            .add(hostname, "sha256/Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=")
+            .build();
+    private static final OkHttpClient httpClient = new OkHttpClient.Builder().certificatePinner(certPinner).build();
 
     /**
      * Issues a GET request against url. Parses JSON for the callback.
      * @param url the target URL
      * @param callback the callback to return to when the request has been executed
      */
+    @SuppressWarnings("unused")
     public static void getJson(String url, JsonRequestCallback callback) {
         getJson(url, new ArrayMap<String, String>(), callback);
     }
@@ -42,7 +50,7 @@ public class HttpHandler {
      */
     public static void getJson(String url, ArrayMap<String, String> headers, final JsonRequestCallback callback) {
         Request req = buildReq("GET", url, null, headers);
-        Log.d("HttpHandler", "Dispatching GET "+url);
+        Log.v("HttpHandler", "Dispatching GET "+url);
         httpClient.newCall(req).enqueue(new MainCallbackHandler(callback));
     }
 
@@ -63,9 +71,10 @@ public class HttpHandler {
      * @param headers ArrayMap of headers
      * @param callback the callback to return to when the request has been executed
      */
+    @SuppressWarnings("WeakerAccess")
     public static void postJson(String url, JSONObject payload, ArrayMap<String, String> headers, final JsonRequestCallback callback) {
         Request req = buildReq("POST", url, RequestBody.create(MediaType.parse("application/json"), payload.toString()), headers);
-        Log.d("HttpHandler", "Dispatching POST "+url);
+        Log.v("HttpHandler", "Dispatching POST "+url);
         httpClient.newCall(req).enqueue(new MainCallbackHandler(callback));
     }
 
@@ -120,7 +129,6 @@ public class HttpHandler {
 
         @Override
         public void onFailure(@NonNull Call call, @NonNull IOException e) {
-            Log.e("HttpHandler", "Failed to complete request.");
             if (e.getMessage().equals("timeout")) {
                 Log.e("HttpHandler", "Timeout error.");
                 jsCallback.onFailure(R.string.http_timeout);
@@ -138,7 +146,6 @@ public class HttpHandler {
 
         @Override
         public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-            Log.d("HttpHandler", "Got response. Parsing...");
             if (response.isSuccessful()) {
                 try {
                     //noinspection ConstantConditions

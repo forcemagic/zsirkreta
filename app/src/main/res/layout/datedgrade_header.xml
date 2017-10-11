@@ -15,15 +15,17 @@
         android:layout_margin="12dp"
         android:text="@string/blablabla"
         android:textColor="@android:color/black"
-        android:textSize="22sp" />
+        android:textSize="22sp"
+        android:layout_alignParentLeft="true" />
 
     <View
-        android:id="@+id/datedGradeGroupBar"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@id/datedGradeHeader"
-        android:layout_marginEnd="67dp"
-        android:layout_marginStart="67dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginRight="70dp"
+        android:layout_marginLeft="10dp"
         android:background="@drawable/grade_group_bar" />
 
 </RelativeLayout>

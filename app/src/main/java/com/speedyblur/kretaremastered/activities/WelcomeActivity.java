@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,9 +24,12 @@ import com.speedyblur.kretaremastered.fragments.WelcomeSlideEndFragment;
 import com.speedyblur.kretaremastered.fragments.WelcomeSlideFingerprintFragment;
 import com.speedyblur.kretaremastered.fragments.WelcomeSlideFirstFragment;
 import com.speedyblur.kretaremastered.fragments.WelcomeSlideSetsqlpassFragment;
+import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.shared.AccountStore;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
+
+import java.util.ArrayList;
 
 import io.reactivex.functions.Consumer;
 
@@ -36,6 +38,7 @@ import io.reactivex.functions.Consumer;
 public class WelcomeActivity extends AppCompatActivity {
 
     private int currentPage;
+    private ArrayList<Profile> profiles;
     private SharedPreferences shPrefs;
 
     @Override
@@ -58,8 +61,8 @@ public class WelcomeActivity extends AppCompatActivity {
             if (!canDecryptSqlite(Common.SQLCRYPT_PWD)) {
                 setContentView(R.layout.activity_unlockdb);
 
-                final ViewFlipper vf = (ViewFlipper) findViewById(R.id.unlockdbFlipper);
-                final TextView statusText = (TextView) findViewById(R.id.fingerprintUnlockDbTitle);
+                final ViewFlipper vf = findViewById(R.id.unlockdbFlipper);
+                final TextView statusText = findViewById(R.id.fingerprintUnlockDbTitle);
 
                 // Handle Fingerprint stuff
                 if (shPrefs.getBoolean("doUseFingerprint", false)) {
@@ -90,9 +93,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                 case AUTHENTICATED:
                                     Common.SQLCRYPT_PWD = fdr.getDecrypted();
                                     if (canDecryptSqlite(Common.SQLCRYPT_PWD)) {
-                                        finish();
-                                        Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
-                                        startActivity(it);
+                                        tryToContinue();
                                     } else {
                                         showOnStatusbar(getString(R.string.decrypt_database_fail));
                                     }
@@ -116,7 +117,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 } else vf.setDisplayedChild(1);
 
                 // Set up "Enter" key action
-                EditText mPasswdView = (EditText) findViewById(R.id.unlockDbPassword);
+                EditText mPasswdView = findViewById(R.id.unlockDbPassword);
                 mPasswdView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                     @Override
                     public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
@@ -129,15 +130,13 @@ public class WelcomeActivity extends AppCompatActivity {
                 });
             } else {
                 // We can use the default password, as nothing else has been provided previously
-                finish();
-                Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
-                startActivity(it);
+                tryToContinue();
             }
         }
     }
 
     public void commitSqlPassword(final View v) {
-        EditText mSqlPass = (EditText) findViewById(R.id.sqlPass);
+        EditText mSqlPass = findViewById(R.id.sqlPass);
         String gotPasswd = mSqlPass.getText().toString().trim();
         if (!TextUtils.isEmpty(gotPasswd)) {
             Common.SQLCRYPT_PWD = gotPasswd;
@@ -163,7 +162,8 @@ public class WelcomeActivity extends AppCompatActivity {
         }
     }
 
-    public void goToNext(View v) {
+    @SuppressWarnings("WeakerAccess")
+    public void goToNext(@SuppressWarnings("UnusedParameters") View v) {
         if (currentPage < 3) {
             Fragment frag;
             if (currentPage == 0) {
@@ -180,18 +180,18 @@ public class WelcomeActivity extends AppCompatActivity {
         } else {
             shPrefs.edit().putBoolean("isFirstStart", false).apply();
             finish();
-            Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
+            Intent it = new Intent(WelcomeActivity.this, NewProfileActivity.class);
+            it.putExtra("doOpenMainActivity", true);
             startActivity(it);
         }
     }
 
-    public void tryDecryptSqlite(View v) {
-        EditText mDbPasswd = (EditText) findViewById(R.id.unlockDbPassword);
+    @SuppressWarnings("WeakerAccess")
+    public void tryDecryptSqlite(@SuppressWarnings({"UnusedParameters", "SameParameterValue"}) View v) {
+        EditText mDbPasswd = findViewById(R.id.unlockDbPassword);
         if (canDecryptSqlite(mDbPasswd.getText().toString())) {
             Common.SQLCRYPT_PWD = mDbPasswd.getText().toString();
-            finish();
-            Intent it = new Intent(WelcomeActivity.this, ProfileListActivity.class);
-            startActivity(it);
+            tryToContinue();
         } else {
             mDbPasswd.setError(getResources().getString(R.string.decrypt_database_fail));
         }
@@ -200,12 +200,24 @@ public class WelcomeActivity extends AppCompatActivity {
     private boolean canDecryptSqlite(String passwd) {
         try {
             AccountStore ash = new AccountStore(this, passwd);
+            profiles = ash.getAccounts();
             ash.close();
-            Log.d("DecryptDB", "Decryption succeeded.");
             return true;
         } catch (DecryptionException e) {
-            Log.w("DecryptDB", "Decryption failed.");
             return false;
+        }
+    }
+
+    private void tryToContinue() {
+        if (profiles.size() > 0) {
+            finish();
+            Intent it = new Intent(WelcomeActivity.this, MainActivity.class);
+            startActivity(it);
+        } else {
+            finish();
+            Intent it = new Intent(WelcomeActivity.this, NewProfileActivity.class);
+            it.putExtra("doOpenMainActivity", true);
+            startActivity(it);
         }
     }
 

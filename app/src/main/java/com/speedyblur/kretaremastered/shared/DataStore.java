@@ -1,5 +1,6 @@
 package com.speedyblur.kretaremastered.shared;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
@@ -20,12 +21,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-// TODO: Make this whole thing ASYNCHRONOUS
-// TODO: Refactoring. This DS needs optimizations. A LOT.
 public class DataStore {
     private final static String LOGTAG = "DataStore";
     private SQLiteDatabase db;
-    private String profileName;
+    private final String profileName;
 
     /**
      * Initializes a new userdata store
@@ -41,19 +40,15 @@ public class DataStore {
             db = SQLiteDatabase.openOrCreateDatabase(dbFile, passwd, null);
         } catch (SQLException e) {
             Log.e(LOGTAG, "Unable to decrypt DB. (Assuming incorrect password) Got error: "+e.getMessage());
-            throw new DecryptionException("Unable to open database. (Is encrypted or is not a DB)");
+            throw new DecryptionException();
         }
     }
 
     public void putGradesData(ArrayList<Grade> grades) {
-        // Truncate table
         truncateTableIfExists("grades_"+profileName);
-
         db.execSQL("CREATE TABLE IF NOT EXISTS grades_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, grade INTEGER, gotdate INTEGER, " +
                 " type TEXT, theme TEXT, teacher TEXT)");
-        Log.d(LOGTAG, "Created grades table (IF NOT EXISTS) for profile "+profileName);
 
-        Log.d(LOGTAG, "About to put "+grades.size()+" grades into DB");
         for (int i=0; i<grades.size(); i++) {
             Grade g = grades.get(i);
             db.execSQL("INSERT INTO grades_"+profileName+" (subject, grade, gotdate, type, theme, teacher) VALUES (?, ?, ?, ?, ?, ?)", new String[] {
@@ -64,13 +59,9 @@ public class DataStore {
     }
 
     public void putAveragesData(ArrayList<Average> averages) {
-        // Truncate table
         truncateTableIfExists("averages_"+profileName);
-
         db.execSQL("CREATE TABLE IF NOT EXISTS averages_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, average REAL, classaverage REAL)");
-        Log.d(LOGTAG, "Created averages table (IF NOT EXISTS) for profile "+profileName);
 
-        Log.d(LOGTAG, "About to put "+averages.size()+" averages into DB");
         for (int i=0; i<averages.size(); i++) {
             Average avg = averages.get(i);
             db.execSQL("INSERT INTO averages_"+profileName+" (subject, average, classaverage) VALUES (?, ?, ?)",
@@ -81,13 +72,9 @@ public class DataStore {
     }
 
     public void putAverageGraphData(ArrayList<AvgGraphData> graphData) {
-        // Truncate table
         truncateTableIfExists("avggraph_"+profileName);
-
         db.execSQL("CREATE TABLE IF NOT EXISTS avggraph_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, x REAL, y INTEGER, isspecial INTEGER)");
-        Log.d(LOGTAG, "Created avggraph table (IF NOT EXISTS) for profile "+profileName);
 
-        Log.d(LOGTAG, "About to put "+graphData.size()+" avggraph subjects into DB");
         for (int i=0; i<graphData.size(); i++) {
             AvgGraphData avgData = graphData.get(i);
             for (int j=0; j<avgData.getEntries().size(); j++) {
@@ -101,13 +88,9 @@ public class DataStore {
     }
 
     public void putAllDayEventsData(ArrayList<AllDayEvent> allDayEvents) {
-        // Truncate table
         truncateTableIfExists("alldayevents_"+profileName);
-
         db.execSQL("CREATE TABLE IF NOT EXISTS alldayevents_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, date INTEGER)");
-        Log.d(LOGTAG, "Created all-day events table (IF NOT EXISTS) for profile "+profileName);
 
-        Log.d(LOGTAG, "About to put "+allDayEvents.size()+" all-day events into DB");
         for (int i=0; i<allDayEvents.size(); i++) {
             AllDayEvent ade = allDayEvents.get(i);
             db.execSQL("INSERT INTO alldayevents_"+profileName+" (name, date) VALUES (?, ?)", new String[] {ade.getName(), String.valueOf(ade.getDate())});
@@ -116,32 +99,39 @@ public class DataStore {
         updateLastSave();
     }
 
-    public void putClassesData(ArrayList<Clazz> clazzes) {
-        // Truncate table
+    public void putClassesData(ArrayList<Clazz> clazzes, InsertProcessCallback ipc) {
         truncateTableIfExists("clazzes_"+profileName);
-
         db.execSQL("CREATE TABLE IF NOT EXISTS clazzes_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, grp TEXT, teacher TEXT," +
                 " room TEXT, classnum INTEGER, begin INTEGER, end INTEGER, theme TEXT, isheld INTEGER, isabsent INTEGER, absencetype TEXT, absenceprovementtype TEXT," +
                 " proven INTEGER, UNIQUE (subject, begin, end) ON CONFLICT IGNORE);");
-        Log.d(LOGTAG, "Created clazzes table (IF NOT EXISTS) for profile "+profileName);
 
-        Log.d(LOGTAG, "About to put "+clazzes.size()+" clazzes into DB");
-        for (int i=0; i<clazzes.size(); i++) {
-            Clazz c = clazzes.get(i);
-            if (c.isAbsent()) {
-                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, " +
-                        "isabsent, absencetype, absenceprovementtype, proven) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
-                        c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
-                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "1", c.getAbsenceDetails().getType(),
-                        c.getAbsenceDetails().getProvementType(), c.getAbsenceDetails().isProven() ? "1" : "0"
-                });
-            } else {
-                db.execSQL("INSERT INTO clazzes_"+profileName+" (subject, grp, teacher, room, classnum, begin, end, theme, isheld, isabsent) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
-                        c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
-                        String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "0"
-                });
+        db.beginTransaction();
+        try {
+            for (int i = 0; i < clazzes.size(); i++) {
+                Clazz c = clazzes.get(i);
+                if (c.isAbsent()) {
+                    db.execSQL("INSERT INTO clazzes_" + profileName + " (subject, grp, teacher, room, classnum, begin, end, theme, isheld, " +
+                            "isabsent, absencetype, absenceprovementtype, proven) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
+                            c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
+                            String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "1", c.getAbsenceDetails().getType(),
+                            c.getAbsenceDetails().getProvementType(), c.getAbsenceDetails().isProven() ? "1" : "0"
+                    });
+                } else {
+                    db.execSQL("INSERT INTO clazzes_" + profileName + " (subject, grp, teacher, room, classnum, begin, end, theme, isheld, isabsent) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", new String[]{
+                            c.getSubject(), c.getGroup(), c.getTeacher(), c.getRoom(), String.valueOf(c.getClassnum()),
+                            String.valueOf(c.getBeginTime()), String.valueOf(c.getEndTime()), c.getTheme(), c.isHeld() ? "1" : "0", "0"
+                    });
+                }
+
+                ipc.onInsertComplete(i + 1, clazzes.size());
             }
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            Log.e(LOGTAG, "Unable to end DB transaction.");
+            e.printStackTrace();
+        } finally {
+            db.endTransaction();
         }
 
         updateLastSave();
@@ -153,10 +143,8 @@ public class DataStore {
             db.execSQL("CREATE TABLE clazzes_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, subject TEXT, grp TEXT, teacher TEXT," +
                     " room TEXT, classnum INTEGER, begin INTEGER, end INTEGER, theme TEXT, isheld INTEGER, isabsent INTEGER, absencetype TEXT, absenceprovementtype TEXT," +
                     " proven INTEGER, UNIQUE (subject, begin, end) ON CONFLICT IGNORE);");
-            Log.d(LOGTAG, "Created clazzes table for profile "+profileName);
         }
 
-        Log.d(LOGTAG, "About to upsert "+clazzes.size()+" classes into DB");
         for (int i=0; i<clazzes.size(); i++) {
             Clazz c = clazzes.get(i);
             if (c.isAbsent()) {
@@ -191,10 +179,8 @@ public class DataStore {
             // Note the UNIQUE constraint!
             db.execSQL("CREATE TABLE announcements_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, teacher TEXT, content TEXT, date INTEGER, isseen INTEGER,"+
                     "UNIQUE (teacher, content, date) ON CONFLICT IGNORE)");
-            Log.d(LOGTAG, "Created announcements table for profile "+profileName);
         }
 
-        Log.d(LOGTAG, "About to upsert "+announcements.size()+" announcements into DB");
         for (int i=0; i<announcements.size(); i++) {
             Announcement a = announcements.get(i);
             if (doUpdate)
@@ -270,6 +256,8 @@ public class DataStore {
         }
     }
 
+    // TODO: Implement this (see MainScheduleFragment for details) and remove SuppressWarnings
+    @SuppressWarnings("unused")
     public ArrayList<AllDayEvent> getAllDayEventsData() {
         if (!tableExists("alldayevents_"+profileName)) return new ArrayList<>();
         Cursor c = db.rawQuery("SELECT * FROM alldayevents_"+profileName, null);
@@ -390,11 +378,11 @@ public class DataStore {
         if (tableExists("announcements_"+profileName)) db.execSQL("DROP TABLE announcements_"+profileName);
         if (tableExists("lastsave")) db.execSQL("DELETE FROM lastsave WHERE userid=?", new String[] {profileName});
         close();
-        Log.d(LOGTAG, "Done.");
     }
 
     // TODO: Call this on every SUCCESSFUL save. Not on every update.
-    public void updateLastSave() {
+    // TODO: Make this public after this (^) todo is complete
+    private void updateLastSave() {
         db.execSQL("CREATE TABLE IF NOT EXISTS lastsave(userid TEXT, stamp INTEGER);");
         db.execSQL("INSERT INTO lastsave (userid, stamp) VALUES (?, ?);", new String[] {profileName, String.valueOf(System.currentTimeMillis())});
     }
@@ -420,5 +408,31 @@ public class DataStore {
 
     public void close() {
         db.close();
+    }
+
+    public interface InsertProcessCallback {
+        void onInsertComplete(int current, int total);
+    }
+
+    public static void asyncQuery(final Activity a, final String sid, final String passwd, final IDataStore ids) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    DataStore ds = new DataStore(a, sid, passwd);
+                    final Object al = ids.requestFromStore(ds);
+                    ds.close();
+                    a.runOnUiThread(new Runnable() {
+                        @Override
+                        @SuppressWarnings("unchecked")
+                        public void run() {
+                            ids.processRequest(al);
+                        }
+                    });
+                } catch (DecryptionException e) {
+                    ids.onDecryptionFailure(e);
+                }
+            }
+        }).start();
     }
 }

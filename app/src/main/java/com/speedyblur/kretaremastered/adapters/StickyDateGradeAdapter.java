@@ -1,10 +1,8 @@
 package com.speedyblur.kretaremastered.adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -29,7 +27,7 @@ import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 public class StickyDateGradeAdapter extends BaseAdapter implements StickyListHeadersAdapter {
     private final Context ctxt;
     private final LayoutInflater inflater;
-    private final ArrayList<Grade> grades;
+    public ArrayList<Grade> grades;
 
     public StickyDateGradeAdapter(@NonNull Context context, ArrayList<Grade> grades) {
         ctxt = context;

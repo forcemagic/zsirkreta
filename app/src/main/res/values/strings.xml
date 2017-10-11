@@ -14,15 +14,11 @@
     <string name="login_copyright">By hitting the arrow below you accept that this application is not affiliated with, nor endorsed by eKreta Informatika Zrt. The KRETA original web application is Copyright © 2017 eKreta Informatikai Zrt.</string>
 
     <!-- Profile selection-related stuff -->
-    <string name="welcome_title">Welcome!</string>
-    <string name="welcome_subtitle">Choose a profile!</string>
-    <string name="empty_profilelist">Looks like nothing\'s here. Go ahead, add some profiles!</string>
+    <string name="profile_delete">Delete Profiles…</string>
     <string name="profile_exists">Profile already exists.</string>
     <string name="profile_add">Add Profile</string>
     <string name="dialog_delete_profile_title">Delete Profile</string>
     <string name="dialog_delete_profile">Are you sure about that?</string>
-    <string name="dialog_show_cached_title">Network Problems</string>
-    <string name="dialog_show_cached">Something bad happened. Show cached version?</string>
 
     <!-- Subjects -->
     <string name="subject_english_lang" tools:ignore="UnusedResources">English</string>
@@ -55,21 +51,15 @@
 
     <!-- Loading messages (proc. indicators) -->
     <string name="loading_logging_in">Logging in…</string>
-    <string name="loading_grades">Loading grades…</string>
-    <string name="loading_averages">Loading averages…</string>
-    <string name="loading_avggraph">Loading average graphs…</string>
-    <string name="loading_schedule">Loading schedule…</string>
-    <string name="loading_announcements">Loading announcements…</string>
-    <string name="main_load_complete">Load complete! Time spent with Kreta communication: %1$.2f seconds.</string>
 
     <!-- HTTP errors -->
-    <string name="http_unauthorized">Invalid card ID or password.</string>
+    <string name="http_unauthorized">Invalid card ID or password</string>
     <string name="http_server_error">Something\'s wrong with my server. I\'m sorry :(</string>
-    <string name="http_timeout">The Kreta servers are not responding.</string>
-    <string name="http_connect_timeout">Connection timed out. Either your network is too slow or my servers are having some issues.</string>
-    <string name="http_cant_resolve">You are not connected to the Internet. Please turn on Mobile Data or Wifi to continue.</string>
+    <string name="http_timeout">Request timed out</string>
+    <string name="http_connect_timeout">Connection timed out</string>
+    <string name="http_cant_resolve">You are not connected to the Internet</string>
     <string name="http_unknown">This error… I have no idea what it is actually. Sorry. :(</string>
-    <string name="http_bad_gateway">Kreta is having some issues… (Not surprising) Try again later.</string>
+    <string name="http_bad_gateway">The Kreta servers are having a great time maintenanced</string>
 
     <!-- Introduction messages -->
     <string name="welcome_first_title">Welcome to Kreta Remastered!</string>
@@ -98,24 +88,18 @@
     <string name="wednesday_short">W</string>
     <string name="thursday_short">T</string>
     <string name="friday_short">F</string>
-    <string name="saturday_short">S</string>
 
     <!-- Misc string values -->
     <string name="blablabla">Something</string><!-- TODO: Remove this placeholder -->
     <string name="unlockdb_title">Enter encryption password</string>
     <string name="fingerprint_unlockdb_title">Awaiting fingerprint…</string>
     <string name="fingerprint_unlockdb_usepassword">Use password</string>
-    <string name="grade_unknown_topic">Unknown Topic</string>
     <string name="grade_end_of_halfterm">Half-year grade</string>
     <string name="grade_end_of_year">End of year grade</string>
     <string name="avglabel_desc">Class average: %1$.2f - Delta: %2$.2f</string>
     <string name="action_sortbysubject">Sort by subject</string>
     <string name="action_sortbydate">Sort by date</string>
-    <string name="http_req_error">Some kind of error occurred. :(</string>
-    <string name="auth_passcode_error">This is not the right code!</string>
     <string name="decrypt_database_fail">Unable to decrypt profile store database.</string>
-    <string name="profile_delete_success">Successfully deleted profile.</string>
-    <string name="select_date">Select Date</string>
     <string name="class_number">#%1$d</string>
     <string name="no_events">No school on this day! (Hooray!)</string>
     <string name="dialog_yes">Yes</string>
@@ -123,11 +107,8 @@
     <string name="nothingtoseehere">There\'s nothing to see here. (Yet)</string>
     <string name="japansmile" translatable="false">¯\\_(ツ)_/¯</string>
     <string name="substitute_class">Substitutes %1$s</string>
-    <string name="current_week">M: %1$s\nF: %2$s</string>
     <string name="dialog_close">Close</string>
     <string name="no_announcements">No announcements here!</string>
-
-    <!-- Unknown string values -->
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="filling_schedule">Filling Your schedule %1$.1f%%…</string>
+    <string name="nodelete_active_profile">You can\'t delete the selected profile.</string>
 </resources>

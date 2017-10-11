@@ -59,14 +59,16 @@ public class ClazzAdapter extends ArrayAdapter<Clazz> {
         }
         for (int i=0; i<getCount(); i++) {
             Clazz subC = getItem(i); assert subC != null;
-            // TODO: Optimize; this should not really be used
+            // I think this is OK.
             if (!c.isHeld() && subC.isHeld() && c.getClassnum() == subC.getClassnum()) return new View(getContext());
         }
 
         holder.scheduleStatus.setImageDrawable(c.getIcon(getContext()));
         holder.scheduleClassNum.setText(getContext().getString(R.string.class_number, c.getClassnum()));
         holder.scheduleTheme.setVisibility(View.VISIBLE);
-        if (c.getTheme().equals("")) holder.scheduleTheme.setVisibility(View.GONE);
+        if (c.getTheme().equals("") && (long) c.getBeginTime()*1000 > System.currentTimeMillis())
+            holder.scheduleTheme.setVisibility(View.GONE);
+        else if (c.getTheme().equals("")) holder.scheduleTheme.setText(R.string.japansmile);
         else holder.scheduleTheme.setText(c.getTheme());
         holder.scheduleSubject.setText(Common.getLocalizedSubjectName(getContext(), c.getSubject()));
 

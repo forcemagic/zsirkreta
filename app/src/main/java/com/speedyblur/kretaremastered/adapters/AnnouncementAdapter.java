@@ -47,7 +47,7 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
         assert a != null;
 
         if (a.isSeen()) {
-            Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.calendar_goodbullet).mutate();
+            Drawable d = ContextCompat.getDrawable(getContext(), R.drawable.announcement_bullet).mutate();
             d.setColorFilter(ContextCompat.getColor(getContext(), android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
             holder.mBullet.setImageDrawable(d);
         }

@@ -11,7 +11,8 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:background="@android:color/white"
-        android:padding="6dp">
+        android:padding="6dp"
+        android:layout_marginLeft="12dp">
 
         <TextView
             android:id="@+id/announcementTeacher"
@@ -21,7 +22,8 @@
             android:layout_alignParentTop="true"
             android:text="@string/blablabla"
             android:textColor="@android:color/black"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_alignParentLeft="true" />
 
         <TextView
             android:id="@+id/announcementContent"
@@ -32,7 +34,8 @@
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@string/blablabla" />
+            android:text="@string/blablabla"
+            android:layout_alignParentLeft="true" />
 
         <TextView
             android:id="@+id/announcementDate"
@@ -42,7 +45,8 @@
             android:layout_below="@+id/announcementContent"
             android:layout_marginTop="4dp"
             android:text="@string/blablabla"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_alignParentLeft="true" />
     </RelativeLayout>
 
     <ImageView
@@ -52,6 +56,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_margin="5dp"
-        app:srcCompat="@drawable/calendar_goodbullet" />
+        app:srcCompat="@drawable/announcement_bullet"
+        android:layout_alignParentLeft="true" />
 
 </RelativeLayout>

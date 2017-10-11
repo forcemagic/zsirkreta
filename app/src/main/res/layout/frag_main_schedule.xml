@@ -7,53 +7,46 @@
     tools:context="com.speedyblur.kretaremastered.activities.MainActivity">
 
 
-    <ImageButton
-        android:id="@+id/calendarImageButton"
-        android:layout_width="60dp"
-        android:layout_height="55dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@null"
-        android:padding="8dp"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/calendar_icon_black" />
-
-    <TextView
-        android:id="@+id/currentScheduleDate"
+    <RelativeLayout
+        android:id="@+id/scheduleTopBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/calendarImageButton"
-        android:layout_alignParentTop="true"
-        android:gravity="center_vertical"
-        android:paddingEnd="2dp"
-        android:paddingStart="2dp"
-        android:text="@string/blablabla"
-        android:textColor="@android:color/black"
-        android:textSize="22sp"
-        android:layout_toStartOf="@+id/scheduleCurrentWeek"
-        android:layout_toEndOf="@id/calendarImageButton" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/scheduleCurrentWeek"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/calendarImageButton"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:fontFamily="monospace"
-        android:gravity="center_vertical"
-        android:paddingEnd="12dp"
-        android:paddingStart="12dp"
-        android:text="@string/blablabla"
-        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/currentScheduleDate"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:gravity="center"
+            android:paddingEnd="2dp"
+            android:paddingStart="2dp"
+            android:text="@string/blablabla"
+            android:textAlignment="center"
+            android:textColor="@android:color/black"
+            android:textSize="22sp" />
+
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView
+            android:id="@+id/scheduleCalendarView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@+id/currentScheduleDate"
+            app:compactCalendarTargetHeight="250dp"
+            app:compactCalendarTextSize="18sp"
+            app:compactCalendarTextColor="#000000"
+            app:compactCalendarBackgroundColor="@color/bgcolorActivity"
+            app:compactCalendarDisplayOtherMonthDays="true"
+            app:compactCalendarOtherMonthDaysTextColor="#DDDDDD"
+            app:compactCalendarCurrentDayBackgroundColor="#CCCCCC"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="@color/colorAccent"
+            app:compactCalendarCurrentSelectedDayTextColor="#FFFFFF" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/noSchoolView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/calendarImageButton"
         android:gravity="center"
-        android:layout_above="@+id/scheduleWeekdaySelector">
+        android:layout_above="@+id/scheduleWeekdaySelector"
+        android:layout_below="@+id/scheduleTopBarLayout">
 
         <ImageView
             android:id="@+id/smileView"
@@ -64,7 +57,6 @@
             app:srcCompat="@drawable/no_absence_icon_black" />
 
         <TextView
-            android:id="@+id/noEventNoticeView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/smileView"
@@ -77,10 +69,13 @@
         android:id="@+id/scheduleList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="@null"
-        android:layout_below="@+id/calendarImageButton"
+        android:footerDividersEnabled="false"
+        android:overScrollFooter="@color/transparent"
+        android:divider="@drawable/grade_group_bar"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/scheduleWeekdaySelector" />
+        android:layout_above="@+id/scheduleWeekdaySelector"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/scheduleTopBarLayout" />
 
     <LinearLayout
         android:id="@+id/scheduleWeekdaySelector"
@@ -90,14 +85,14 @@
         android:layout_alignParentStart="true"
         android:background="@color/transparent"
         android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true">
 
         <TextView
             android:id="@+id/scheduleMondaySelector"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/monday_short"
             android:textAlignment="center"
@@ -109,7 +104,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/tuesday_short"
             android:textAlignment="center"
@@ -121,7 +115,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/wednesday_short"
             android:textAlignment="center"
@@ -133,7 +126,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/thursday_short"
             android:textAlignment="center"
@@ -145,7 +137,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:elevation="4dp"
             android:gravity="center"
             android:text="@string/friday_short"
             android:textAlignment="center"

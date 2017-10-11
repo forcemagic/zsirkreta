@@ -14,6 +14,7 @@ public class Profile implements Parcelable {
         this.friendlyName = friendlyName;
     }
 
+    @SuppressWarnings("WeakerAccess")
     protected Profile(Parcel in) {
         cardid = in.readString();
         passwd = in.readString();

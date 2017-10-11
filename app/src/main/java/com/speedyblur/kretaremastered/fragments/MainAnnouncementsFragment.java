@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,6 +20,8 @@ import com.speedyblur.kretaremastered.models.Announcement;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
+import com.speedyblur.kretaremastered.shared.IDataStore;
+import com.speedyblur.kretaremastered.shared.IRefreshHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainAnnouncementsFragment extends Fragment {
-    private ArrayList<Announcement> announcements;
+    private AnnouncementAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -39,17 +41,32 @@ public class MainAnnouncementsFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         final MainActivity parent = (MainActivity) getActivity();
+        final ListView aList = parent.findViewById(R.id.announcementsList);
 
-        // Fetching DataStore
-        try {
-            DataStore ds = new DataStore(getContext(), parent.p.getCardid(), Common.SQLCRYPT_PWD);
-            announcements = ds.getAnnouncementsData();
-            ds.close();
-        } catch (DecryptionException e) {e.printStackTrace();}
+        adapter = new AnnouncementAdapter(getContext(), new ArrayList<Announcement>());
 
-        final ListView aList = (ListView) parent.findViewById(R.id.announcementsList);
+        updateFromDS(parent);
+        parent.setRefreshHandler(new IRefreshHandler() {
+            @Override
+            public void onRefreshComplete() {
+                updateFromDS(parent);
+            }
+        });
+
+        // Setup view
         aList.setEmptyView(parent.findViewById(R.id.announcementsEmptyView));
-        aList.setAdapter(new AnnouncementAdapter(getContext(), announcements));
+        aList.setAdapter(adapter);
+        aList.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int i) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+                parent.setSwipeRefreshEnabled(!absListView.canScrollVertically(-1));
+            }
+        });
         aList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -77,18 +94,31 @@ public class MainAnnouncementsFragment extends Fragment {
                         .setPositiveButton(R.string.dialog_close, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                if (!a.isSeen()) {
-                                    try {
-                                        DataStore ds = new DataStore(getContext(), parent.p.getCardid(), Common.SQLCRYPT_PWD);
-                                        announcements = ds.getAnnouncementsData();
-                                        ds.close();
-                                    } catch (DecryptionException e) {e.printStackTrace();}
-                                    aList.setAdapter(new AnnouncementAdapter(getContext(), announcements));
-                                }
-
+                                if (!a.isSeen()) updateFromDS(parent);
                                 dialogInterface.dismiss();
                             }
                         }).show();
+            }
+        });
+    }
+
+    private void updateFromDS(MainActivity parent) {
+        DataStore.asyncQuery(parent, parent.p.getCardid(), Common.SQLCRYPT_PWD, new IDataStore<ArrayList<Announcement>>() {
+            @Override
+            public ArrayList<Announcement> requestFromStore(DataStore ds) {
+                return ds.getAnnouncementsData();
+            }
+
+            @Override
+            public void processRequest(ArrayList<Announcement> data) {
+                adapter.clear();
+                adapter.addAll(data);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onDecryptionFailure(DecryptionException e) {
+                e.printStackTrace();
             }
         });
     }

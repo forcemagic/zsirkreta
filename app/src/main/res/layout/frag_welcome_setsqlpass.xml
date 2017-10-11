@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -14,18 +16,21 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/welcomeSqlpassTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
                 android:text="@string/welcome_sqlpass_title"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/welcomeSqlpassSubtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:labelFor="@+id/sqlPass"
                 android:padding="12dp"
                 android:text="@string/welcome_sqlpass_subtitle"
                 android:textAlignment="center"
@@ -40,7 +45,6 @@
                 android:inputType="textPassword" />
 
             <ImageButton
-                android:id="@+id/sqlPassAcceptBtn"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"

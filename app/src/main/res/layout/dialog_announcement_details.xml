@@ -11,18 +11,17 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/announcementInfoTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:text="@string/announcementinfo_title"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:layout_alignParentRight="true" />
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/announcementInfoContentLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/announcementInfoHeaderLayout"
@@ -36,7 +35,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/announcementInfoAuthorTitle"
                 android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:text="@string/announcementinfo_author"
@@ -58,7 +56,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/announcementInfoDateTitle"
                 android:layout_width="55dp"
                 android:layout_height="wrap_content"
                 android:text="@string/announcementinfo_date"

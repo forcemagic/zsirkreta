@@ -1,40 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/importantGradeInnerLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/goodGrade">
 
-    <RelativeLayout
-        android:id="@+id/importantGradeInnerLayout"
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/gradeBullet"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="8dp"
+        android:adjustViewBounds="true"
+        app:srcCompat="@drawable/normalgrade" />
+
+    <TextView
+        android:id="@+id/grade"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:text="5"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="28sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/gradeTitle"
+        style="@style/ShadowedText"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/goodGrade">
-
-        <TextView
-            android:id="@+id/grade"
-            android:layout_width="67dp"
-            android:layout_height="67dp"
-            android:layout_alignParentTop="true"
-            android:layout_gravity="center_vertical"
-            android:gravity="fill_vertical"
-            android:text="5"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="36sp" />
-
-        <TextView
-            android:id="@+id/gradeTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:layout_toEndOf="@+id/grade"
-            android:gravity="center_vertical"
-            android:text="@string/blablabla"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-    </RelativeLayout>
-
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_toEndOf="@+id/grade"
+        android:layout_toRightOf="@+id/grade"
+        android:gravity="center_vertical"
+        android:text="@string/blablabla"
+        android:textColor="@android:color/white"
+        android:textSize="18sp" />
 </RelativeLayout>

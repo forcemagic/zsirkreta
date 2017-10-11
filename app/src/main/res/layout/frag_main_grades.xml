@@ -23,7 +23,6 @@
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/noGradesDescView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/noGradesTextView"
@@ -39,19 +38,24 @@
         android:layout_height="match_parent"
         tools:ignore="UselessParent">
 
-        <se.emilsjolander.stickylistheaders.StickyListHeadersListView
-            android:id="@+id/datedGradeList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@null"
-            android:dividerHeight="0dp" />
-
-        <ExpandableListView
-            android:id="@+id/mainGradeView"
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </ExpandableListView>
+            <se.emilsjolander.stickylistheaders.StickyListHeadersListView
+                android:id="@+id/datedGradeList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@drawable/grade_group_bar"
+                android:dividerHeight="1dp" />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mainGradeView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
 
     </ViewFlipper>
 
