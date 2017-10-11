@@ -45,7 +45,6 @@
     <string name="grade_end_of_year">Év végi jegy</string>
     <string name="action_sortbydate">Rendezés dátum szerint</string>
     <string name="action_sortbysubject">Rendezés tantárgy szerint</string>
-    <string name="select_date">Dátum Választás</string>
     <string name="class_number">%1$d.</string>
     <string name="friday_short">P</string>
     <string name="monday_short">H</string>

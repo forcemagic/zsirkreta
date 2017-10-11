@@ -54,6 +54,6 @@
         android:layout_alignParentTop="true"
         android:layout_margin="5dp"
         android:elevation="4dp"
-        app:srcCompat="@drawable/calendar_goodbullet" />
+        app:srcCompat="@drawable/announcement_bullet" />
 
 </RelativeLayout>

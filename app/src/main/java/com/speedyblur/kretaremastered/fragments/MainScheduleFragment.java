@@ -51,6 +51,8 @@ public class MainScheduleFragment extends Fragment {
     //private ArrayList<AllDayEvent> allDayEvents;
     private ArrayList<Clazz> clazzes;
     private Calendar selectedScheduleDate;
+    private MainActivity parent;
+    private CompactCalendarView calendarView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,7 +63,8 @@ public class MainScheduleFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        final MainActivity parent = (MainActivity) getActivity();
+        parent = (MainActivity) getActivity();
+        calendarView = parent.findViewById(R.id.scheduleCalendarView);
         final ListView schedList = parent.findViewById(R.id.scheduleList);
 
         updateFromDS(parent);
@@ -83,7 +86,10 @@ public class MainScheduleFragment extends Fragment {
 
             @Override
             public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-                parent.setSwipeRefreshEnabled(!absListView.canScrollVertically(-1));
+                if (calendarView.getHeight() > 0)
+                    parent.setSwipeRefreshEnabled(false);
+                else
+                    parent.setSwipeRefreshEnabled(!absListView.canScrollVertically(-1));
             }
         });
         schedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -308,11 +314,10 @@ public class MainScheduleFragment extends Fragment {
     private class CalendarClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            final CompactCalendarView cal = getActivity().findViewById(R.id.scheduleCalendarView);
-            cal.shouldDrawIndicatorsBelowSelectedDays(true);
-            cal.setCurrentDate(selectedScheduleDate.getTime());
-            if (cal.getHeight() > 0) {
-                cal.hideCalendarWithAnimation();
+            calendarView.shouldDrawIndicatorsBelowSelectedDays(true);
+            calendarView.setCurrentDate(selectedScheduleDate.getTime());
+            if (calendarView.getHeight() > 0) {
+                calendarView.hideCalendarWithAnimation();
             }
 
             ArrayList<Event> evts = new ArrayList<>();
@@ -326,23 +331,23 @@ public class MainScheduleFragment extends Fragment {
                         evts.add(new Event(ContextCompat.getColor(getContext(), R.color.badGrade), (long) c.getBeginTime()*1000));
                 }
             }
-            cal.removeAllEvents();
-            cal.addEvents(evts);
+            calendarView.removeAllEvents();
+            calendarView.addEvents(evts);
 
-            cal.showCalendarWithAnimation();
-            cal.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+            calendarView.showCalendarWithAnimation();
+            calendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
                 @Override
                 public void onDayClick(Date dateClicked) {
                     selectedScheduleDate.setTime(dateClicked);
                     showAbsenceListForDate(selectedScheduleDate);
-                    if (cal.isAnimating()) {
+                    if (calendarView.isAnimating()) {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                cal.hideCalendarWithAnimation();
+                                calendarView.hideCalendarWithAnimation();
                             }
                         }, 800);
-                    } else cal.hideCalendarWithAnimation();
+                    } else calendarView.hideCalendarWithAnimation();
                 }
 
                 @Override
