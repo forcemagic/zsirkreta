@@ -32,7 +32,7 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
     public ArrayList<Average> averages;
     private int currentOpened = -1;
 
-    public AverageAdapter(ArrayList<Average> averages, String profileName) {
+    public AverageAdapter(ArrayList<Average> averages) {
         this.averages = averages;
     }
 

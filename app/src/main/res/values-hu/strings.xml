@@ -83,6 +83,6 @@
     <string name="announcementinfo_date">Dátum:</string>
     <string name="announcementinfo_title">Üzenet</string>
     <string name="filling_schedule">Az órarended betöltése %1$.1f%%…</string>
-    <string name="profile_delete">Profilok Törlése…</string>
     <string name="nodelete_active_profile">Nem törölheted a kiválasztott profilt.</string>
+    <string name="profile_manage">Profilok Kezelése</string>
 </resources>

@@ -43,6 +43,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerItemClickListener {
     private final static int INTENT_REQ_NEWPROF = 1;
+    private final static int INTENT_REQ_DELPROF = 2;
 
     private IRefreshHandler irh;
     private boolean shouldShowMenu = true;
@@ -179,52 +180,14 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
                         return true;
                     }
                 }), new ProfileSettingDrawerItem()
-                .withName(R.string.profile_delete)
+                .withName(R.string.profile_manage)
                 .withIcon(R.drawable.delete_icon_black)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        View inflView = LayoutInflater.from(view.getContext()).inflate(R.layout.dialog_delete_profiles, null);
-
-                        final ListView lv = inflView.findViewById(R.id.deleteProfileList);
-                        lv.setAdapter(new ProfileAdapter(view.getContext(), profiles, p));
-                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                final Profile p = (Profile) parent.getItemAtPosition(position);
-
-                                if (p.getCardid().equals(MainActivity.this.p.getCardid()))
-                                    return;
-
-                                new AlertDialog.Builder(view.getContext())
-                                        .setTitle(R.string.dialog_delete_profile_title)
-                                        .setMessage(R.string.dialog_delete_profile)
-                                        .setPositiveButton(R.string.dialog_yes, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                try {
-                                                    AccountStore as = new AccountStore(MainActivity.this, Common.SQLCRYPT_PWD);
-                                                    lv.setAdapter(new ProfileAdapter(MainActivity.this, profiles, p));
-                                                    as.dropAccount(p.getCardid());
-                                                    profiles.remove(p);
-                                                    populateProfiles();
-                                                    dialog.dismiss();
-                                                } catch (DecryptionException e) {e.printStackTrace();}
-                                            }
-                                        })
-                                        .setNegativeButton(R.string.dialog_no, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        }).show();
-                            }
-                        });
-
-                        new AlertDialog.Builder(view.getContext())
-                                .setTitle(R.string.dialog_delete_profile_title)
-                                .setView(inflView)
-                                .show();
+                        Intent it = new Intent(MainActivity.this, ManageProfilesActivity.class);
+                        it.putExtra("currentProfileId", p.getCardid());
+                        startActivityForResult(it, INTENT_REQ_DELPROF);
                         return true;
                     }
                 })
@@ -312,6 +275,11 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
             fetchAccounts();
             populateProfiles();
             accHeader.setActiveProfile(Long.parseLong(data.getStringExtra("profileId")));
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
+            doProfileUpdate();
+        } else if (requestCode == INTENT_REQ_DELPROF) {
+            fetchAccounts();
+            populateProfiles();
             fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
             doProfileUpdate();
         }
