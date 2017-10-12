@@ -194,11 +194,9 @@ public class NewProfileActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Intent i = getIntent();
-                                    i.putExtra("profile", p);
-                                    setResult(RESULT_OK, i);
+                                    setResult(RESULT_OK, getIntent().putExtra("profileId", p.getCardid()));
                                     finish();
-                                    if (i.getBooleanExtra("doOpenMainActivity", false)) {
+                                    if (getIntent().getBooleanExtra("doOpenMainActivity", false)) {
                                         Intent mainIntent = new Intent(NewProfileActivity.this, MainActivity.class);
                                         startActivity(mainIntent);
                                     }

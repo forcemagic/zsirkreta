@@ -68,13 +68,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
         toolbar.setTitle(R.string.title_activity_grades);
         setSupportActionBar(toolbar);
 
-        // TODO: Make this asynchronous
-        // Fetch Accounts (UI block, sorry about that :/)
-        try {
-            AccountStore as = new AccountStore(this, Common.SQLCRYPT_PWD);
-            profiles = as.getAccounts();
-            as.close();
-        } catch (DecryptionException e) {e.printStackTrace();}
+        fetchAccounts();
 
         String lastUsedProfile = getSharedPreferences("main", MODE_PRIVATE).getString("lastUsedProfile", "");
         if (!lastUsedProfile.equals("")) {
@@ -121,6 +115,16 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
         accHeader.setActiveProfile(Long.parseLong(p.getCardid()));
 
         doProfileUpdate();
+    }
+
+    private void fetchAccounts() {
+        // TODO: Make this asynchronous
+        // Fetch Accounts (UI block, sorry about that :/)
+        try {
+            AccountStore as = new AccountStore(this, Common.SQLCRYPT_PWD);
+            profiles = as.getAccounts();
+            as.close();
+        } catch (DecryptionException e) {e.printStackTrace();}
     }
 
     private void doProfileUpdate() {
@@ -304,16 +308,12 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == INTENT_REQ_NEWPROF) {
-            if (data != null && data.hasExtra("profile")) {
-                final Profile cProfile = data.getParcelableExtra("profile");
-
-                profiles.add(cProfile);
-                populateProfiles();
-                accHeader.setActiveProfile(Long.parseLong(cProfile.getCardid()));
-                fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
-                doProfileUpdate();
-            }
+        if (requestCode == INTENT_REQ_NEWPROF && data != null) {
+            fetchAccounts();
+            populateProfiles();
+            accHeader.setActiveProfile(Long.parseLong(data.getStringExtra("profileId")));
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
+            doProfileUpdate();
         }
     }
 }
