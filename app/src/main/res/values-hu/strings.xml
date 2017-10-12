@@ -46,11 +46,6 @@
     <string name="action_sortbydate">Rendezés dátum szerint</string>
     <string name="action_sortbysubject">Rendezés tantárgy szerint</string>
     <string name="class_number">%1$d.</string>
-    <string name="friday_short">P</string>
-    <string name="monday_short">H</string>
-    <string name="thursday_short">Cs</string>
-    <string name="tuesday_short">K</string>
-    <string name="wednesday_short">Sz</string>
     <string name="subject_french_lang">Francia Nyelv</string>
     <string name="loading_logging_in">Bejelentkezés…</string>
     <string name="no_events">Nincs suli ezen a napon! (Azaaaz!)</string>

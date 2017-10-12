@@ -82,13 +82,6 @@
     <string name="welcome_end_title">That\'s it!</string>
     <string name="welcome_end_subtitle">Just one more thing: You can not change your password after you hit the check mark. Also, if you lose it, you\'ll have to reinstall.</string>
 
-    <!-- Weekdays -->
-    <string name="monday_short">M</string>
-    <string name="tuesday_short">T</string>
-    <string name="wednesday_short">W</string>
-    <string name="thursday_short">T</string>
-    <string name="friday_short">F</string>
-
     <!-- Misc string values -->
     <string name="blablabla">Something</string><!-- TODO: Remove this placeholder -->
     <string name="unlockdb_title">Enter encryption password</string>

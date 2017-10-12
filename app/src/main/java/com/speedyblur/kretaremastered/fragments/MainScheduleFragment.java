@@ -3,16 +3,13 @@ package com.speedyblur.kretaremastered.fragments;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.DialogInterface;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatDelegate;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -132,12 +129,7 @@ public class MainScheduleFragment extends Fragment {
         });
 
         // Setting up listeners
-        parent.findViewById(R.id.scheduleMondaySelector).setOnClickListener(new BulletClick());
-        parent.findViewById(R.id.scheduleTuesdaySelector).setOnClickListener(new BulletClick());
-        parent.findViewById(R.id.scheduleWednesdaySelector).setOnClickListener(new BulletClick());
-        parent.findViewById(R.id.scheduleThursdaySelector).setOnClickListener(new BulletClick());
-        parent.findViewById(R.id.scheduleFridaySelector).setOnClickListener(new BulletClick());
-        parent.findViewById(R.id.currentScheduleDate).setOnClickListener(new CalendarClick());
+        parent.findViewById(R.id.scheduleTopBarLayout).setOnClickListener(new CalendarClick());
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
     }
 
@@ -171,29 +163,6 @@ public class MainScheduleFragment extends Fragment {
         });
     }
 
-    private void resetSelectBullet(int day) {
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        getActivity().findViewById(R.id.scheduleMondaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
-        getActivity().findViewById(R.id.scheduleTuesdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
-        getActivity().findViewById(R.id.scheduleWednesdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
-        getActivity().findViewById(R.id.scheduleThursdaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
-        getActivity().findViewById(R.id.scheduleFridaySelector).setBackground(ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector));
-
-        Drawable selectedBullet = ContextCompat.getDrawable(getContext(), R.drawable.weekday_selector).mutate();
-        selectedBullet.setColorFilter(ContextCompat.getColor(getContext(), R.color.weekdayActive), PorterDuff.Mode.SRC_ATOP);
-        if (day == Calendar.MONDAY) {
-            getActivity().findViewById(R.id.scheduleMondaySelector).setBackground(selectedBullet);
-        } else if (day == Calendar.TUESDAY) {
-            getActivity().findViewById(R.id.scheduleTuesdaySelector).setBackground(selectedBullet);
-        } else if (day == Calendar.WEDNESDAY) {
-            getActivity().findViewById(R.id.scheduleWednesdaySelector).setBackground(selectedBullet);
-        } else if (day == Calendar.THURSDAY) {
-            getActivity().findViewById(R.id.scheduleThursdaySelector).setBackground(selectedBullet);
-        } else if (day == Calendar.FRIDAY) {
-            getActivity().findViewById(R.id.scheduleFridaySelector).setBackground(selectedBullet);
-        }
-    }
-
     private void showAbsenceListForDate(Calendar day) {
         selectedScheduleDate = day;
         calendarView.setCurrentDate(day.getTime());
@@ -206,8 +175,6 @@ public class MainScheduleFragment extends Fragment {
                 listElements.add(clazzes.get(i));
         }
 
-        resetSelectBullet(day.get(Calendar.DAY_OF_WEEK));
-
         ListView lv = getActivity().findViewById(R.id.scheduleList);
         lv.setAdapter(new ClazzAdapter(getContext(), listElements));
 
@@ -216,11 +183,8 @@ public class MainScheduleFragment extends Fragment {
         currentDate.setTypeface(Typeface.create(tFace, Typeface.BOLD));
         currentDate.setText(new SimpleDateFormat("YYYY. MMMM dd.", Locale.getDefault()).format(day.getTime()));
 
-        // TODO: 10/5/17 Implement this
-        Calendar postCal = (Calendar) day.clone();
-        SimpleDateFormat weekFmt = new SimpleDateFormat("MMM. dd.", Locale.getDefault());
-        postCal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY); String dateMonday = weekFmt.format(postCal.getTime());
-        postCal.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY); String dateFriday = weekFmt.format(postCal.getTime());
+        TextView currentDayOfWeek = getActivity().findViewById(R.id.scheduleCurrentDayOfWeek);
+        currentDayOfWeek.setText(new SimpleDateFormat("E", Locale.getDefault()).format(day.getTime()).substring(0,1));
     }
 
     private class SwipeDetector implements View.OnTouchListener {
@@ -289,27 +253,6 @@ public class MainScheduleFragment extends Fragment {
                 }
             }
             return false;
-        }
-    }
-
-    private class BulletClick implements View.OnClickListener {
-        @Override
-        public void onClick(View v) {
-            Calendar c = selectedScheduleDate;
-            if (v.getId() == R.id.scheduleMondaySelector) {
-                c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            } else if (v.getId() == R.id.scheduleTuesdaySelector) {
-                c.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-            } else if (v.getId() == R.id.scheduleWednesdaySelector) {
-                c.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
-            } else if (v.getId() == R.id.scheduleThursdaySelector) {
-                c.set(Calendar.DAY_OF_WEEK, Calendar.THURSDAY);
-            } else if (v.getId() == R.id.scheduleFridaySelector) {
-                c.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-            }
-
-            resetSelectBullet(c.get(Calendar.DAY_OF_WEEK));
-            showAbsenceListForDate(c);
         }
     }
 
