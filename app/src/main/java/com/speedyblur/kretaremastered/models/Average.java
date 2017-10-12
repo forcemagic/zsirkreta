@@ -9,6 +9,7 @@ public class Average implements Parcelable {
     private final String subject;
     private final double average;
     private final double classAverage;
+    private AvgGraphData graphData;
     private final int colorId;
 
     public Average(String subject, double average, double classAverage) {
@@ -63,6 +64,10 @@ public class Average implements Parcelable {
         parcel.writeInt(colorId);
     }
 
+    public void setGraphData(AvgGraphData graphData) {
+        this.graphData = graphData;
+    }
+
     // Getter methods
     public String getSubject() {
         return subject;
@@ -75,5 +80,8 @@ public class Average implements Parcelable {
     }
     public int getColorId() {
         return colorId;
+    }
+    public AvgGraphData getGraphData() {
+        return graphData;
     }
 }

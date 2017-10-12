@@ -25,19 +25,15 @@ import com.speedyblur.kretaremastered.EpochToDateFormatter;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.shared.Common;
-import com.speedyblur.kretaremastered.shared.DataStore;
-import com.speedyblur.kretaremastered.shared.DecryptionException;
 
 import java.util.ArrayList;
 
 public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHolder> {
     public ArrayList<Average> averages;
-    private final String profileName;
     private int currentOpened = -1;
 
     public AverageAdapter(ArrayList<Average> averages, String profileName) {
         this.averages = averages;
-        this.profileName = profileName;
     }
 
     @Override
@@ -64,18 +60,8 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
         if (position == currentOpened) {
             holder.expandToggler.setRotation(180f);
 
-            // DataStore
-            DataStore ds = null;
-            try {
-                ds = new DataStore(ctxt, profileName, Common.SQLCRYPT_PWD);
-            } catch (DecryptionException e) {
-                e.printStackTrace();
-            }
-            assert ds != null;
-
             // DataSet settings
-            final LineDataSet lds = new LineDataSet(ds.getAverageGraphData(item.getSubject()).getEntries(), "Averages");
-            ds.close();
+            final LineDataSet lds = new LineDataSet(item.getGraphData().getEntries(), "Averages");
             lds.setValueTextColor(R.color.colorPrimaryDark);
             lds.setMode(LineDataSet.Mode.CUBIC_BEZIER);
             lds.setDrawFilled(true);
@@ -118,6 +104,8 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
             holder.chart.setData(new LineData(lds));
             holder.chart.invalidate();
             holder.chart.setVisibility(View.VISIBLE);
+            holder.chart.setAlpha(0f);
+            holder.chart.animate().alpha(1f).setDuration((long) 2000);
         } else {
             holder.expandToggler.setRotation(0f);
             holder.chart.setVisibility(View.GONE);

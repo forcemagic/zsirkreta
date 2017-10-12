@@ -44,6 +44,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MainScheduleFragment extends Fragment {
@@ -195,6 +196,7 @@ public class MainScheduleFragment extends Fragment {
 
     private void showAbsenceListForDate(Calendar day) {
         selectedScheduleDate = day;
+        calendarView.setCurrentDate(day.getTime());
 
         ArrayList<Clazz> listElements = new ArrayList<>();
         for (int i=0; i<clazzes.size(); i++) {
@@ -212,7 +214,7 @@ public class MainScheduleFragment extends Fragment {
         TextView currentDate = getActivity().findViewById(R.id.currentScheduleDate);
         Typeface tFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf");
         currentDate.setTypeface(Typeface.create(tFace, Typeface.BOLD));
-        currentDate.setText(new SimpleDateFormat("MMMM dd.", Locale.getDefault()).format(day.getTime()));
+        currentDate.setText(new SimpleDateFormat("YYYY. MMMM dd.", Locale.getDefault()).format(day.getTime()));
 
         // TODO: 10/5/17 Implement this
         Calendar postCal = (Calendar) day.clone();
@@ -315,31 +317,50 @@ public class MainScheduleFragment extends Fragment {
         @Override
         public void onClick(View v) {
             calendarView.shouldDrawIndicatorsBelowSelectedDays(true);
-            calendarView.setCurrentDate(selectedScheduleDate.getTime());
             if (calendarView.getHeight() > 0) {
                 calendarView.hideCalendarWithAnimation();
             }
 
-            ArrayList<Event> evts = new ArrayList<>();
+            calendarView.removeAllEvents();
             for (int i=0; i<clazzes.size(); i++) {
                 Clazz c = clazzes.get(i);
 
+                // TODO: Optimize & Refactor
                 if (c.isAbsent()) {
-                    if (c.getAbsenceDetails().isProven())
-                        evts.add(new Event(ContextCompat.getColor(getContext(), R.color.goodGrade), (long) c.getBeginTime()*1000));
-                    else
-                        evts.add(new Event(ContextCompat.getColor(getContext(), R.color.badGrade), (long) c.getBeginTime()*1000));
+                    List<Event> evts = calendarView.getEvents((long) c.getBeginTime()*1000);
+
+                    if (c.getAbsenceDetails().isProven()) {
+                        boolean alreadyHasProvenEvent = false;
+                        for (int j=0; j<evts.size(); j++) {
+                            if (ContextCompat.getColor(getContext(), R.color.goodGrade) == evts.get(j).getColor()) {
+                                alreadyHasProvenEvent = true;
+                                break;
+                            }
+                        }
+                        if (!alreadyHasProvenEvent)
+                                calendarView.addEvent(new Event(ContextCompat.getColor(getContext(), R.color.goodGrade),
+                                        (long) c.getBeginTime() * 1000), false);
+                    } else {
+                        boolean alreadyHasNonProvenEvent = false;
+                        for (int j=0; j<evts.size(); j++) {
+                            if (ContextCompat.getColor(getContext(), R.color.badGrade) == evts.get(j).getColor()) {
+                                alreadyHasNonProvenEvent = true;
+                                break;
+                            }
+                        }
+                        if (!alreadyHasNonProvenEvent)
+                            calendarView.addEvent(new Event(ContextCompat.getColor(getContext(), R.color.badGrade),
+                                    (long) c.getBeginTime() * 1000), false);
+                    }
                 }
             }
-            calendarView.removeAllEvents();
-            calendarView.addEvents(evts);
 
-            calendarView.showCalendarWithAnimation();
             calendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
                 @Override
                 public void onDayClick(Date dateClicked) {
-                    selectedScheduleDate.setTime(dateClicked);
-                    showAbsenceListForDate(selectedScheduleDate);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(dateClicked);
+                    showAbsenceListForDate(c);
                     if (calendarView.isAnimating()) {
                         new Handler().postDelayed(new Runnable() {
                             @Override
@@ -351,10 +372,19 @@ public class MainScheduleFragment extends Fragment {
                 }
 
                 @Override
-                public void onMonthScroll(Date firstDayOfNewMonth) {
-                    // Method stub
+                public void onMonthScroll(final Date firstDayOfNewMonth) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Calendar c = Calendar.getInstance();
+                            c.setTime(firstDayOfNewMonth);
+                            showAbsenceListForDate(c);
+                        }
+                    }, 200);
                 }
             });
+            calendarView.showCalendarWithAnimation();
+            calendarView.invalidate();
         }
     }
 }

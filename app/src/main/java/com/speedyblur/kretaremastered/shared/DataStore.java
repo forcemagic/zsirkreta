@@ -229,6 +229,7 @@ public class DataStore {
                         c.getDouble(c.getColumnIndex("average")),
                         c.getDouble(c.getColumnIndex("classaverage"))
                 );
+                avg.setGraphData(getAverageGraphData(c.getString(c.getColumnIndex("subject"))));
                 averages.add(avg);
             } while (c.moveToNext());
             c.close();
