@@ -36,7 +36,7 @@ Két mód létezik erre (magyar és angol nyelven is):
 
 # Build információ
 
-Az alkalmazás `v26.0.1`-es build eszközöket használ, SDK verzió: `26`.
+Az alkalmazás `v26.0.2`-es build eszközöket használ, SDK verzió: `26`.
 Továbbiakért látogasd meg az [`app/build.gradle`](https://github.com/forcemagic/kreta-remastered/blob/master/app/build.gradle) fájlt.
 
 ---
@@ -66,5 +66,5 @@ There are two ways to report a bug (in Hungarian or in English):
 
 # Build info
 
-Application uses `v26.0.1` build tools, and SDK version `26`.
+Application uses `v26.0.2` build tools, and SDK version `26`.
 Check the [`app/build.gradle`](https://github.com/forcemagic/kreta-remastered/blob/master/app/build.gradle) file for more info.
