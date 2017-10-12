@@ -1,5 +1,6 @@
 package com.speedyblur.kretaremastered.adapters;
 
+import android.accounts.Account;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,9 @@ import android.widget.TextView;
 
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.Profile;
+import com.speedyblur.kretaremastered.shared.AccountStore;
+import com.speedyblur.kretaremastered.shared.Common;
+import com.speedyblur.kretaremastered.shared.DecryptionException;
 
 import java.util.ArrayList;
 
@@ -33,8 +37,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Profile p = profiles.get(position);
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Profile p = profiles.get(position);
 
         if (currentProfileId.equals(p.getCardid()))
             holder.profileComment.setVisibility(View.VISIBLE);
@@ -44,7 +48,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         holder.profileDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                try {
+                    AccountStore as = new AccountStore(holder.profileDelete.getContext(), Common.SQLCRYPT_PWD);
+                    as.dropAccount(p.getCardid());
+                    as.close();
+                    profiles.remove(p);
+                    notifyItemRemoved(holder.getAdapterPosition());
+                } catch (DecryptionException e) {e.printStackTrace();}
             }
         });
     }
