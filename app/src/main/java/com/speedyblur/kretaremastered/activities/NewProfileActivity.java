@@ -8,6 +8,8 @@ import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -40,6 +42,8 @@ import java.util.ArrayList;
 
 public class NewProfileActivity extends AppCompatActivity {
 
+    private boolean doShowMenu = true;
+
     // UI references.
     private ViewFlipper mLoginFlipperView;
     private EditText mFriendlyNameView;
@@ -60,6 +64,10 @@ public class NewProfileActivity extends AppCompatActivity {
         mIdView = findViewById(R.id.studentid);
         mPasswordView = findViewById(R.id.password);
         mFriendlyNameView = findViewById(R.id.friendlyname);
+        mLoginFlipperView = findViewById(R.id.login_flipper);
+        mProgressStatusView = findViewById(R.id.login_progress_status);
+        mProgressBar = findViewById(R.id.login_progress);
+
         mFriendlyNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -70,18 +78,24 @@ public class NewProfileActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
 
-        Button mEmailSignInButton = findViewById(R.id.login_btn);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (doShowMenu) {
+            getMenuInflater().inflate(R.menu.new_profile, menu);
+            return true;
+        } else return false;
+    }
 
-        mLoginFlipperView = findViewById(R.id.login_flipper);
-        mProgressStatusView = findViewById(R.id.login_progress_status);
-        mProgressBar = findViewById(R.id.login_progress);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_create_profile) {
+            attemptLogin();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -262,6 +276,8 @@ public class NewProfileActivity extends AppCompatActivity {
      * @param show whether to show the progress or not
      */
     private void showProgress(boolean show) {
+        doShowMenu = !show;
+        invalidateOptionsMenu();
         mLoginFlipperView.setDisplayedChild(show ? 1 : 0);
     }
 }

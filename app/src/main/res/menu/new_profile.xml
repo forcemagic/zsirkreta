@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.speedyblur.kretaremastered.activities.NewProfileActivity">
+
+    <item android:id="@+id/action_create_profile"
+        android:icon="@drawable/check_icon_white"
+        android:title="@string/profile_add"
+        app:showAsAction="always" />
+
+</menu>
