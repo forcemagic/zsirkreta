@@ -13,34 +13,47 @@ android {
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
-        release {
-            minifyEnabled false
+        build {
+            minifyEnabled true
+            useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    productFlavors {
+        release {
+            shrinkResources true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    // Test compile
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    testCompile 'junit:junit:4.12'
+
+    // Android support libraries
     compile 'com.android.support:appcompat-v7:26.1.0'
     compile 'com.android.support:design:26.1.0'
-    compile 'com.squareup.okhttp3:okhttp:3.8.1'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
-    compile 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.3'
-    compile 'com.mtramin:rxfingerprint:2.1.0'
-    compile 'se.emilsjolander:stickylistheaders:2.7.0'
-    testCompile 'junit:junit:4.12'
-    compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.android.support:recyclerview-v7:26.1.0'
+
+    // Network communication
+    compile 'com.squareup.okhttp3:okhttp:3.8.1'
+    compile 'com.google.code.gson:gson:2.8.1'
+
+    // UI components
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    compile 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
+    compile 'se.emilsjolander:stickylistheaders:2.7.0'
     compile('com.mikepenz:materialdrawer:5.9.5@aar') {
         transitive = true
     }
-    compile 'com.mikepenz:crossfader:1.3.7@aar'
+
+    // Datastore, fingerprint & RXJava
+    compile 'net.zetetic:android-database-sqlcipher:3.5.7@aar'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.3'
+    compile 'com.mtramin:rxfingerprint:2.1.0'
 }
