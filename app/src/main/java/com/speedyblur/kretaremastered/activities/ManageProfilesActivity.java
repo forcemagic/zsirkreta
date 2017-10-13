@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.adapters.ProfileAdapter;
@@ -21,6 +22,11 @@ public class ManageProfilesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_profiles);
+
+        // Back button
+        assert getSupportActionBar() != null;
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.profile_manage);
 
         final String currentProfileId = getIntent().getStringExtra("currentProfileId");
         final RecyclerView profList = findViewById(R.id.manageProfilesList);
@@ -44,5 +50,11 @@ public class ManageProfilesActivity extends AppCompatActivity {
                 } catch (DecryptionException e) {e.printStackTrace();}
             }
         }).run();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) finish();
+        return super.onOptionsItemSelected(item);
     }
 }

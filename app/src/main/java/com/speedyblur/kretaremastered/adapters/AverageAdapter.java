@@ -105,7 +105,7 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
             holder.chart.invalidate();
             holder.chart.setVisibility(View.VISIBLE);
             holder.chart.setAlpha(0f);
-            holder.chart.animate().alpha(1f).setDuration((long) 250);
+            holder.chart.animate().alpha(1f).setDuration((long) 500);
         } else {
             holder.expandToggler.setRotation(0f);
             holder.chart.setVisibility(View.GONE);

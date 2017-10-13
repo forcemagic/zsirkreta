@@ -1,21 +1,16 @@
 package com.speedyblur.kretaremastered.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.ViewFlipper;
 
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -27,7 +22,6 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.speedyblur.kretaremastered.R;
-import com.speedyblur.kretaremastered.adapters.ProfileAdapter;
 import com.speedyblur.kretaremastered.fragments.MainAnnouncementsFragment;
 import com.speedyblur.kretaremastered.fragments.MainAveragesFragment;
 import com.speedyblur.kretaremastered.fragments.MainGradesFragment;
@@ -181,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
                     }
                 }), new ProfileSettingDrawerItem()
                 .withName(R.string.profile_manage)
-                .withIcon(R.drawable.delete_icon_black)
+                .withIcon(R.drawable.settings_icon_black)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {

@@ -1,15 +1,12 @@
 package com.speedyblur.kretaremastered.adapters;
 
-import android.accounts.Account;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,23 +37,27 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Profile p = profiles.get(position);
 
-        if (currentProfileId.equals(p.getCardid()))
+        if (currentProfileId.equals(p.getCardid())) {
             holder.profileComment.setVisibility(View.VISIBLE);
-        else holder.profileComment.setVisibility(View.GONE);
+            holder.profileDelete.setColorFilter(ContextCompat.getColor(holder.profileDelete.getContext(),
+                    android.R.color.darker_gray), PorterDuff.Mode.SRC_ATOP);
+        } else {
+            holder.profileComment.setVisibility(View.GONE);
+            holder.profileDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        AccountStore as = new AccountStore(holder.profileDelete.getContext(), Common.SQLCRYPT_PWD);
+                        as.dropAccount(p.getCardid());
+                        as.close();
+                        profiles.remove(p);
+                        notifyItemRemoved(holder.getAdapterPosition());
+                    } catch (DecryptionException e) {e.printStackTrace();}
+                }
+            });
+        }
 
         holder.profileTitle.setText(p.hasFriendlyName() ? p.getFriendlyName() : p.getCardid());
-        holder.profileDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    AccountStore as = new AccountStore(holder.profileDelete.getContext(), Common.SQLCRYPT_PWD);
-                    as.dropAccount(p.getCardid());
-                    as.close();
-                    profiles.remove(p);
-                    notifyItemRemoved(holder.getAdapterPosition());
-                } catch (DecryptionException e) {e.printStackTrace();}
-            }
-        });
     }
 
     @Override
