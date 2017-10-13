@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
         // Drawer & Account Header setup
         accHeader = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.side_nav_bar)
+                .withHeaderBackground(R.drawable.drawer_background)
                 .withOnlyMainProfileImageVisible(true)
                 .build();
         populateProfiles();
