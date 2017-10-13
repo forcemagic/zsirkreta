@@ -269,6 +269,10 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
             fetchAccounts();
             populateProfiles();
             accHeader.setActiveProfile(Long.parseLong(data.getStringExtra("profileId")));
+            for (int i=0; i<profiles.size(); i++) {
+                if (profiles.get(i).getCardid().equals(data.getStringExtra("profileId")))
+                    p = profiles.get(i);
+            }
             fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
             doProfileUpdate();
         } else if (requestCode == INTENT_REQ_DELPROF) {
