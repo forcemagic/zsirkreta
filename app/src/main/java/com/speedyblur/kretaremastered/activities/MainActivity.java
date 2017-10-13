@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
     }
 
     private void fetchAccounts() {
-        // TODO: Make this asynchronous
         // Fetch Accounts (UI block, sorry about that :/)
         try {
             AccountStore as = new AccountStore(this, Common.SQLCRYPT_PWD);
