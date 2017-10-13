@@ -22,7 +22,7 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.speedyblur.kretaremastered.R;
-import com.speedyblur.kretaremastered.fragments.MainAnnouncementsFragment;
+import com.speedyblur.kretaremastered.fragments.MainBulletinsFragment;
 import com.speedyblur.kretaremastered.fragments.MainAveragesFragment;
 import com.speedyblur.kretaremastered.fragments.MainGradesFragment;
 import com.speedyblur.kretaremastered.fragments.MainScheduleFragment;
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
             shouldShowMenu = false;
             invalidateOptionsMenu();
 
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainAnnouncementsFragment()).commit();
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainBulletinsFragment()).commit();
         } else return true;
         return false;
     }
