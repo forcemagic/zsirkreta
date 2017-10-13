@@ -46,7 +46,7 @@
             android:layout_alignParentTop="true"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:background="@drawable/weekday_selector"
+            android:background="@drawable/schedule_currentday_bullet"
             android:gravity="center"
             android:padding="8dp"
             android:text="@string/blablabla"

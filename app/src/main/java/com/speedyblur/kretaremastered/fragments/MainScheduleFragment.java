@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -72,6 +73,9 @@ public class MainScheduleFragment extends Fragment {
                 updateFromDS(parent);
             }
         });
+
+        // Support for vectors
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         // ListView setup
         schedList.setEmptyView(parent.findViewById(R.id.noSchoolView));
@@ -181,10 +185,10 @@ public class MainScheduleFragment extends Fragment {
         TextView currentDate = getActivity().findViewById(R.id.currentScheduleDate);
         Typeface tFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf");
         currentDate.setTypeface(Typeface.create(tFace, Typeface.BOLD));
-        currentDate.setText(new SimpleDateFormat("YYYY. MMMM dd.", Locale.getDefault()).format(day.getTime()));
+        currentDate.setText(new SimpleDateFormat("yyyy. MMMM dd.", Locale.ENGLISH).format(day.getTime()));
 
         TextView currentDayOfWeek = getActivity().findViewById(R.id.scheduleCurrentDayOfWeek);
-        currentDayOfWeek.setText(new SimpleDateFormat("E", Locale.getDefault()).format(day.getTime()).substring(0,1));
+        currentDayOfWeek.setText(new SimpleDateFormat("E", Locale.ENGLISH).format(day.getTime()).substring(0,1));
     }
 
     private class SwipeDetector implements View.OnTouchListener {
