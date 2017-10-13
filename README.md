@@ -1,6 +1,9 @@
 # ZsírKréta
 
-[![Build Status](https://travis-ci.org/forcemagic/kreta-remastered.svg?branch=master)](https://travis-ci.org/forcemagic/kreta-remastered)
+[![Build Status](https://img.shields.io/travis/forcemagic/zsirkreta.svg?style=flat-square)](https://travis-ci.org/forcemagic/zsirkreta)
+[![GitHub (pre)release](https://img.shields.io/github/release/forcemagic/zsirkreta/all.svg?style=flat-square)](https://github.com/forcemagic/zsirkreta/releases)
+![Last Commit](https://img.shields.io/github/last-commit/forcemagic/zsirkreta.svg?style=flat-square)
+![License](https://img.shields.io/github/license/forcemagic/zsirkreta.svg?style=flat-square)
 
 [![Get it on Google Play](https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png)](https://play.google.com/store/apps/details?id=com.speedyblur.kretaremastered&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1)
 
