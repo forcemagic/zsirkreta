@@ -14,7 +14,7 @@
     <string name="login_copyright">By hitting the arrow below you accept that this application is not affiliated with, nor endorsed by eKreta Informatika Zrt. The KRETA original web application is Copyright © 2017 eKreta Informatikai Zrt.</string>
 
     <!-- Profile selection-related stuff -->
-    <string name="profile_delete">Delete Profiles…</string>
+    <string name="profile_manage">Manage Profiles</string>
     <string name="profile_exists">Profile already exists.</string>
     <string name="profile_add">Add Profile</string>
     <string name="dialog_delete_profile_title">Delete Profile</string>

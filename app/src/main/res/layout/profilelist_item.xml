@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/profileTitle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_margin="12dp"
-        android:text="@string/blablabla" />
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/profileDeleteIcon"
+        android:layout_alignTop="@+id/profileDeleteIcon"
+        android:layout_toEndOf="@+id/profileDeleteIcon"
+        android:layout_toRightOf="@+id/profileDeleteIcon"
+        android:gravity="center_vertical"
+        android:text="@string/blablabla"
+        android:textColor="@android:color/black"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/profileComment"
@@ -23,5 +28,15 @@
         android:layout_marginBottom="8dp"
         android:text="@string/nodelete_active_profile"
         android:textColor="@color/badGrade"
-        android:visibility="gone" />
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/profileDeleteIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="12dp"
+        app:srcCompat="@drawable/dash_circle_icon_red" />
 </RelativeLayout>
