@@ -5,11 +5,14 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -108,7 +111,14 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
             holder.chart.animate().alpha(1f).setDuration((long) 1000);
         } else {
             holder.expandToggler.setRotation(0f);
-            holder.chart.setVisibility(View.GONE);
+            holder.chart.setVisibility(View.INVISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    collapse(holder.chart);
+                    holder.chart.setVisibility(View.GONE);
+                }
+            }, 1500);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +134,31 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
     @Override
     public int getItemCount() {
         return averages.size();
+    }
+
+    public static void collapse(final View v) {
+        final int initialHeight = v.getMeasuredHeight();
+
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                if(interpolatedTime == 1){
+                    v.setVisibility(View.GONE);
+                }else{
+                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp/ms
+        a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+        v.startAnimation(a);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
