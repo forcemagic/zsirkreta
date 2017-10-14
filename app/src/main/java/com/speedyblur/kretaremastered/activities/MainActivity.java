@@ -147,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
             finalProfiles.add(new ProfileDrawerItem()
                     .withName(cProfile.hasFriendlyName() ? cProfile.getFriendlyName() : cProfile.getCardid())
                     .withEmail(cProfile.hasFriendlyName() ? cProfile.getCardid() : null)
+                    .withNameShown(true)
                     .withIdentifier(Long.parseLong(cProfile.getCardid()))
                     .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                         @Override
@@ -272,12 +273,12 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
                 if (profiles.get(i).getCardid().equals(data.getStringExtra("profileId")))
                     p = profiles.get(i);
             }
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
+            drawer.setSelectionAtPosition(1);
             doProfileUpdate();
         } else if (requestCode == INTENT_REQ_DELPROF) {
             fetchAccounts();
             populateProfiles();
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
+            drawer.setSelectionAtPosition(1);
             doProfileUpdate();
         }
     }
