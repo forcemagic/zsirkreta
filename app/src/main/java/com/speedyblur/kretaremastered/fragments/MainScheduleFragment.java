@@ -135,6 +135,12 @@ public class MainScheduleFragment extends Fragment {
         // Setting up listeners
         parent.findViewById(R.id.scheduleTopBarLayout).setOnClickListener(new CalendarClick());
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
+        parent.findViewById(R.id.moveToCurrentDateIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAbsenceListForDate(Calendar.getInstance());
+            }
+        });
     }
 
     private void updateFromDS(MainActivity parent) {

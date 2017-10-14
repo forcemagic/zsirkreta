@@ -1,6 +1,7 @@
 package com.speedyblur.kretaremastered.activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -145,8 +146,8 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
             final Profile cProfile = profiles.get(i);
 
             finalProfiles.add(new ProfileDrawerItem()
-                    .withName(cProfile.hasFriendlyName() ? cProfile.getCardid() : null)
-                    .withEmail(cProfile.hasFriendlyName() ? cProfile.getFriendlyName() : cProfile.getCardid())
+                    .withName(cProfile.hasFriendlyName() ? cProfile.getFriendlyName() : cProfile.getCardid())
+                    .withEmail(cProfile.hasFriendlyName() ? cProfile.getCardid() : null)
                     .withIdentifier(Long.parseLong(cProfile.getCardid()))
                     .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                         @Override

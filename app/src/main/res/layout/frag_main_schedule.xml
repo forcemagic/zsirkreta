@@ -13,21 +13,21 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/moveToCurrentDateIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:padding="8dp"
-            app:srcCompat="@drawable/daterange_icon_black" />
+            app:srcCompat="@drawable/schedule_gotocurrentdate_icon_gray" />
 
         <TextView
             android:id="@+id/currentScheduleDate"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_toEndOf="@+id/imageView"
+            android:layout_toEndOf="@+id/moveToCurrentDateIcon"
             android:layout_toLeftOf="@+id/scheduleCurrentDayOfWeek"
-            android:layout_toRightOf="@+id/imageView"
+            android:layout_toRightOf="@+id/moveToCurrentDateIcon"
             android:layout_toStartOf="@+id/scheduleCurrentDayOfWeek"
             android:gravity="center"
             android:paddingEnd="2dp"
@@ -101,7 +101,7 @@
         android:layout_height="match_parent"
         android:footerDividersEnabled="false"
         android:overScrollFooter="@color/transparent"
-        android:divider="@drawable/grade_group_bar"
+        android:divider="@drawable/unified_separator"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/scheduleTopBarLayout" />

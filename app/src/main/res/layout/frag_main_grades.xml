@@ -42,7 +42,7 @@
             android:id="@+id/datedGradeList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@drawable/grade_group_bar"
+            android:divider="@drawable/unified_separator"
             android:dividerHeight="1dp" />
 
         <android.support.v7.widget.RecyclerView

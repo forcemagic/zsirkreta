@@ -50,7 +50,7 @@ public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectE
         if (position == currentOpened) {
             holder.expandToggler.setRotation(180f);
             holder.subView.setVisibility(View.VISIBLE);
-            Drawable bar = ContextCompat.getDrawable(ctxt, R.drawable.grade_group_bar).mutate();
+            Drawable bar = ContextCompat.getDrawable(ctxt, R.drawable.unified_separator).mutate();
             bar.setColorFilter(ContextCompat.getColor(ctxt, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
         } else {
             holder.expandToggler.setRotation(0f);

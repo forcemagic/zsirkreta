@@ -13,7 +13,7 @@ public class GradeSeparatorDecoration extends RecyclerView.ItemDecoration {
     private final Drawable mDivider;
 
     public GradeSeparatorDecoration(Context ctxt) {
-        mDivider = ContextCompat.getDrawable(ctxt, R.drawable.grade_group_bar);
+        mDivider = ContextCompat.getDrawable(ctxt, R.drawable.unified_separator);
     }
 
     @Override
