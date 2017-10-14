@@ -57,6 +57,7 @@ public class NewProfileActivity extends AppCompatActivity {
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(R.string.profile_add);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set up the login form.
         mIdView = findViewById(R.id.studentid);
@@ -91,6 +92,9 @@ public class NewProfileActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_create_profile) {
             attemptLogin();
+            return true;
+        } else if (id == android.R.id.home) {
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
