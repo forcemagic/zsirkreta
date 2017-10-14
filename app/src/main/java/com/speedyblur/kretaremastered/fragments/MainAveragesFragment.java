@@ -3,6 +3,7 @@ package com.speedyblur.kretaremastered.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -48,6 +49,10 @@ public class MainAveragesFragment extends Fragment {
         });
 
         // Setup view
+        DefaultItemAnimator anim = new DefaultItemAnimator();
+        anim.setChangeDuration(250);
+        anim.setMoveDuration(250);
+        avgList.setItemAnimator(anim);
         avgList.addItemDecoration(new GradeSeparatorDecoration(getContext()));
         avgList.setLayoutManager(new LinearLayoutManager(getContext()));
         avgList.setAdapter(adapter);
