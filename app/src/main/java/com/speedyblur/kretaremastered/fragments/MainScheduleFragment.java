@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDelegate;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.StyleSpan;
@@ -73,6 +74,9 @@ public class MainScheduleFragment extends Fragment {
             }
         });
 
+        // Support for vectors
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+
         // ListView setup
         schedList.setEmptyView(parent.findViewById(R.id.noSchoolView));
         schedList.setOnTouchListener(new SwipeDetector());
@@ -131,6 +135,12 @@ public class MainScheduleFragment extends Fragment {
         // Setting up listeners
         parent.findViewById(R.id.scheduleTopBarLayout).setOnClickListener(new CalendarClick());
         parent.findViewById(R.id.noSchoolView).setOnTouchListener(new SwipeDetector());
+        parent.findViewById(R.id.moveToCurrentDateIcon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAbsenceListForDate(Calendar.getInstance());
+            }
+        });
     }
 
     private void updateFromDS(MainActivity parent) {
@@ -181,10 +191,10 @@ public class MainScheduleFragment extends Fragment {
         TextView currentDate = getActivity().findViewById(R.id.currentScheduleDate);
         Typeface tFace = Typeface.createFromAsset(getContext().getAssets(), "fonts/OpenSans-Light.ttf");
         currentDate.setTypeface(Typeface.create(tFace, Typeface.BOLD));
-        currentDate.setText(new SimpleDateFormat("YYYY. MMMM dd.", Locale.getDefault()).format(day.getTime()));
+        currentDate.setText(new SimpleDateFormat("yyyy. MMMM dd.", Locale.ENGLISH).format(day.getTime()));
 
         TextView currentDayOfWeek = getActivity().findViewById(R.id.scheduleCurrentDayOfWeek);
-        currentDayOfWeek.setText(new SimpleDateFormat("E", Locale.getDefault()).format(day.getTime()).substring(0,1));
+        currentDayOfWeek.setText(new SimpleDateFormat("E", Locale.ENGLISH).format(day.getTime()).substring(0,1));
     }
 
     private class SwipeDetector implements View.OnTouchListener {
@@ -259,9 +269,12 @@ public class MainScheduleFragment extends Fragment {
     private class CalendarClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            parent.setSwipeRefreshEnabled(false);
+
             calendarView.shouldDrawIndicatorsBelowSelectedDays(true);
             if (calendarView.getHeight() > 0) {
                 calendarView.hideCalendarWithAnimation();
+                parent.setSwipeRefreshEnabled(true);
             }
 
             calendarView.removeAllEvents();
@@ -304,13 +317,14 @@ public class MainScheduleFragment extends Fragment {
                     Calendar c = Calendar.getInstance();
                     c.setTime(dateClicked);
                     showAbsenceListForDate(c);
+                    parent.setSwipeRefreshEnabled(true);
                     if (calendarView.isAnimating()) {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 calendarView.hideCalendarWithAnimation();
                             }
-                        }, 800);
+                        }, 600);
                     } else calendarView.hideCalendarWithAnimation();
                 }
 

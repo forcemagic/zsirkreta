@@ -51,8 +51,6 @@
     <string name="no_events">Nincs suli ezen a napon! (Azaaaz!)</string>
     <string name="dialog_no">Nem</string>
     <string name="dialog_yes">Igen</string>
-    <string name="dialog_delete_profile">Biztos vagy benne?</string>
-    <string name="dialog_delete_profile_title">Profil Törlése</string>
     <string name="title_activity_schedule">Napirend</string>
     <string name="nothingtoseehere">Itt semmi sincs. (Még)</string>
     <string name="fingerprint_unlockdb_title">Várakozás ujjlenyomatra…</string>

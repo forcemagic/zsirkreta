@@ -9,26 +9,39 @@
 
     <RelativeLayout
         android:id="@+id/scheduleTopBarLayout"
+        android:elevation="4dp"
+        android:padding="2dp"
+        android:clipToPadding="false"
+        android:background="@color/bgcolorActivity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:targetApi="lollipop">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentLeft="true"
+        <TextView
+            android:id="@+id/scheduleCurrentDayOfWeek"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentStart="true"
-            android:padding="8dp"
-            app:srcCompat="@drawable/daterange_icon_black" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:background="@drawable/schedule_currentday_bullet"
+            android:gravity="center"
+            android:padding="3dp"
+            android:text="@string/blablabla"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/currentScheduleDate"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_toEndOf="@+id/imageView"
-            android:layout_toLeftOf="@+id/scheduleCurrentDayOfWeek"
-            android:layout_toRightOf="@+id/imageView"
-            android:layout_toStartOf="@+id/scheduleCurrentDayOfWeek"
+            android:layout_toEndOf="@+id/scheduleCurrentDayOfWeek"
+            android:layout_toLeftOf="@+id/moveToCurrentDateIcon"
+            android:layout_toRightOf="@+id/scheduleCurrentDayOfWeek"
+            android:layout_toStartOf="@+id/moveToCurrentDateIcon"
             android:gravity="center"
             android:paddingEnd="2dp"
             android:paddingStart="2dp"
@@ -37,22 +50,15 @@
             android:textColor="@android:color/black"
             android:textSize="22sp" />
 
-        <TextView
-            android:id="@+id/scheduleCurrentDayOfWeek"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
+        <ImageView
+            android:id="@+id/moveToCurrentDateIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            android:background="@drawable/weekday_selector"
-            android:gravity="center"
             android:padding="8dp"
-            android:text="@string/blablabla"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
+            app:srcCompat="@drawable/schedule_gotocurrentdate_icon_gray" />
 
         <com.github.sundeepk.compactcalendarview.CompactCalendarView
             android:id="@+id/scheduleCalendarView"
@@ -101,7 +107,7 @@
         android:layout_height="match_parent"
         android:footerDividersEnabled="false"
         android:overScrollFooter="@color/transparent"
-        android:divider="@drawable/grade_group_bar"
+        android:divider="@drawable/schedule_separator"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/scheduleTopBarLayout" />

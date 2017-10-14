@@ -22,7 +22,7 @@ import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.speedyblur.kretaremastered.R;
-import com.speedyblur.kretaremastered.fragments.MainAnnouncementsFragment;
+import com.speedyblur.kretaremastered.fragments.MainBulletinsFragment;
 import com.speedyblur.kretaremastered.fragments.MainAveragesFragment;
 import com.speedyblur.kretaremastered.fragments.MainGradesFragment;
 import com.speedyblur.kretaremastered.fragments.MainScheduleFragment;
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
         // Drawer & Account Header setup
         accHeader = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.drawable.side_nav_bar)
+                .withHeaderBackground(R.drawable.drawer_background)
                 .withOnlyMainProfileImageVisible(true)
                 .build();
         populateProfiles();
@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
     }
 
     private void fetchAccounts() {
-        // TODO: Make this asynchronous
         // Fetch Accounts (UI block, sorry about that :/)
         try {
             AccountStore as = new AccountStore(this, Common.SQLCRYPT_PWD);
@@ -146,8 +145,9 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
             final Profile cProfile = profiles.get(i);
 
             finalProfiles.add(new ProfileDrawerItem()
-                    .withName(cProfile.hasFriendlyName() ? cProfile.getCardid() : null)
-                    .withEmail(cProfile.hasFriendlyName() ? cProfile.getFriendlyName() : cProfile.getCardid())
+                    .withName(cProfile.hasFriendlyName() ? cProfile.getFriendlyName() : cProfile.getCardid())
+                    .withEmail(cProfile.hasFriendlyName() ? cProfile.getCardid() : null)
+                    .withNameShown(true)
                     .withIdentifier(Long.parseLong(cProfile.getCardid()))
                     .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                         @Override
@@ -257,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
             shouldShowMenu = false;
             invalidateOptionsMenu();
 
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainAnnouncementsFragment()).commit();
+            fragManager.beginTransaction().replace(R.id.master_fragment, new MainBulletinsFragment()).commit();
         } else return true;
         return false;
     }
@@ -269,12 +269,16 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
             fetchAccounts();
             populateProfiles();
             accHeader.setActiveProfile(Long.parseLong(data.getStringExtra("profileId")));
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
+            for (int i=0; i<profiles.size(); i++) {
+                if (profiles.get(i).getCardid().equals(data.getStringExtra("profileId")))
+                    p = profiles.get(i);
+            }
+            drawer.setSelectionAtPosition(1);
             doProfileUpdate();
         } else if (requestCode == INTENT_REQ_DELPROF) {
             fetchAccounts();
             populateProfiles();
-            fragManager.beginTransaction().replace(R.id.master_fragment, new MainGradesFragment()).commit();
+            drawer.setSelectionAtPosition(1);
             doProfileUpdate();
         }
     }

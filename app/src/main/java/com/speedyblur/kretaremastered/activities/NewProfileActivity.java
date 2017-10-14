@@ -11,9 +11,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -59,6 +57,7 @@ public class NewProfileActivity extends AppCompatActivity {
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(R.string.profile_add);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set up the login form.
         mIdView = findViewById(R.id.studentid);
@@ -93,6 +92,9 @@ public class NewProfileActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.action_create_profile) {
             attemptLogin();
+            return true;
+        } else if (id == android.R.id.home) {
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

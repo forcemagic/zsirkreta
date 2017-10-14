@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
+import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHolder> {
     public ArrayList<Average> averages;
     private int currentOpened = -1;
+    private int lastOpened = -1;
 
     public AverageAdapter(ArrayList<Average> averages) {
         this.averages = averages;
@@ -58,6 +60,7 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
         holder.descView.setText(ctxt.getString(R.string.avglabel_desc, item.getClassAverage(), item.getAverage() - item.getClassAverage()));
 
         if (position == currentOpened) {
+            holder.itemView.setActivated(true);
             holder.expandToggler.setRotation(180f);
 
             // DataSet settings
@@ -99,21 +102,27 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
                 holder.chart.getXAxis().addLimitLine(limit);
             }
 
+            // A little elevation styling
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                holder.itemView.setElevation(8f);
 
             // Final data setting
             holder.chart.setData(new LineData(lds));
             holder.chart.invalidate();
             holder.chart.setVisibility(View.VISIBLE);
-            holder.chart.setAlpha(0f);
-            holder.chart.animate().alpha(1f).setDuration((long) 500);
         } else {
+            // Reset elevation
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                holder.itemView.setElevation(0f);
+
+            holder.itemView.setActivated(false);
             holder.expandToggler.setRotation(0f);
             holder.chart.setVisibility(View.GONE);
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int lastOpened = currentOpened;
+                lastOpened = currentOpened;
                 if (currentOpened == holder.getAdapterPosition()) currentOpened = -1;
                 else currentOpened = holder.getAdapterPosition();
                 notifyItemChanged(lastOpened); notifyItemChanged(currentOpened);

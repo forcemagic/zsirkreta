@@ -3,6 +3,7 @@ package com.speedyblur.kretaremastered.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +17,7 @@ import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
-import com.speedyblur.kretaremastered.shared.GradeSeparatorDecoration;
+import com.speedyblur.kretaremastered.shared.SeparatorDecoration;
 import com.speedyblur.kretaremastered.shared.IDataStore;
 import com.speedyblur.kretaremastered.shared.IRefreshHandler;
 
@@ -48,7 +49,11 @@ public class MainAveragesFragment extends Fragment {
         });
 
         // Setup view
-        avgList.addItemDecoration(new GradeSeparatorDecoration(getContext()));
+        DefaultItemAnimator anim = new DefaultItemAnimator();
+        anim.setChangeDuration(250);
+        anim.setMoveDuration(250);
+        avgList.setItemAnimator(anim);
+        avgList.addItemDecoration(new SeparatorDecoration(getContext(), 12));
         avgList.setLayoutManager(new LinearLayoutManager(getContext()));
         avgList.setAdapter(adapter);
         avgList.addOnScrollListener(new RecyclerView.OnScrollListener() {

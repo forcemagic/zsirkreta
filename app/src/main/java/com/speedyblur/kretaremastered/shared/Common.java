@@ -8,7 +8,7 @@ import android.util.Log;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.speedyblur.kretaremastered.models.Announcement;
+import com.speedyblur.kretaremastered.models.Bulletin;
 import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.models.AvgGraphData;
 import com.speedyblur.kretaremastered.models.AvgGraphDataDeserializer;
@@ -56,7 +56,7 @@ public class Common {
                                 ArrayList<Average> averages = new ArrayList<>();
                                 ArrayList<AvgGraphData> avgGraphDatas = new ArrayList<>();
                                 ArrayList<Clazz> clazzes = new ArrayList<>();
-                                ArrayList<Announcement> announcements = new ArrayList<>();
+                                ArrayList<Bulletin> bulletins = new ArrayList<>();
 
                                 JSONArray rawGrades = resp.getJSONObject("grades").getJSONArray("data");
                                 JSONArray rawAvg = resp.getJSONObject("avg").getJSONArray("data");
@@ -90,8 +90,8 @@ public class Common {
                                 }
                                 for (int i = 0; i < rawAnnouncements.length(); i++) {
                                     JSONObject currentObj = rawAnnouncements.getJSONObject(i);
-                                    Announcement a = new Gson().fromJson(currentObj.toString(), Announcement.class);
-                                    announcements.add(a);
+                                    Bulletin a = new Gson().fromJson(currentObj.toString(), Bulletin.class);
+                                    bulletins.add(a);
                                 }
 
                                 try {
@@ -100,7 +100,7 @@ public class Common {
                                     ds.putAveragesData(averages);
                                     ds.putAverageGraphData(avgGraphDatas);
                                     ds.upsertClassData(clazzes);
-                                    ds.upsertAnnouncementsData(announcements);
+                                    ds.upsertAnnouncementsData(bulletins);
                                     ds.close();
                                 } catch (DecryptionException e) {e.printStackTrace();}
 

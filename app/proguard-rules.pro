@@ -24,6 +24,28 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# This application (ZsirKreta)
+
+-keepattributes Signature
+-keep class com.speedyblur.kretaremastered.models.** { *; }
+
+# MPAndroidChart
+
+-keep class com.github.mikephil.charting.** { *; }
+
+# GSON
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keep class sun.misc.Unsafe { *; }
+-keep class com.google.gson.stream.** { *; }
+
+# SQLCipher
+
+-keep class net.sqlcipher.** { *; }
+-keep class net.sqlcipher.database.** { *; }
+
 # Okio
 -keep class sun.misc.Unsafe { *; }
 -dontwarn java.nio.file.*

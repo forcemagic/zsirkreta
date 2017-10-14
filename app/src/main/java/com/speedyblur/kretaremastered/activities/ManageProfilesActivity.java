@@ -12,7 +12,7 @@ import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.shared.AccountStore;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
-import com.speedyblur.kretaremastered.shared.GradeSeparatorDecoration;
+import com.speedyblur.kretaremastered.shared.SeparatorDecoration;
 
 import java.util.ArrayList;
 
@@ -31,7 +31,7 @@ public class ManageProfilesActivity extends AppCompatActivity {
         final String currentProfileId = getIntent().getStringExtra("currentProfileId");
         final RecyclerView profList = findViewById(R.id.manageProfilesList);
         profList.setLayoutManager(new LinearLayoutManager(this));
-        profList.addItemDecoration(new GradeSeparatorDecoration(this));
+        profList.addItemDecoration(new SeparatorDecoration(this, -5));
 
         // Fetch accounts (asynchronously!)
         new Thread(new Runnable() {

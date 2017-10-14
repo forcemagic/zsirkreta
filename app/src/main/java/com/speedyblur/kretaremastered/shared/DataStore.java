@@ -7,7 +7,7 @@ import android.util.Log;
 import com.github.mikephil.charting.data.Entry;
 import com.speedyblur.kretaremastered.models.AbsenceDetails;
 import com.speedyblur.kretaremastered.models.AllDayEvent;
-import com.speedyblur.kretaremastered.models.Announcement;
+import com.speedyblur.kretaremastered.models.Bulletin;
 import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.models.AvgGraphData;
 import com.speedyblur.kretaremastered.models.Clazz;
@@ -170,19 +170,19 @@ public class DataStore {
         updateLastSave();
     }
 
-    public void upsertAnnouncementsData(ArrayList<Announcement> announcements) {
-        upsertAnnouncementsData(announcements, false);
+    public void upsertAnnouncementsData(ArrayList<Bulletin> bulletins) {
+        upsertAnnouncementsData(bulletins, false);
     }
 
-    public void upsertAnnouncementsData(ArrayList<Announcement> announcements, boolean doUpdate) {
+    public void upsertAnnouncementsData(ArrayList<Bulletin> bulletins, boolean doUpdate) {
         if (!tableExists("announcements_"+profileName)) {
             // Note the UNIQUE constraint!
             db.execSQL("CREATE TABLE announcements_"+profileName+"(id INTEGER PRIMARY KEY AUTOINCREMENT, teacher TEXT, content TEXT, date INTEGER, isseen INTEGER,"+
                     "UNIQUE (teacher, content, date) ON CONFLICT IGNORE)");
         }
 
-        for (int i=0; i<announcements.size(); i++) {
-            Announcement a = announcements.get(i);
+        for (int i = 0; i< bulletins.size(); i++) {
+            Bulletin a = bulletins.get(i);
             if (doUpdate)
                 db.execSQL("UPDATE announcements_"+profileName+" SET isseen=? WHERE teacher=? AND content=? AND date=?",
                         new String[] {a.isSeen() ? "1" : "0", a.getTeacher(), a.getContent(), String.valueOf(a.getDate())});
@@ -326,23 +326,23 @@ public class DataStore {
         }
     }
 
-    public ArrayList<Announcement> getAnnouncementsData() {
+    public ArrayList<Bulletin> getAnnouncementsData() {
         if (!tableExists("announcements_"+profileName)) return new ArrayList<>();
         Cursor c = db.rawQuery("SELECT * FROM announcements_"+profileName, null);
         c.moveToFirst();
         if (c.getCount() != 0) {
-            ArrayList<Announcement> announcements = new ArrayList<>();
+            ArrayList<Bulletin> bulletins = new ArrayList<>();
             do {
-                Announcement a = new Announcement(
+                Bulletin a = new Bulletin(
                         c.getString(c.getColumnIndex("teacher")),
                         c.getString(c.getColumnIndex("content")),
                         c.getInt(c.getColumnIndex("date")),
                         c.getInt(c.getColumnIndex("isseen")) == 1
                 );
-                announcements.add(a);
+                bulletins.add(a);
             } while (c.moveToNext());
             c.close();
-            return announcements;
+            return bulletins;
         } else {
             c.close();
             return new ArrayList<>();

@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="6dp"
+    android:background="@drawable/avgitem_bg">
 
     <RelativeLayout
+        android:id="@+id/avgInnerLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/avgInnerLayout">
+        android:layout_height="wrap_content">
 
         <ProgressBar
             android:id="@+id/avgProgress"
@@ -92,6 +94,7 @@
         android:layout_marginTop="4dp"
         android:paddingLeft="8dp"
         android:paddingStart="8dp"
+        android:visibility="gone"
         tools:ignore="RtlSymmetry" />
 
 </RelativeLayout>

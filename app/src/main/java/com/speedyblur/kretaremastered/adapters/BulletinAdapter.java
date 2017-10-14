@@ -14,15 +14,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.speedyblur.kretaremastered.R;
-import com.speedyblur.kretaremastered.models.Announcement;
+import com.speedyblur.kretaremastered.models.Bulletin;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
-    public AnnouncementAdapter(@NonNull Context ctxt, ArrayList<Announcement> announcements) {
-        super(ctxt, 0, announcements);
+public class BulletinAdapter extends ArrayAdapter<Bulletin> {
+    public BulletinAdapter(@NonNull Context ctxt, ArrayList<Bulletin> bulletins) {
+        super(ctxt, 0, bulletins);
     }
 
     @NonNull
@@ -30,7 +30,7 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.announcementlist_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.bulletinlist_item, parent, false);
 
             holder = new ViewHolder();
             holder.mBullet = convertView.findViewById(R.id.announcementSeenBullet);
@@ -43,7 +43,7 @@ public class AnnouncementAdapter extends ArrayAdapter<Announcement> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Announcement a = getItem(position);
+        Bulletin a = getItem(position);
         assert a != null;
 
         if (a.isSeen()) {
