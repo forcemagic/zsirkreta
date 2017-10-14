@@ -269,6 +269,8 @@ public class MainScheduleFragment extends Fragment {
     private class CalendarClick implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            parent.setSwipeRefreshEnabled(false);
+
             calendarView.shouldDrawIndicatorsBelowSelectedDays(true);
             if (calendarView.getHeight() > 0) {
                 calendarView.hideCalendarWithAnimation();
@@ -314,13 +316,14 @@ public class MainScheduleFragment extends Fragment {
                     Calendar c = Calendar.getInstance();
                     c.setTime(dateClicked);
                     showAbsenceListForDate(c);
+                    parent.setSwipeRefreshEnabled(true);
                     if (calendarView.isAnimating()) {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 calendarView.hideCalendarWithAnimation();
                             }
-                        }, 800);
+                        }, 600);
                     } else calendarView.hideCalendarWithAnimation();
                 }
 
