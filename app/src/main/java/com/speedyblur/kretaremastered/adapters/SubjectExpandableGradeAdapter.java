@@ -1,10 +1,7 @@
 package com.speedyblur.kretaremastered.adapters;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +13,7 @@ import android.widget.TextView;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.SubjectGradeGroup;
 import com.speedyblur.kretaremastered.shared.Common;
-import com.speedyblur.kretaremastered.shared.GradeSeparatorDecoration;
+import com.speedyblur.kretaremastered.shared.SeparatorDecoration;
 
 import java.util.ArrayList;
 
@@ -46,12 +43,10 @@ public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectE
         holder.subView.setHasFixedSize(true);
         holder.subView.setLayoutManager(new LinearLayoutManager(ctxt));
         holder.subView.setAdapter(new SubGradeAdapter(sgg.getGrades()));
-        holder.subView.addItemDecoration(new GradeSeparatorDecoration(ctxt));
+        holder.subView.addItemDecoration(new SeparatorDecoration(ctxt, 0));
         if (position == currentOpened) {
             holder.expandToggler.setRotation(180f);
             holder.subView.setVisibility(View.VISIBLE);
-            Drawable bar = ContextCompat.getDrawable(ctxt, R.drawable.unified_separator).mutate();
-            bar.setColorFilter(ContextCompat.getColor(ctxt, R.color.colorAccent), PorterDuff.Mode.SRC_ATOP);
         } else {
             holder.expandToggler.setRotation(0f);
             holder.subView.setVisibility(View.GONE);
