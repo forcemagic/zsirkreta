@@ -107,7 +107,7 @@
         android:layout_height="match_parent"
         android:footerDividersEnabled="false"
         android:overScrollFooter="@color/transparent"
-        android:divider="@drawable/unified_separator"
+        android:divider="@drawable/schedule_separator"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/scheduleTopBarLayout" />

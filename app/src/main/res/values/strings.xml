@@ -34,7 +34,7 @@
     <string name="subject_pe" tools:ignore="UnusedResources">Physical Education</string>
     <string name="subject_history" tools:ignore="UnusedResources">History</string>
     <string name="subject_dance_and_drama" tools:ignore="UnusedResources">Dance and Drama</string>
-    <string name="subject_head_teacher_class" tools:ignore="UnusedResources">Class \\w head teacher</string>
+    <string name="subject_head_teacher_class" tools:ignore="UnusedResources">Class w/ head teacher</string>
 
     <!-- Class details dialog -->
     <string name="classinfo_theme">Theme:</string>
