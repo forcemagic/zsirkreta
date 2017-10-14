@@ -274,6 +274,7 @@ public class MainScheduleFragment extends Fragment {
             calendarView.shouldDrawIndicatorsBelowSelectedDays(true);
             if (calendarView.getHeight() > 0) {
                 calendarView.hideCalendarWithAnimation();
+                parent.setSwipeRefreshEnabled(true);
             }
 
             calendarView.removeAllEvents();
