@@ -8,6 +8,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.speedyblur.kretaremastered.EpochToDateFormatter;
 import com.speedyblur.kretaremastered.R;
+import com.speedyblur.kretaremastered.animations.ScalingAnimation;
 import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.shared.Common;
 
@@ -61,6 +63,7 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
         holder.descView.setText(ctxt.getString(R.string.avglabel_desc, item.getClassAverage(), item.getAverage() - item.getClassAverage()));
 
         if (position == currentOpened) {
+            holder.itemView.setActivated(true);
             holder.expandToggler.setRotation(180f);
 
             // DataSet settings
@@ -107,18 +110,10 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
             holder.chart.setData(new LineData(lds));
             holder.chart.invalidate();
             holder.chart.setVisibility(View.VISIBLE);
-            holder.chart.setAlpha(0f);
-            holder.chart.animate().alpha(1f).setDuration((long) 1000);
         } else {
+            holder.itemView.setActivated(false);
             holder.expandToggler.setRotation(0f);
-            holder.chart.setVisibility(View.INVISIBLE);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    collapse(holder.chart);
-                    holder.chart.setVisibility(View.GONE);
-                }
-            }, 1500);
+            holder.chart.startAnimation(new ScalingAnimation(1.0f, 1.0f, 1.0f, 0.0f, 500, holder.chart, true));
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,31 +129,6 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
     @Override
     public int getItemCount() {
         return averages.size();
-    }
-
-    public static void collapse(final View v) {
-        final int initialHeight = v.getMeasuredHeight();
-
-        Animation a = new Animation() {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                if(interpolatedTime == 1){
-                    v.setVisibility(View.GONE);
-                }else{
-                    v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
-                    v.requestLayout();
-                }
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        // 1dp/ms
-        a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
-        v.startAnimation(a);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
