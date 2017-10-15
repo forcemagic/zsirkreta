@@ -72,6 +72,11 @@
                         android:maxLength="16" />
                 </android.support.design.widget.TextInputLayout>
 
+                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                    android:id="@+id/instituteSelector"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
             </LinearLayout>
         </ScrollView>
 

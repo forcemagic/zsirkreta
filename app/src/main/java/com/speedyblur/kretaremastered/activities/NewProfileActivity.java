@@ -20,16 +20,21 @@ import android.widget.ViewFlipper;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.speedyblur.kretaremastered.R;
+import com.speedyblur.kretaremastered.adapters.InstituteAdapter;
 import com.speedyblur.kretaremastered.models.AllDayEvent;
 import com.speedyblur.kretaremastered.models.Clazz;
 import com.speedyblur.kretaremastered.models.ClazzDeserializer;
+import com.speedyblur.kretaremastered.models.Institute;
 import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.shared.AccountStore;
 import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
 import com.speedyblur.kretaremastered.shared.HttpHandler;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import net.sqlcipher.database.SQLiteConstraintException;
 
@@ -50,6 +55,7 @@ public class NewProfileActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private ProgressBar mProgressBar;
     private TextView mProgressStatusView;
+    private SearchableSpinner mInstituteSelectorView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +74,7 @@ public class NewProfileActivity extends AppCompatActivity {
         mLoginFlipperView = findViewById(R.id.login_flipper);
         mProgressStatusView = findViewById(R.id.login_progress_status);
         mProgressBar = findViewById(R.id.login_progress);
+        mInstituteSelectorView = findViewById(R.id.instituteSelector);
 
         mFriendlyNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -77,6 +84,28 @@ public class NewProfileActivity extends AppCompatActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+        mInstituteSelectorView.setPositiveButton("OK");
+
+        HttpHandler.getJson(Common.APIBASE + "/institutes", new HttpHandler.JsonRequestCallback() {
+            @Override
+            public void onComplete(JsonElement resp) throws JSONException {
+                final ArrayList<Institute> institutes = new ArrayList<>();
+                for (int i=0; i<resp.getAsJsonArray().size(); i++) {
+                    institutes.add(new Gson().fromJson(resp.getAsJsonArray().get(i), Institute.class));
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mInstituteSelectorView.setAdapter(new InstituteAdapter(NewProfileActivity.this, institutes));
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(int localizedError) {
+                showOnSnackbar(localizedError, Snackbar.LENGTH_LONG);
             }
         });
     }
@@ -129,7 +158,7 @@ public class NewProfileActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             showProgress(true);
-            doLoginSaveIfValid(studentId, password, friendlyName);
+            doLoginSaveIfValid(studentId, password, friendlyName, (Institute) mInstituteSelectorView.getSelectedItem());
         }
     }
 
@@ -139,7 +168,7 @@ public class NewProfileActivity extends AppCompatActivity {
      * @param passwd the password to use
      * @param friendlyName a friendly name for the profile
      */
-    private void doLoginSaveIfValid(final String studentId, final String passwd, final String friendlyName) {
+    private void doLoginSaveIfValid(final String studentId, final String passwd, final String friendlyName, final Institute institute) {
         mProgressBar.setIndeterminate(true);
         mProgressBar.setProgress(0);
         mProgressStatusView.setText(R.string.loading_logging_in);
@@ -154,28 +183,28 @@ public class NewProfileActivity extends AppCompatActivity {
         // Enqueue request
         HttpHandler.postJson(Common.APIBASE + "/auth", payload, new HttpHandler.JsonRequestCallback() {
             @Override
-            public void onComplete(JSONObject resp) throws JSONException {
-                final Profile p = new Profile(studentId, passwd, friendlyName);
+            public void onComplete(JsonElement resp) throws JSONException {
+                final Profile p = new Profile(studentId, passwd, friendlyName, institute);
 
                 ArrayMap<String, String> headers = new ArrayMap<>();
-                headers.put("X-Auth-Token", resp.getString("token"));
+                headers.put("X-Auth-Token", resp.getAsJsonObject().get("token").getAsString());
                 HttpHandler.getJson(Common.APIBASE + "/schedule", headers, new HttpHandler.JsonRequestCallback() {
                     @Override
-                    public void onComplete(JSONObject resp) throws JSONException {
+                    public void onComplete(JsonElement resp) throws JSONException {
                         try {
                             ArrayList<AllDayEvent> allDayEvents = new ArrayList<>();
-                            for (int i = 0; i < resp.getJSONObject("data").getJSONArray("allday").length(); i++) {
-                                JSONObject currentObj = resp.getJSONObject("data").getJSONArray("allday").getJSONObject(i);
-                                AllDayEvent ade = new Gson().fromJson(currentObj.toString(), AllDayEvent.class);
+                            JsonArray unparsedAllDayEvents = resp.getAsJsonObject().get("data").getAsJsonObject().get("allday").getAsJsonArray();
+                            for (int i = 0; i < unparsedAllDayEvents.size(); i++) {
+                                AllDayEvent ade = new Gson().fromJson(unparsedAllDayEvents.get(i).toString(), AllDayEvent.class);
                                 allDayEvents.add(ade);
                             }
 
                             ArrayList<Clazz> clazzes = new ArrayList<>();
-                            for (int i = 0; i < resp.getJSONObject("data").getJSONArray("classes").length(); i++) {
-                                JSONObject currentObj = resp.getJSONObject("data").getJSONArray("classes").getJSONObject(i);
+                            JsonArray unparsedClazzes = resp.getAsJsonObject().get("data").getAsJsonObject().get("classes").getAsJsonArray();
+                            for (int i = 0; i < unparsedClazzes.size(); i++) {
                                 GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
                                 gsonBuilder.registerTypeAdapter(Clazz.class, new ClazzDeserializer());
-                                Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
+                                Clazz c = gsonBuilder.create().fromJson(unparsedClazzes.get(i).toString(), Clazz.class);
                                 clazzes.add(c);
                             }
 

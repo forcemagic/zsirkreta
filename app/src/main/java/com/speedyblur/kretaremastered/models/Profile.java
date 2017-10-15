@@ -4,11 +4,13 @@ public class Profile {
     private final String cardid;
     private final String passwd;
     private final String friendlyName;
+    private final Institute institute;
 
-    public Profile(String cardid, String passwd, String friendlyName) {
+    public Profile(String cardid, String passwd, String friendlyName, Institute institute) {
         this.cardid = cardid;
         this.passwd = passwd;
         this.friendlyName = friendlyName;
+        this.institute = institute;
     }
 
     public boolean hasFriendlyName() {
@@ -24,5 +26,8 @@ public class Profile {
     }
     public String getFriendlyName() {
         return friendlyName;
+    }
+    public Institute getInstitute() {
+        return institute;
     }
 }

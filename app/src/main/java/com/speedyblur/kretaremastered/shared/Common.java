@@ -11,6 +11,8 @@ import android.util.Log;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.speedyblur.kretaremastered.models.Bulletin;
 import com.speedyblur.kretaremastered.models.Average;
 import com.speedyblur.kretaremastered.models.AvgGraphData;
@@ -21,7 +23,6 @@ import com.speedyblur.kretaremastered.models.Grade;
 import com.speedyblur.kretaremastered.models.Profile;
 import com.speedyblur.kretaremastered.receivers.BirthdayReceiver;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,57 +48,53 @@ public class Common {
                 try {
                     payload.put("username", profile.getCardid());
                     payload.put("password", profile.getPasswd());
+                    payload.put("baseuri", profile.getInstitute().getId());
                 } catch (JSONException e) { e.printStackTrace(); }
 
                 HttpHandler.postJson(Common.APIBASE + "/auth", payload, new HttpHandler.JsonRequestCallback() {
                     @Override
-                    public void onComplete(JSONObject resp) throws JSONException {
+                    public void onComplete(JsonElement resp) throws JSONException {
                         ArrayMap<String, String> headers = new ArrayMap<>();
-                        headers.put("X-Auth-Token", resp.getString("token"));
+                        headers.put("X-Auth-Token", resp.getAsJsonObject().get("token").getAsString());
 
                         final long loadBeginTime = System.currentTimeMillis();
                         HttpHandler.getJson(Common.APIBASE + "/bundle", headers, new HttpHandler.JsonRequestCallback() {
                             @Override
-                            public void onComplete(JSONObject resp) throws JSONException {
+                            public void onComplete(JsonElement resp) throws JSONException {
                                 ArrayList<Grade> grades = new ArrayList<>();
                                 ArrayList<Average> averages = new ArrayList<>();
                                 ArrayList<AvgGraphData> avgGraphDatas = new ArrayList<>();
                                 ArrayList<Clazz> clazzes = new ArrayList<>();
                                 ArrayList<Bulletin> bulletins = new ArrayList<>();
 
-                                JSONArray rawGrades = resp.getJSONObject("grades").getJSONArray("data");
-                                JSONArray rawAvg = resp.getJSONObject("avg").getJSONArray("data");
-                                JSONArray rawGraphData = resp.getJSONObject("avggraph").getJSONArray("data");
-                                JSONArray rawClazzes = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("classes");
-                                //JSONArray rawAllDayEvents = resp.getJSONObject("schedule").getJSONObject("data").getJSONArray("allday");
-                                JSONArray rawAnnouncements = resp.getJSONObject("announcements").getJSONArray("data");
-                                for (int i = 0; i < rawGrades.length(); i++) {
-                                    JSONObject currentObj = rawGrades.getJSONObject(i);
-                                    Grade g = new Gson().fromJson(currentObj.toString(), Grade.class);
+                                JsonArray rawGrades = resp.getAsJsonObject().get("grades").getAsJsonObject().get("data").getAsJsonArray();
+                                JsonArray rawAvg = resp.getAsJsonObject().get("avg").getAsJsonObject().get("data").getAsJsonArray();
+                                JsonArray rawGraphData = resp.getAsJsonObject().get("avggraph").getAsJsonObject().get("data").getAsJsonArray();
+                                JsonArray rawClazzes = resp.getAsJsonObject().get("schedule").getAsJsonObject().get("data").getAsJsonObject().get("classes").getAsJsonArray();
+//                                JsonArray rawAlldayEvents = resp.getAsJsonObject().get("schedule").getAsJsonObject().get("data").getAsJsonObject().get("allday").getAsJsonArray();
+                                JsonArray rawBulletins = resp.getAsJsonObject().get("announcements").getAsJsonObject().get("data").getAsJsonArray();
+                                for (int i = 0; i < rawGrades.size(); i++) {
+                                    Grade g = new Gson().fromJson(rawGrades.get(i), Grade.class);
                                     grades.add(g);
                                 }
-                                for (int i = 0; i < rawAvg.length(); i++) {
-                                    JSONObject currentObj = rawAvg.getJSONObject(i);
-                                    Average avg = new Gson().fromJson(currentObj.toString(), Average.class);
+                                for (int i = 0; i < rawAvg.size(); i++) {
+                                    Average avg = new Gson().fromJson(rawAvg.get(i), Average.class);
                                     averages.add(avg);
                                 }
-                                for (int i = 0; i < rawGraphData.length(); i++) {
-                                    JSONObject currentObj = rawGraphData.getJSONObject(i);
+                                for (int i = 0; i < rawGraphData.size(); i++) {
                                     GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
                                     gsonBuilder.registerTypeAdapter(AvgGraphData.class, new AvgGraphDataDeserializer());
-                                    AvgGraphData agd = gsonBuilder.create().fromJson(currentObj.toString(), AvgGraphData.class);
+                                    AvgGraphData agd = gsonBuilder.create().fromJson(rawGraphData.get(i), AvgGraphData.class);
                                     avgGraphDatas.add(agd);
                                 }
-                                for (int i = 0; i < rawClazzes.length(); i++) {
-                                    JSONObject currentObj = rawClazzes.getJSONObject(i);
+                                for (int i = 0; i < rawClazzes.size(); i++) {
                                     GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE);
                                     gsonBuilder.registerTypeAdapter(Clazz.class, new ClazzDeserializer());
-                                    Clazz c = gsonBuilder.create().fromJson(currentObj.toString(), Clazz.class);
+                                    Clazz c = gsonBuilder.create().fromJson(rawClazzes.get(i), Clazz.class);
                                     clazzes.add(c);
                                 }
-                                for (int i = 0; i < rawAnnouncements.length(); i++) {
-                                    JSONObject currentObj = rawAnnouncements.getJSONObject(i);
-                                    Bulletin a = new Gson().fromJson(currentObj.toString(), Bulletin.class);
+                                for (int i = 0; i < rawBulletins.size(); i++) {
+                                    Bulletin a = new Gson().fromJson(rawBulletins.get(i), Bulletin.class);
                                     bulletins.add(a);
                                 }
 

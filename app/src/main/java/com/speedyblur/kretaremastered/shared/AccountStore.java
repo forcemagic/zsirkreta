@@ -3,6 +3,7 @@ package com.speedyblur.kretaremastered.shared;
 import android.content.Context;
 import android.util.Log;
 
+import com.speedyblur.kretaremastered.models.Institute;
 import com.speedyblur.kretaremastered.models.Profile;
 
 import net.sqlcipher.Cursor;
@@ -31,11 +32,11 @@ public class AccountStore {
             e.printStackTrace();
             throw new DecryptionException();
         }
-        db.execSQL("CREATE TABLE IF NOT EXISTS accounts(cardid VARCHAR(12) PRIMARY KEY NOT NULL, friendlyname VARCHAR(16), passwd VARCHAR(30) NOT NULL);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS accounts(cardid VARCHAR(12) PRIMARY KEY NOT NULL, friendlyname VARCHAR(16), passwd VARCHAR(30) NOT NULL, institutename TEXT, instituteid TEXT);");
     }
 
     public void addAccount(Profile p) throws SQLiteConstraintException {
-        db.execSQL("INSERT INTO accounts VALUES (?, ?, ?);", new String[] {p.getCardid(), p.getFriendlyName(), p.getPasswd()});
+        db.execSQL("INSERT INTO accounts VALUES (?, ?, ?, ?, ?);", new String[] {p.getCardid(), p.getFriendlyName(), p.getPasswd(), p.getInstitute().getName(), p.getInstitute().getId()});
         Log.d(LOGTAG, "DB Commit OK. Added 1 record.");
     }
 
@@ -49,7 +50,8 @@ public class AccountStore {
                 Profile cProf = new Profile(
                         c.getString(c.getColumnIndex("cardid")),
                         c.getString(c.getColumnIndex("passwd")),
-                        c.getString(c.getColumnIndex("friendlyname"))
+                        c.getString(c.getColumnIndex("friendlyname")),
+                        new Institute(c.getString(c.getColumnIndex("institutename")), c.getString(c.getColumnIndex("instituteid")))
                 );
                 profiles.add(cProf);
             } while (c.moveToNext());

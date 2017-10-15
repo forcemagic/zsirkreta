@@ -5,6 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.speedyblur.kretaremastered.R;
 
 import org.json.JSONException;
@@ -110,7 +112,7 @@ public class HttpHandler {
          * (The status code must be 200 OK)
          * @param resp the response body (parsed JSON)
          */
-        void onComplete(JSONObject resp) throws JSONException;
+        void onComplete(JsonElement resp) throws JSONException;
 
         /**
          * Function is called when a request fails.
@@ -149,7 +151,7 @@ public class HttpHandler {
             if (response.isSuccessful()) {
                 try {
                     //noinspection ConstantConditions
-                    jsCallback.onComplete(new JSONObject(response.body().string()));
+                    jsCallback.onComplete(new JsonParser().parse(response.body().string()));
                     Log.d("HttpHandler", "Got 200 OK, callback finished.");
                 } catch (JSONException e) {
                     Log.e("HttpHandler", "Unable to parse JSON (or tried to get a nonexistent object). Dumping request...");
