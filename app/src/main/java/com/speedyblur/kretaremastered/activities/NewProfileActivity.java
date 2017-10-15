@@ -178,6 +178,7 @@ public class NewProfileActivity extends AppCompatActivity {
         try {
             payload.put("username", studentId);
             payload.put("password", passwd);
+            payload.put("baseuri", institute.getId());
         } catch (JSONException e) { e.printStackTrace(); }
 
         // Enqueue request
