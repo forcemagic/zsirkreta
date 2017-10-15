@@ -1,6 +1,6 @@
 # ZsírKréta
 
-[![Build Status](https://img.shields.io/travis/forcemagic/zsirkreta.svg?style=flat-square)](https://travis-ci.org/forcemagic/zsirkreta)
+[![Build Status](https://img.shields.io/jenkins/s/https/jenkins.speedyblur.com/job/android-zsirkreta.svg?style=flat-square)](https://jenkins.speedyblur.com/job/android-zsirkreta/)
 [![GitHub (pre)release](https://img.shields.io/github/release/forcemagic/zsirkreta/all.svg?style=flat-square)](https://github.com/forcemagic/zsirkreta/releases)
 [![Last Commit](https://img.shields.io/github/last-commit/forcemagic/zsirkreta.svg?style=flat-square)](https://github.com/forcemagic/zsirkreta/commits/master)
 [![License](https://img.shields.io/github/license/forcemagic/zsirkreta.svg?style=flat-square)](https://github.com/forcemagic/zsirkreta/blob/master/LICENSE)
@@ -37,11 +37,6 @@ Két mód létezik erre (magyar és angol nyelven is):
 * Emailen keresztül: [`k.bug@speedyblur.com`](mailto:k.bug@speedyblur.com) (Ezek továbbításra kerülnek a hibakövetöre)
 * **FONTOS!** A nyelvhelyességi és fordítási hibákra a [`k.i18n@speedyblur.com`](mailto:k.i18n@speedyblur.com) email cím használatos!
 
-# Build információ
-
-Az alkalmazás `v26.0.2`-es build eszközöket használ, SDK verzió: `26`.
-Továbbiakért látogasd meg az [`app/build.gradle`](https://github.com/forcemagic/kreta-remastered/blob/master/app/build.gradle) fájlt.
-
 ---
 
 # Features
@@ -66,8 +61,3 @@ There are two ways to report a bug (in Hungarian or in English):
 * Via the issue tracker [here](https://github.com/forcemagic/kreta-remastered/issues)
 * Via email: [`k.bug@speedyblur.com`](mailto:k.bug@speedyblur.com) (These will be forwarded to the issue tracker)
 * **IMPORTANT!** Problems regarding localization should go to the [`k.i18n@speedyblur.com`](mailto:k.i18n@speedyblur.com) email
-
-# Build info
-
-Application uses `v26.0.2` build tools, and SDK version `26`.
-Check the [`app/build.gradle`](https://github.com/forcemagic/kreta-remastered/blob/master/app/build.gradle) file for more info.
