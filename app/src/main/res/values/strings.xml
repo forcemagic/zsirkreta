@@ -102,4 +102,6 @@
     <string name="no_announcements">No bulletins here!</string>
     <string name="filling_schedule">Filling Your schedule %1$.1f%%…</string>
     <string name="nodelete_active_profile">You can\'t delete the selected profile.</string>
+    <string name="happy_birthday">Happy birthday!</string>
+    <string name="happy_birthday_content">It\'s Your birthday today! Make the most of it!\nFrom the creators of ZsírKréta.</string>
 </resources>

@@ -10,7 +10,7 @@
     <color name="badGrade">#e53935</color>
     <color name="veryBadGrade">#FF960D0D</color>
 
-    <color name="bgcolorActivity">#FFF8F8F8</color>
+    <color name="bgcolorActivity">#FFFBFBFB</color>
 
     <color name="transparent">#00000000</color>
 </resources>

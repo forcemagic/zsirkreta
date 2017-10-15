@@ -37,6 +37,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class NewProfileActivity extends AppCompatActivity {
 
@@ -57,7 +58,8 @@ public class NewProfileActivity extends AppCompatActivity {
 
         assert getSupportActionBar() != null;
         getSupportActionBar().setTitle(R.string.profile_add);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (!getIntent().getBooleanExtra("doOpenMainActivity", false))
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Set up the login form.
         mIdView = findViewById(R.id.studentid);
@@ -213,6 +215,22 @@ public class NewProfileActivity extends AppCompatActivity {
                                     setResult(RESULT_OK, getIntent().putExtra("profileId", p.getCardid()));
                                     finish();
                                     if (getIntent().getBooleanExtra("doOpenMainActivity", false)) {
+                                        // Birthday collection
+                                        String[] exploded = p.getPasswd().split("-");
+                                        if (exploded.length == 3) {
+                                            Calendar c = Calendar.getInstance();
+                                            c.set(Calendar.HOUR_OF_DAY, 9);
+                                            c.set(Calendar.MINUTE, 0);
+                                            c.set(Calendar.SECOND, 0);
+                                            c.set(Calendar.MONTH, Integer.valueOf(exploded[1])-1);
+                                            c.set(Calendar.DAY_OF_MONTH, Integer.valueOf(exploded[2]));
+                                            if (c.getTimeInMillis() < Calendar.getInstance().getTimeInMillis())
+                                                c.add(Calendar.YEAR, 1);
+
+                                            getSharedPreferences("main", MODE_PRIVATE).edit().putLong("birthday", c.getTimeInMillis()).apply();
+                                            Common.registerBirthdayReminder(NewProfileActivity.this, c);
+                                        }
+
                                         Intent mainIntent = new Intent(NewProfileActivity.this, MainActivity.class);
                                         startActivity(mainIntent);
                                     }

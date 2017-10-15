@@ -83,4 +83,6 @@
     <string name="filling_schedule">Az órarended betöltése %1$.1f%%…</string>
     <string name="nodelete_active_profile">Nem törölheted a kiválasztott profilt.</string>
     <string name="profile_manage">Profilok Kezelése</string>
+    <string name="happy_birthday">Boldog szülinapot!</string>
+    <string name="happy_birthday_content">Hozd ki belöle a legtöbbet!\n/A ZsírKréta alkotói/</string>
 </resources>

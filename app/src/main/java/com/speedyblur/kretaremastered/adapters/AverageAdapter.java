@@ -102,19 +102,11 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
                 holder.chart.getXAxis().addLimitLine(limit);
             }
 
-            // A little elevation styling
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                holder.itemView.setElevation(8f);
-
             // Final data setting
             holder.chart.setData(new LineData(lds));
             holder.chart.invalidate();
             holder.chart.setVisibility(View.VISIBLE);
         } else {
-            // Reset elevation
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                holder.itemView.setElevation(0f);
-
             holder.itemView.setActivated(false);
             holder.expandToggler.setRotation(0f);
             holder.chart.setVisibility(View.GONE);

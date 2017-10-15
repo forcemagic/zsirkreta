@@ -1,7 +1,10 @@
 package com.speedyblur.kretaremastered.shared;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
@@ -16,12 +19,15 @@ import com.speedyblur.kretaremastered.models.Clazz;
 import com.speedyblur.kretaremastered.models.ClazzDeserializer;
 import com.speedyblur.kretaremastered.models.Grade;
 import com.speedyblur.kretaremastered.models.Profile;
+import com.speedyblur.kretaremastered.receivers.BirthdayReceiver;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class Common {
     public static final String APIBASE = "https://www.speedyblur.com/kretaapi/v6";
@@ -32,6 +38,7 @@ public class Common {
         return gotResxId == 0 ? subject : context.getResources().getString(gotResxId);
     }
 
+    // Account fetching
     public static void fetchAccountAsync(final Activity a, final Profile profile, final IFetchAccount ifa) {
         new Thread(new Runnable() {
             @Override
@@ -143,5 +150,19 @@ public class Common {
     public interface IFetchAccount {
         void onFetchComplete();
         void onFetchError(int localizedErrorMsg);
+    }
+
+    // Happy birthday reminder
+    public static void registerBirthdayReminder(Context ctxt, Calendar date) {
+        if (PendingIntent.getBroadcast(ctxt, 0, new Intent(ctxt, BirthdayReceiver.class), PendingIntent.FLAG_NO_CREATE) != null) {
+            Log.w("AlarmManager", "Alarm already set, not setting another one.");
+            return;
+        }
+        AlarmManager alarmMgr = (AlarmManager) ctxt.getSystemService(Context.ALARM_SERVICE);
+        Intent it = new Intent(ctxt, BirthdayReceiver.class);
+        PendingIntent pit = PendingIntent.getBroadcast(ctxt, 0, it, 0);
+
+        alarmMgr.set(AlarmManager.RTC_WAKEUP, date.getTimeInMillis(), pit);
+        Log.v("AlarmManager", String.format(Locale.ENGLISH, "Will fire BDay notfication at T-%d", (date.getTimeInMillis() - Calendar.getInstance().getTimeInMillis())));
     }
 }
