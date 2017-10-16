@@ -19,6 +19,7 @@ import com.speedyblur.kretaremastered.models.Bulletin;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class BulletinAdapter extends ArrayAdapter<Bulletin> {
     public BulletinAdapter(@NonNull Context ctxt, ArrayList<Bulletin> bulletins) {
@@ -53,7 +54,7 @@ public class BulletinAdapter extends ArrayAdapter<Bulletin> {
         }
         holder.mTeacher.setText(a.getTeacher());
         holder.mContent.setText(a.getContent());
-        holder.mDate.setText(SimpleDateFormat.getDateInstance().format(new Date((long) a.getDate()*1000)));
+        holder.mDate.setText(new SimpleDateFormat("yyyy. MMM. dd.", Locale.getDefault()).format(new Date((long) a.getDate()*1000)));
 
         return convertView;
     }
