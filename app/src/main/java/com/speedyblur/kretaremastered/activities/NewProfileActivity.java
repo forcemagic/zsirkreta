@@ -5,15 +5,23 @@ import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.util.ArrayMap;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -23,7 +31,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.speedyblur.kretaremastered.R;
-import com.speedyblur.kretaremastered.adapters.InstituteAdapter;
 import com.speedyblur.kretaremastered.models.AllDayEvent;
 import com.speedyblur.kretaremastered.models.Clazz;
 import com.speedyblur.kretaremastered.models.ClazzDeserializer;
@@ -34,7 +41,6 @@ import com.speedyblur.kretaremastered.shared.Common;
 import com.speedyblur.kretaremastered.shared.DataStore;
 import com.speedyblur.kretaremastered.shared.DecryptionException;
 import com.speedyblur.kretaremastered.shared.HttpHandler;
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import net.sqlcipher.database.SQLiteConstraintException;
 
@@ -47,6 +53,9 @@ import java.util.Calendar;
 public class NewProfileActivity extends AppCompatActivity {
 
     private boolean doShowMenu = true;
+    private Institute selectedInstitute;
+    private ArrayList<Institute> institutes = new ArrayList<>();
+    private ArrayAdapter<Institute> instituteArrayAdapter;
 
     // UI references.
     private ViewFlipper mLoginFlipperView;
@@ -55,7 +64,7 @@ public class NewProfileActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private ProgressBar mProgressBar;
     private TextView mProgressStatusView;
-    private SearchableSpinner mInstituteSelectorView;
+    private TextView mInstituteTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +76,15 @@ public class NewProfileActivity extends AppCompatActivity {
         if (!getIntent().getBooleanExtra("doOpenMainActivity", false))
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        // Set up the login form.
+        // UI setup
         mIdView = findViewById(R.id.studentid);
         mPasswordView = findViewById(R.id.password);
         mFriendlyNameView = findViewById(R.id.friendlyname);
         mLoginFlipperView = findViewById(R.id.login_flipper);
         mProgressStatusView = findViewById(R.id.login_progress_status);
         mProgressBar = findViewById(R.id.login_progress);
-        mInstituteSelectorView = findViewById(R.id.instituteSelector);
+        mInstituteTextView = findViewById(R.id.instituteSelectorText);
+        RelativeLayout mInstituteSelectorView = findViewById(R.id.instituteSelector);
 
         mFriendlyNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -86,19 +96,55 @@ public class NewProfileActivity extends AppCompatActivity {
                 return false;
             }
         });
-        mInstituteSelectorView.setPositiveButton("OK");
+
+        mInstituteSelectorView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View toSet = LayoutInflater.from(NewProfileActivity.this).inflate(R.layout.dialog_choose_institute, null);
+
+                ListView lv = toSet.findViewById(R.id.instituteList);
+                SearchView sv = toSet.findViewById(R.id.instituteSearch);
+
+                lv.setAdapter(instituteArrayAdapter);
+
+                sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        instituteArrayAdapter.getFilter().filter(newText);
+                        return true;
+                    }
+                });
+
+                final AlertDialog dialog = new AlertDialog.Builder(NewProfileActivity.this).setView(toSet).show();
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        selectedInstitute = (Institute) parent.getAdapter().getItem(position);
+                        assert selectedInstitute != null;
+
+                        mInstituteTextView.setText(selectedInstitute.toString());
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
 
         HttpHandler.getJson(Common.APIBASE + "/institutes", new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JsonElement resp) throws JSONException {
-                final ArrayList<Institute> institutes = new ArrayList<>();
                 for (int i=0; i<resp.getAsJsonArray().size(); i++) {
                     institutes.add(new Gson().fromJson(resp.getAsJsonArray().get(i), Institute.class));
                 }
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mInstituteSelectorView.setAdapter(new InstituteAdapter(NewProfileActivity.this, institutes));
+                        instituteArrayAdapter = new ArrayAdapter<>(NewProfileActivity.this, android.R.layout.simple_spinner_dropdown_item, institutes);
                     }
                 });
             }
@@ -158,7 +204,7 @@ public class NewProfileActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             showProgress(true);
-            doLoginSaveIfValid(studentId, password, friendlyName, (Institute) mInstituteSelectorView.getSelectedItem());
+            doLoginSaveIfValid(studentId, password, friendlyName, selectedInstitute);
         }
     }
 
