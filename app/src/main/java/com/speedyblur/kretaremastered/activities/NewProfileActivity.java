@@ -100,6 +100,11 @@ public class NewProfileActivity extends AppCompatActivity {
         mInstituteSelectorView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (institutes.size() == 0 || instituteArrayAdapter == null) {
+                    showOnSnackbar(R.string.didnt_load_institutes, Snackbar.LENGTH_LONG);
+                    return;
+                }
+
                 View toSet = LayoutInflater.from(NewProfileActivity.this).inflate(R.layout.dialog_choose_institute, null);
 
                 ListView lv = toSet.findViewById(R.id.instituteList);
@@ -138,7 +143,8 @@ public class NewProfileActivity extends AppCompatActivity {
             }
         });
 
-        HttpHandler.getJson(Common.APIBASE + "/institutes", new HttpHandler.JsonRequestCallback() {
+        // TODO: CACHE
+        HttpHandler.getJson(Common.APIBASE+"/institutes", new HttpHandler.JsonRequestCallback() {
             @Override
             public void onComplete(JsonElement resp) throws JSONException {
                 for (int i=0; i<resp.getAsJsonArray().size(); i++) {
