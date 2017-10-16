@@ -4,12 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -84,7 +84,7 @@ public class NewProfileActivity extends AppCompatActivity {
         mProgressStatusView = findViewById(R.id.login_progress_status);
         mProgressBar = findViewById(R.id.login_progress);
         mInstituteTextView = findViewById(R.id.instituteSelectorText);
-        RelativeLayout mInstituteSelectorView = findViewById(R.id.instituteSelector);
+        final RelativeLayout mInstituteSelectorView = findViewById(R.id.instituteSelector);
 
         mFriendlyNameView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -107,6 +107,7 @@ public class NewProfileActivity extends AppCompatActivity {
 
                 lv.setAdapter(instituteArrayAdapter);
 
+                sv.setIconifiedByDefault(false);
                 sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
@@ -128,9 +129,12 @@ public class NewProfileActivity extends AppCompatActivity {
                         assert selectedInstitute != null;
 
                         mInstituteTextView.setText(selectedInstitute.toString());
+                        mInstituteTextView.setTextColor(ContextCompat.getColor(NewProfileActivity.this, android.R.color.black));
                         dialog.dismiss();
                     }
                 });
+
+                sv.requestFocus();
             }
         });
 
@@ -198,6 +202,10 @@ public class NewProfileActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(studentId)) {
             mIdView.setError(getString(R.string.error_field_required));
             focusView = mIdView; cancel = true;
+        }
+        if (selectedInstitute == null) {
+            mInstituteTextView.setError(getString(R.string.error_field_required));
+            focusView = mInstituteTextView; cancel = true;
         }
 
         if (cancel) {

@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
 
         drawer = new DrawerBuilder().withActivity(this).withToolbar(toolbar)
                 .withAccountHeader(accHeader)
-                .inflateMenu(R.menu.activity_main_drawer)
+                .inflateMenu(R.menu.drawer)
                 .withOnDrawerItemClickListener(this)
                 .build();
 
@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.chsort, menu);
         return true;
     }
 
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
         if (position == 1) {
             toolbar.setTitle(R.string.title_activity_grades);
-            getMenuInflater().inflate(R.menu.main, menu);
+            getMenuInflater().inflate(R.menu.chsort, menu);
             shouldShowMenu = true;
             invalidateOptionsMenu();
 

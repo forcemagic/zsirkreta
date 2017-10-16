@@ -9,7 +9,7 @@
             android:icon="@drawable/avg_chart_icon_black"
             android:title="@string/title_activity_avgs" />
         <item
-            android:icon="@drawable/daterange_icon_black"
+            android:icon="@drawable/schedule_icon_black"
             android:title="@string/title_activity_schedule" />
         <item
             android:icon="@drawable/announcements_icon_black"
