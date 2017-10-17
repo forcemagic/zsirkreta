@@ -76,12 +76,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                             parent.pendingProfileDelete = null;
                             s.removeCallback(deleteCallback);
                             profiles.add(lastpos, p);
-                            notifyItemInserted(holder.getAdapterPosition());
+                            notifyItemInserted(lastpos);
                         }
                     }).show();
 
                     profiles.remove(p);
-                    notifyItemRemoved(holder.getAdapterPosition());
+                    notifyItemRemoved(lastpos);
                 }
             });
         }
