@@ -73,6 +73,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                     s.setAction(R.string.undo, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            parent.pendingProfileDelete = null;
                             s.removeCallback(deleteCallback);
                             profiles.add(lastpos, p);
                             notifyItemInserted(holder.getAdapterPosition());
