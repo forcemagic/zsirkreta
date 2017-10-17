@@ -106,4 +106,6 @@
     <string name="happy_birthday_content">It\'s Your birthday today! Make the most of it!\nFrom the creators of ZsírKréta.</string>
     <string name="select_institute">Select an institute</string>
     <string name="didnt_load_institutes">There are no institutes loaded. Come back again with some network connection!</string>
+    <string name="profile_deleted_success">Profile deleted.</string>
+    <string name="undo">Undo</string>
 </resources>

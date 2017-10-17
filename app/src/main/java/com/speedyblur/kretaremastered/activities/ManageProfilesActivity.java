@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 public class ManageProfilesActivity extends AppCompatActivity {
 
+    public Profile pendingProfileDelete = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +46,7 @@ public class ManageProfilesActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            profList.setAdapter(new ProfileAdapter(profiles, currentProfileId));
+                            profList.setAdapter(new ProfileAdapter(ManageProfilesActivity.this, profiles, currentProfileId));
                         }
                     });
                 } catch (DecryptionException e) {e.printStackTrace();}
@@ -56,5 +58,17 @@ public class ManageProfilesActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) finish();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        if (pendingProfileDelete != null) {
+            try {
+                AccountStore as = new AccountStore(this, Common.SQLCRYPT_PWD);
+                as.dropAccount(pendingProfileDelete.getCardid());
+                as.close();
+            } catch (DecryptionException e) {e.printStackTrace();}
+        }
+        super.onPause();
     }
 }

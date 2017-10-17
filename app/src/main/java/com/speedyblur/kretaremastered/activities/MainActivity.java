@@ -121,23 +121,6 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
         } catch (DecryptionException e) {e.printStackTrace();}
     }
 
-    private void doProfileUpdate() {
-        swipeRefresh.setRefreshing(true);
-        Common.fetchAccountAsync(this, p, new Common.IFetchAccount() {
-            @Override
-            public void onFetchComplete() {
-                irh.onRefreshComplete();
-                swipeRefresh.setRefreshing(false);
-            }
-
-            @Override
-            public void onFetchError(int localizedErrorMsg) {
-                Snackbar.make(findViewById(R.id.main_coord_view), localizedErrorMsg, Snackbar.LENGTH_SHORT).show();
-                swipeRefresh.setRefreshing(false);
-            }
-        });
-    }
-
     // This code escalated quickly. TODO: Refactor.
     private void populateProfiles() {
         List<IProfile> finalProfiles = new ArrayList<>();
@@ -152,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
                     .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                         @Override
                         public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                            getSharedPreferences("main", MODE_PRIVATE).edit().putString("lastUsedProfile", cProfile.getCardid()).apply();
                             p = cProfile;
                             irh.onRefreshComplete();
                             doProfileUpdate();
@@ -186,6 +170,23 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
                     }
                 })
         );
+    }
+
+    private void doProfileUpdate() {
+        swipeRefresh.setRefreshing(true);
+        Common.fetchAccountAsync(this, p, new Common.IFetchAccount() {
+            @Override
+            public void onFetchComplete() {
+                irh.onRefreshComplete();
+                swipeRefresh.setRefreshing(false);
+            }
+
+            @Override
+            public void onFetchError(int localizedErrorMsg) {
+                Snackbar.make(findViewById(R.id.main_coord_view), localizedErrorMsg, Snackbar.LENGTH_SHORT).show();
+                swipeRefresh.setRefreshing(false);
+            }
+        });
     }
 
     public void setRefreshHandler(IRefreshHandler irh) {

@@ -87,4 +87,6 @@
     <string name="happy_birthday_content">Hozd ki belöle a legtöbbet!\n/A ZsírKréta alkotói/</string>
     <string name="select_institute">Válassz intézményt</string>
     <string name="didnt_load_institutes">Nincs intézmény betöltve. Probáld meg aktív internetkapcsolattal!</string>
+    <string name="profile_deleted_success">Profil törölve.</string>
+    <string name="undo">Visszavonás</string>
 </resources>
