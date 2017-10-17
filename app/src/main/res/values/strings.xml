@@ -63,7 +63,7 @@
     <string name="welcome_first_title">Welcome to Kreta Remastered!</string>
     <string name="welcome_first_subtitle">Let\'s get you set up.</string>
     <string name="welcome_sqlpass_title">Set encryption password</string>
-    <string name="welcome_sqlpass_subtitle">This password will be used to encrypt all your profiles in this app. While providing a password is STRONGLY ADVISED, it is not mandatory. But if you don\'t provide one, your credentials will be available to almost anyone with a little knowledge of Android™.</string>
+    <string name="welcome_sqlpass_subtitle">This password will be used to encrypt all your profiles in this app. While providing a password is STRONGLY ADVISED, it is not mandatory.</string>
     <string name="welcome_useempty_title">Question</string>
     <string name="welcome_useempty_desc">You are about to use an empty password. Do you really want that?</string>
     <string name="welcome_fingerprint_title">Fingerprint? Yeah!</string>
