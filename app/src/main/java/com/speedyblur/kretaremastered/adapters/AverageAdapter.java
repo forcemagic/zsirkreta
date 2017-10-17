@@ -32,6 +32,7 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
     public ArrayList<Average> averages;
     private int currentOpened = -1;
     private int lastOpened = -1;
+    private RecyclerView view;
 
     public AverageAdapter(ArrayList<Average> averages) {
         this.averages = averages;
@@ -42,6 +43,12 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
         LayoutInflater infl = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = infl.inflate(R.layout.avglist_item, parent, false);
         return new ViewHolder(v);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        view = recyclerView;
     }
 
     @Override
@@ -113,6 +120,7 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AverageAdapter.this.view.scrollToPosition(holder.getAdapterPosition());
                 lastOpened = currentOpened;
                 if (currentOpened == holder.getAdapterPosition()) currentOpened = -1;
                 else currentOpened = holder.getAdapterPosition();
