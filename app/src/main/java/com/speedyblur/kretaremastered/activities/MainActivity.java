@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements Drawer.OnDrawerIt
         } else if (requestCode == INTENT_REQ_DELPROF) {
             fetchAccounts();
             populateProfiles();
-            drawer.setSelectionAtPosition(1);
+            drawer.setSelection(Long.parseLong(p.getCardid()));
             doProfileUpdate();
         }
     }
