@@ -6,6 +6,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.graphics.drawable.LayerDrawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -120,11 +121,11 @@ public class AverageAdapter extends RecyclerView.Adapter<AverageAdapter.ViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AverageAdapter.this.view.scrollToPosition(holder.getAdapterPosition());
                 lastOpened = currentOpened;
                 if (currentOpened == holder.getAdapterPosition()) currentOpened = -1;
                 else currentOpened = holder.getAdapterPosition();
                 notifyItemChanged(lastOpened); notifyItemChanged(currentOpened);
+                ((LinearLayoutManager) AverageAdapter.this.view.getLayoutManager()).scrollToPositionWithOffset(holder.getAdapterPosition(), 0);
             }
         });
     }

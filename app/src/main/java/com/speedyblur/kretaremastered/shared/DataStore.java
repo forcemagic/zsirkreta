@@ -240,7 +240,7 @@ public class DataStore {
         }
     }
 
-    public AvgGraphData getAverageGraphData(String subject) {
+    private AvgGraphData getAverageGraphData(String subject) {
         if (!tableExists("avggraph_"+profileName)) return null;
         Cursor c = db.rawQuery("SELECT x,y,isspecial FROM avggraph_"+profileName+" WHERE subject=?", new String[] {subject});
         c.moveToFirst();

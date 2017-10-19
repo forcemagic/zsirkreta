@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectExpandableGradeAdapter.ListHeaderVH> {
     public ArrayList<SubjectGradeGroup> subjectGradeGroups;
+    private RecyclerView view;
     private int currentOpened = -1;
 
     public SubjectExpandableGradeAdapter(ArrayList<SubjectGradeGroup> subjectGradeGroups) {
@@ -30,6 +31,12 @@ public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectE
         LayoutInflater infl = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View v = infl.inflate(R.layout.gradegroup_item, parent, false);
         return new ListHeaderVH(v);
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        view = recyclerView;
     }
 
     @Override
@@ -58,6 +65,7 @@ public class SubjectExpandableGradeAdapter extends RecyclerView.Adapter<SubjectE
                 if (currentOpened == holder.getAdapterPosition()) currentOpened = -1;
                 else currentOpened = holder.getAdapterPosition();
                 notifyItemChanged(lastOpened); notifyItemChanged(currentOpened);
+                ((LinearLayoutManager) SubjectExpandableGradeAdapter.this.view.getLayoutManager()).scrollToPositionWithOffset(holder.getAdapterPosition(), 0);
             }
         });
     }

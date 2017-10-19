@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.speedyblur.kretaremastered.BuildConfig;
 import com.speedyblur.kretaremastered.R;
 
 import org.json.JSONException;
@@ -82,6 +83,7 @@ public class HttpHandler {
 
     private static Request buildReq(String method, String url, @Nullable RequestBody payload, ArrayMap<String, String> headers) {
         Request.Builder reqBuild = new Request.Builder().url(url);
+        reqBuild.header("User-Agent", "zsirkreta/" + BuildConfig.VERSION_NAME + " " + okhttp3.internal.Version.userAgent());
         for (int i=0; i<headers.size(); i++) {
             reqBuild.header(headers.keyAt(i), headers.valueAt(i));
         }
