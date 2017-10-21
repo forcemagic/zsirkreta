@@ -32,16 +32,19 @@ public class AccountStore {
             e.printStackTrace();
             throw new DecryptionException();
         }
+
         db.execSQL("CREATE TABLE IF NOT EXISTS accounts(cardid VARCHAR(12) PRIMARY KEY NOT NULL, friendlyname VARCHAR(16), passwd VARCHAR(30) NOT NULL, institutename TEXT, instituteid TEXT);");
+        if (!columnExists("institutename") && !columnExists("instituteid")) {
+            db.execSQL("ALTER TABLE accounts ADD COLUMN institutename TEXT DEFAULT 'Dobó Katalin Gimnázium'");
+            db.execSQL("ALTER TABLE accounts ADD COLUMN instituteid TEXT DEFAULT klik031937001");
+        }
     }
 
     public void addAccount(Profile p) throws SQLiteConstraintException {
         db.execSQL("INSERT INTO accounts VALUES (?, ?, ?, ?, ?);", new String[] {p.getCardid(), p.getFriendlyName(), p.getPasswd(), p.getInstitute().getName(), p.getInstitute().getId()});
-        Log.d(LOGTAG, "DB Commit OK. Added 1 record.");
     }
 
     public ArrayList<Profile> getAccounts() {
-        Log.d(LOGTAG, "Fetching accounts...");
         Cursor c = db.rawQuery("SELECT * FROM accounts", null);
         c.moveToFirst();
         if (c.getCount() != 0) {
@@ -70,8 +73,14 @@ public class AccountStore {
             DataStore ds = new DataStore(ctxt, cardid, Common.SQLCRYPT_PWD);
             ds.purgeEverything();
         } catch (DecryptionException e) {e.printStackTrace();}
+    }
 
-        Log.d(LOGTAG, "Account dropped successfully.");
+    private boolean columnExists(String colName) {
+        Cursor c = db.rawQuery("SELECT * FROM accounts LIMIT 1", null);
+        c.moveToFirst();
+        boolean isPresent = c.getColumnIndex(colName) != -1;
+        c.close();
+        return isPresent;
     }
 
     public void close() {

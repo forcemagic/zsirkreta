@@ -30,6 +30,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.speedyblur.kretaremastered.R;
 import com.speedyblur.kretaremastered.models.AllDayEvent;
 import com.speedyblur.kretaremastered.models.Clazz;
@@ -146,7 +147,7 @@ public class NewProfileActivity extends AppCompatActivity {
         // TODO: CACHE
         HttpHandler.getJson(Common.APIBASE+"/institutes", new HttpHandler.JsonRequestCallback() {
             @Override
-            public void onComplete(JsonElement resp) throws JSONException {
+            public void onComplete(JsonElement resp) throws JsonParseException {
                 for (int i=0; i<resp.getAsJsonArray().size(); i++) {
                     institutes.add(new Gson().fromJson(resp.getAsJsonArray().get(i), Institute.class));
                 }
@@ -244,14 +245,14 @@ public class NewProfileActivity extends AppCompatActivity {
         // Enqueue request
         HttpHandler.postJson(Common.APIBASE + "/auth", payload, new HttpHandler.JsonRequestCallback() {
             @Override
-            public void onComplete(JsonElement resp) throws JSONException {
+            public void onComplete(JsonElement resp) throws JsonParseException {
                 final Profile p = new Profile(studentId, passwd, friendlyName, institute);
 
                 ArrayMap<String, String> headers = new ArrayMap<>();
                 headers.put("X-Auth-Token", resp.getAsJsonObject().get("token").getAsString());
                 HttpHandler.getJson(Common.APIBASE + "/schedule", headers, new HttpHandler.JsonRequestCallback() {
                     @Override
-                    public void onComplete(JsonElement resp) throws JSONException {
+                    public void onComplete(JsonElement resp) throws JsonParseException {
                         try {
                             ArrayList<AllDayEvent> allDayEvents = new ArrayList<>();
                             JsonArray unparsedAllDayEvents = resp.getAsJsonObject().get("data").getAsJsonObject().get("allday").getAsJsonArray();

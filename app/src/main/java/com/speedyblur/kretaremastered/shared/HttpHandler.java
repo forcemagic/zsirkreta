@@ -2,15 +2,16 @@ package com.speedyblur.kretaremastered.shared;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.speedyblur.kretaremastered.BuildConfig;
 import com.speedyblur.kretaremastered.R;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -114,13 +115,13 @@ public class HttpHandler {
          * (The status code must be 200 OK)
          * @param resp the response body (parsed JSON)
          */
-        void onComplete(JsonElement resp) throws JSONException;
+        void onComplete(JsonElement resp) throws JsonParseException;
 
         /**
          * Function is called when a request fails.
          * @param localizedError a string resource ID containing the (localized) error explanation
          */
-        void onFailure(final int localizedError);
+        void onFailure(@StringRes final int localizedError);
     }
 
     private static class MainCallbackHandler implements Callback {
@@ -154,8 +155,7 @@ public class HttpHandler {
                 try {
                     //noinspection ConstantConditions
                     jsCallback.onComplete(new JsonParser().parse(response.body().string()));
-                    Log.d("HttpHandler", "Got 200 OK, callback finished.");
-                } catch (JSONException e) {
+                } catch (JsonParseException e) {
                     Log.e("HttpHandler", "Unable to parse JSON (or tried to get a nonexistent object). Dumping request...");
                     jsCallback.onFailure(R.string.http_server_error);
                     e.printStackTrace();
