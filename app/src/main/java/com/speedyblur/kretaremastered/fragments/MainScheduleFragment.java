@@ -203,6 +203,9 @@ public class MainScheduleFragment extends Fragment {
 
         @Override
         public boolean onTouch(final View view, MotionEvent motionEvent) {
+            if (clazzes.size() == 0)
+                return false;
+
             switch (motionEvent.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
                     downX = motionEvent.getX();
