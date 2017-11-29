@@ -1,6 +1,11 @@
-# ZsírKréta
+# :warning: WARNING! / FIGYELEM! :warning:
 
-[![Build Status](https://img.shields.io/jenkins/s/https/jenkins.speedyblur.com/job/android-zsirkreta.svg?style=flat-square)](https://jenkins.speedyblur.com/job/android-zsirkreta/)
+We are in the process of migrating to `react-native`, which supports iOS. The new repository is at [jomagambt/react-crayon](https://github.com/jomagambt/react-crayon).
+
+Éppen most készülünk az iOS-es támogatásra, azaz a `react-native`-re való átmigrálódásra. Az új repót lásd itt: [jomagambt/react-crayon](https://github.com/jomagambt/react-crayon).
+
+# Crayon
+
 [![GitHub (pre)release](https://img.shields.io/github/release/forcemagic/zsirkreta/all.svg?style=flat-square)](https://github.com/forcemagic/zsirkreta/releases)
 [![Last Commit](https://img.shields.io/github/last-commit/forcemagic/zsirkreta.svg?style=flat-square)](https://github.com/forcemagic/zsirkreta/commits/master)
 [![License](https://img.shields.io/github/license/forcemagic/zsirkreta.svg?style=flat-square)](https://github.com/forcemagic/zsirkreta/blob/master/LICENSE)
